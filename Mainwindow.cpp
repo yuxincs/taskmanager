@@ -6,12 +6,17 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    QFile file("/proc/cpuinfo");
-    if(file.open(QIODevice::ReadOnly))
-        qDebug() << file.readAll();
+
+    ui->processesView->setModel(&processModel);
+
+    // Refresh every 200 ms
+    refreshTimer.start(200);
+    connect(&refreshTimer, &QTimer::timeout,
+            &processModel, &ProcessTableModel::refresh);
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
 }
+

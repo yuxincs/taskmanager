@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>432</width>
-    <height>427</height>
+    <width>593</width>
+    <height>540</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -19,7 +19,6 @@
 }
 
 QTabWidget::pane{
-	background:transparent;
 	border:none;
 }
 
@@ -41,6 +40,10 @@ QTabBar::tab:selected {
 QTabBar::tab:hover:!selected{
 	color:rgb(190, 190, 190);
 	padding-bottom: 3px;
+}
+
+QTableView{
+	border:none;
 }
 </string>
   </property>
@@ -67,16 +70,41 @@ QTabBar::tab:hover:!selected{
     <item>
      <widget class="QTabWidget" name="tabWidget">
       <property name="currentIndex">
-       <number>1</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="tabProcesses">
        <attribute name="title">
         <string>Processes</string>
        </attribute>
+       <layout class="QVBoxLayout" name="verticalLayout_2">
+        <property name="spacing">
+         <number>0</number>
+        </property>
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
+         <number>0</number>
+        </property>
+        <item>
+         <widget class="QTableView" name="processesView"/>
+        </item>
+       </layout>
       </widget>
       <widget class="QWidget" name="tabPerformance">
        <attribute name="title">
         <string>Performance</string>
+       </attribute>
+      </widget>
+      <widget class="QWidget" name="tabSystem">
+       <attribute name="title">
+        <string>System</string>
        </attribute>
       </widget>
      </widget>
@@ -88,7 +116,7 @@ QTabBar::tab:hover:!selected{
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>432</width>
+     <width>593</width>
      <height>28</height>
     </rect>
    </property>
@@ -102,14 +130,8 @@ QTabBar::tab:hover:!selected{
      <string>Options</string>
     </property>
    </widget>
-   <widget class="QMenu" name="menuAbout">
-    <property name="title">
-     <string>About</string>
-    </property>
-   </widget>
    <addaction name="menuFile"/>
    <addaction name="menuOptions"/>
-   <addaction name="menuAbout"/>
   </widget>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
