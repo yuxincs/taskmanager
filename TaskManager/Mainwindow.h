@@ -1,8 +1,7 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
-#include "stable.h"
-#include "ProcessTableModel.h"
-#include "PerformanceModel.h"
+
+#include <QMainWindow>
 
 namespace Ui {
 class MainWindow;
@@ -11,10 +10,7 @@ class MainWindow;
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
-private:
-    QTimer refreshTimer;
-    ProcessTableModel processModel;
-    PerformanceModel systemModel;
+
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
