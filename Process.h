@@ -4,26 +4,33 @@
 
 class Process : public QObject
 {
+public:
+    enum Property
+    {
+        ProcessName = 0,
+        UniqueID,
+        CPUUsage,
+        MemoryUsage,
+        DiskUsage,
+        NetworkUsage
+    };
 private:
     QFile stat;
     QFile statm;
-    QString processName;
-    unsigned int uid;
-    float cpu;
-    float memory;
-    float disk;
-    float net;
+    // This list holds process' properties by the order below:
+    // Process Name, Unique ID, CPU Usage, Memory Usage, Disk Usage, Network Usage
+    QVariantList propertyList;
 public:
-    explicit Process(const QDir & procDir, QObject * parent = nullptr);
+    explicit Process(unsigned int uid, QObject * parent = nullptr);
     virtual ~Process();
-    unsigned int uniqueID() const;
-    float cpuOccupancy() const;
-    float memoryOccupancy() const;
-    float diskOccupancy() const;
-    float networkOccupancy() const;
-    const QString & name() const;
+    unsigned int uid() const;
+    float cpuUsage() const;
+    float memoryUsage() const;
+    float diskUsage() const;
+    float networkUsage() const;
+    QString name() const;
     bool refresh();
-
+    const QVariantList & property();
 };
 
 #endif // PROCESS_H

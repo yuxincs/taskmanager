@@ -1,31 +1,41 @@
 #include "Process.h"
 
-Process::Process(const QDir & procDir, QObject * parent)
+Process::Process(unsigned int uid, QObject * parent)
     :QObject(parent)
 {
-    uid = procDir.dirName().toInt();
-    cpu = 0;
-    net = 0;
-    disk = 0;
-    memory = 0;
-
     // Open files
     stat.setFileName(QString("/proc/%1/stat").arg(uid));
     statm.setFileName(QString("/proc/%1/statm").arg(uid));
     stat.open(QIODevice::ReadOnly);
     statm.open(QIODevice::ReadOnly);
 
-    // Set process name
+    // Append process name
     QString statContent(stat.readAll());
-    processName = statContent.split(" ").at(1);
-    processName.chop(1);
-    processName.remove(0, 1);
+    QString name = statContent.split(" ").at(1);
+    name.chop(1);
+    name.remove(0, 1);
+    propertyList.append(name);
+
+    // Append process Uid
+    propertyList.append(uid);
+
+    // Append Empty CPU Usage, Memory Usage, Disk Usage, Network Usage
+    propertyList.append(0.0f);
+    propertyList.append(0.0f);
+    propertyList.append(0.0f);
+    propertyList.append(0.0f);
+
     refresh();
 }
 
 Process::~Process()
 {
 
+}
+
+const QVariantList & Process::property()
+{
+    return propertyList;
 }
 
 bool Process::refresh()
@@ -43,41 +53,40 @@ bool Process::refresh()
     QString statmContent = statm.readAll();
     QStringList statmItemList = statmContent.split(" ");
 
-    memory = statmItemList.at(1).toFloat() * (getpagesize() >> 10);
-    memory /= 1024;
+    propertyList[MemoryUsage] = statmItemList.at(1).toFloat() * (getpagesize() >> 10) / 1024;
 
     return true;
 }
 
-float Process::cpuOccupancy() const
+float Process::cpuUsage() const
 {
-    return cpu;
+    return propertyList[CPUUsage].toFloat();
 }
 
-unsigned int Process::uniqueID() const
+unsigned int Process::uid() const
 {
-    return uid;
+    return propertyList[UniqueID].toUInt();
 }
 
-float Process::diskOccupancy() const
+float Process::diskUsage() const
 {
-    return disk;
+    return propertyList[DiskUsage].toFloat();
 }
 
-float Process::networkOccupancy() const
+float Process::networkUsage() const
 {
-    return net;
+    return propertyList[NetworkUsage].toFloat();
 }
 
-float Process::memoryOccupancy() const
+float Process::memoryUsage() const
 {
-    if(memory < 0.1)
+    if(propertyList[MemoryUsage].toFloat() < 0.1)
         return 0;
     else
-        return memory;
+        return propertyList[MemoryUsage].toFloat();
 }
 
-const QString & Process::name() const
+QString Process::name() const
 {
-    return processName;
+    return propertyList[ProcessName].toString();
 }
