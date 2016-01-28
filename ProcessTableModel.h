@@ -8,6 +8,8 @@ class ProcessTableModel : public QAbstractTableModel
     Q_OBJECT
 private:
     QList<Process *> processList;
+    QList<float> maxProperty;
+    QFileSystemWatcher * fileWatcher;
 public:
     explicit ProcessTableModel(QObject * parent = nullptr);
     virtual ~ProcessTableModel();

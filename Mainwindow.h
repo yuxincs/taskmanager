@@ -14,7 +14,7 @@ class MainWindow : public QMainWindow
 private:
     QTimer refreshTimer;
     ProcessTableModel processModel;
-    PerformanceModel systemModel;
+    PerformanceModel performanceModel;
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();

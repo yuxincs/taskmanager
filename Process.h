@@ -8,11 +8,12 @@ public:
     enum Property
     {
         ProcessName = 0,
-        UniqueID,
+        ID,
         CPUUsage,
         MemoryUsage,
         DiskUsage,
-        NetworkUsage
+        NetworkUsage,
+        PropertyCount
     };
 private:
     QFile stat;
@@ -21,16 +22,10 @@ private:
     // Process Name, Unique ID, CPU Usage, Memory Usage, Disk Usage, Network Usage
     QVariantList propertyList;
 public:
-    explicit Process(unsigned int uid, QObject * parent = nullptr);
+    explicit Process(unsigned int id, QObject * parent = nullptr);
     virtual ~Process();
-    unsigned int uid() const;
-    float cpuUsage() const;
-    float memoryUsage() const;
-    float diskUsage() const;
-    float networkUsage() const;
-    QString name() const;
     bool refresh();
-    const QVariantList & property();
+    const QVariant & property(int propertyName);
 };
 
 #endif // PROCESS_H

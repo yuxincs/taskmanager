@@ -9,18 +9,18 @@ MainWindow::MainWindow(QWidget *parent) :
 
     ui->processesView->setModel(&processModel);
     ui->processesView->setSelectionBehavior(QAbstractItemView::SelectRows);
-    ui->processesView->horizontalHeader()->setStretchLastSection(true);
+    //ui->processesView->horizontalHeader()->setStretchLastSection(true);
 
     // Connect the sorting signals / slots
     connect(ui->processesView->horizontalHeader(), &QHeaderView::sortIndicatorChanged,
             &processModel, &ProcessTableModel::sortByColumn);
 
-    // Bind the refresh signals and slots
+    // Connect refresh timers
     connect(&refreshTimer, &QTimer::timeout,
             &processModel, &ProcessTableModel::refresh);
 
     connect(&refreshTimer, &QTimer::timeout,
-            &systemModel, &PerformanceModel::refresh);
+            &performanceModel, &PerformanceModel::refresh);
 
     // Refresh every 200 ms
     refreshTimer.start(200);

@@ -1,11 +1,11 @@
 #include "Process.h"
 
-Process::Process(unsigned int uid, QObject * parent)
+Process::Process(unsigned int id, QObject * parent)
     :QObject(parent)
 {
     // Open files
-    stat.setFileName(QString("/proc/%1/stat").arg(uid));
-    statm.setFileName(QString("/proc/%1/statm").arg(uid));
+    stat.setFileName(QString("/proc/%1/stat").arg(id));
+    statm.setFileName(QString("/proc/%1/statm").arg(id));
     stat.open(QIODevice::ReadOnly);
     statm.open(QIODevice::ReadOnly);
 
@@ -17,7 +17,7 @@ Process::Process(unsigned int uid, QObject * parent)
     propertyList.append(name);
 
     // Append process Uid
-    propertyList.append(uid);
+    propertyList.append(id);
 
     // Append Empty CPU Usage, Memory Usage, Disk Usage, Network Usage
     propertyList.append(0.0f);
@@ -33,9 +33,9 @@ Process::~Process()
 
 }
 
-const QVariantList & Process::property()
+const QVariant & Process::property(int propertyName)
 {
-    return propertyList;
+    return propertyList.at(propertyName);
 }
 
 bool Process::refresh()
@@ -53,40 +53,7 @@ bool Process::refresh()
     QString statmContent = statm.readAll();
     QStringList statmItemList = statmContent.split(" ");
 
-    propertyList[MemoryUsage] = statmItemList.at(1).toFloat() * (getpagesize() >> 10) / 1024;
+    propertyList[MemoryUsage] = statmItemList.at(1).toUInt() * (getpagesize() / 1024);
 
     return true;
-}
-
-float Process::cpuUsage() const
-{
-    return propertyList[CPUUsage].toFloat();
-}
-
-unsigned int Process::uid() const
-{
-    return propertyList[UniqueID].toUInt();
-}
-
-float Process::diskUsage() const
-{
-    return propertyList[DiskUsage].toFloat();
-}
-
-float Process::networkUsage() const
-{
-    return propertyList[NetworkUsage].toFloat();
-}
-
-float Process::memoryUsage() const
-{
-    if(propertyList[MemoryUsage].toFloat() < 0.1)
-        return 0;
-    else
-        return propertyList[MemoryUsage].toFloat();
-}
-
-QString Process::name() const
-{
-    return propertyList[ProcessName].toString();
 }

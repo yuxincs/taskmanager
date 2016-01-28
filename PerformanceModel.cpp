@@ -3,24 +3,6 @@
 PerformanceModel::PerformanceModel(QObject * parent)
     :QObject(parent)
 {
-    refresh();
-}
-
-const QList<Temperature *> & PerformanceModel::cpuTemperatureList()
-{
-    return cpuTempList;
-}
-
-void PerformanceModel::refresh()
-{
-    // Refresh cpu temperatures
-    refreshCpuTemperatures();
-}
-
-void PerformanceModel::refreshCpuTemperatures()
-{
-    QDir dir("/sys/class/hwmon/hwmon1");
-
     // Iterate all temp*_* files
     for(int i = 1;;i++)
     {
@@ -33,12 +15,30 @@ void PerformanceModel::refreshCpuTemperatures()
 
         QString label(labelFile.readAll());
         float temp = QString(inputFile.readAll()).toInt() / 1000;
+        cpuTempList.append(new Temperature(label, temp));
+    }
+}
 
-        // If the list hasn't been populated
-        if(cpuTempList.size() < i)
-            cpuTempList.append(new Temperature(label,temp));
-        else
-            cpuTempList.value(i - 1)->setValue(temp);
+const QList<Temperature *> & PerformanceModel::cpuTemperatureList()
+{
+    return cpuTempList;
+}
+
+void PerformanceModel::refresh()
+{
+    refreshCpuTemperatures();
+}
+
+void PerformanceModel::refreshCpuTemperatures()
+{
+    for(int i = 1; i < cpuTempList.size() + 1; i ++)
+    {
+        QFile inputFile(QString("/sys/class/hwmon/hwmon1/temp%1_input").arg(i));
+        if(!inputFile.open(QIODevice::ReadOnly))
+            return;
+
+        float temp = QString(inputFile.readAll()).toInt() / 1000;
+        cpuTempList[i - 1]->setValue(temp);
     }
 }
 
