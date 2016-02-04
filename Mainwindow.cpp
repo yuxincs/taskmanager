@@ -22,8 +22,8 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(&refreshTimer, &QTimer::timeout,
             &performanceModel, &PerformanceModel::refresh);
 
-    // Refresh every 200 ms
-    refreshTimer.start(200);
+    // Refresh every 500 ms
+    refreshTimer.start(500);
 }
 
 MainWindow::~MainWindow()

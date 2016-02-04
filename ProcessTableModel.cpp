@@ -3,42 +3,41 @@
 ProcessTableModel::ProcessTableModel(QObject *parent)
     :QAbstractTableModel(parent)
 {
-    // Clear maximum property values
-    for(int i = 0;i < Process::PropertyCount; i++)
-        maxProperty.append(-1);
-    // Set maxProperty for CPU Usage
-    maxProperty[Process::CPUUsage] = 100;
-
-    for(const QString entry : QDir("/proc").entryList(QDir::NoDotAndDotDot | QDir::Dirs))
-    {
-        bool isProc = false;
-        int uid = entry.toInt(&isProc);
-        if(isProc)
-            processList.append(new Process(uid, this));
-    }
+    refresh();
 }
 
 
 void ProcessTableModel::refresh()
 {
-    maxProperty[Process::MemoryUsage] = maxProperty[Process::DiskUsage] = maxProperty[Process::NetworkUsage] = 0;
     emit layoutAboutToBeChanged();
+
+    // Iterate through /proc directory to find new process
+    for(const QString entry : QDir("/proc").entryList(QDir::NoDotAndDotDot | QDir::Dirs))
+    {
+        bool isProc = false;
+        int uid = entry.toInt(&isProc);
+
+        // If it is a new process
+        if(isProc && !pidSet.contains(uid))
+        {
+            processList.append(new Process(uid, this));
+            pidSet.insert(uid);
+        }
+    }
+
+    // Iterate through current process list to refresh info
+    // and remove those have already been killed
     for(Process * process: processList)
     {
         // If process doesn't exist anymore
         if(!process->refresh())
         {
             processList.removeOne(process);
+            pidSet.remove(process->property(Process::ID).toUInt());
             delete process;
         }
-        // Refresh maximum property values
-        else
-        {
-            maxProperty[Process::MemoryUsage] = std::max(maxProperty[Process::MemoryUsage], process->property(Process::MemoryUsage).toFloat());
-            maxProperty[Process::DiskUsage] = std::max(maxProperty[Process::DiskUsage], process->property(Process::DiskUsage).toFloat());
-            maxProperty[Process::NetworkUsage] = std::max(maxProperty[Process::NetworkUsage], process->property(Process::NetworkUsage).toFloat());
-        }
     }
+
     emit layoutChanged();
 }
 
@@ -140,10 +139,10 @@ QVariant ProcessTableModel::data(const QModelIndex & index, int role) const
     {
         if(index.column() > 1)
         {
-            if(maxProperty.at(index.column()) == 0)
+            //if(maxProperty.at(index.column()) == 0)
                 return QBrush(QColor(255, 198, 61, 80));
-            else
-                return QBrush(QColor(255, 198, 61, 80 + 175 * (process->property(index.column()).toFloat()) / maxProperty.at(index.column())));
+           // else
+             //   return QBrush(QColor(255, 198, 61, 80 + 175 * (process->property(index.column()).toFloat()) / maxProperty.at(index.column())));
         }
     }
     else if (role == Qt::TextAlignmentRole)

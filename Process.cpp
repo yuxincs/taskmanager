@@ -25,7 +25,9 @@ Process::Process(unsigned int id, QObject * parent)
     propertyList.append(0.0f);
     propertyList.append(0.0f);
 
-    refresh();
+    // Close files
+    stat.close();
+    statm.close();
 }
 
 Process::~Process()
@@ -40,9 +42,6 @@ const QVariant & Process::property(int propertyName)
 
 bool Process::refresh()
 {
-    stat.close();
-    statm.close();
-
     // If the process doesn't exist anymore
     if(!stat.open(QIODevice::ReadOnly) || !statm.open(QIODevice::ReadOnly))
         return false;
@@ -55,5 +54,8 @@ bool Process::refresh()
 
     propertyList[MemoryUsage] = statmItemList.at(1).toUInt() * (getpagesize() / 1024);
 
+    // Close files
+    stat.close();
+    statm.close();
     return true;
 }
