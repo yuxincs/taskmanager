@@ -16,8 +16,6 @@ public:
         PropertyCount
     };
 private:
-    QFile stat;
-    QFile statm;
     // This list holds process' properties by the order below:
     // Process Name, Unique ID, CPU Usage, Memory Usage, Disk Usage, Network Usage
     QVariantList propertyList;

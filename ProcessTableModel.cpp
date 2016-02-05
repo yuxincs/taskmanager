@@ -3,6 +3,11 @@
 ProcessTableModel::ProcessTableModel(QObject *parent)
     :QAbstractTableModel(parent)
 {
+    sortColumn = -1;
+    sortOrder = Qt::AscendingOrder;
+
+    // Set maximum property
+    maxProperty << 0 << 0 << 100 << 1024 * 128 << 50 << 1;
     refresh();
 }
 
@@ -32,12 +37,13 @@ void ProcessTableModel::refresh()
         // If process doesn't exist anymore
         if(!process->refresh())
         {
-            processList.removeOne(process);
             pidSet.remove(process->property(Process::ID).toUInt());
+            processList.removeOne(process);
             delete process;
         }
     }
 
+    sortByColumn(sortColumn, sortOrder);
     emit layoutChanged();
 }
 
@@ -72,11 +78,11 @@ QVariant ProcessTableModel::headerData(int section, Qt::Orientation orientation,
             switch(section)
             {
             case Process::ProcessName:
-                return QString("Name");
+                return QString("Process Name");
             case Process::ID:
                 return QString("PID");
             case Process::CPUUsage:
-                return QString("% CPU");
+                return QString("CPU");
             case Process::MemoryUsage:
                 return QString("Memory");
             case Process::DiskUsage:
@@ -87,15 +93,14 @@ QVariant ProcessTableModel::headerData(int section, Qt::Orientation orientation,
                 return QVariant();
             }
         }
-        else if (role == Qt::SizeHintRole)
+        else if (role == Qt::TextAlignmentRole)
         {
-            switch(section)
-            {
-            case 0:
-                return QSize(300,30);
-            default:
-                return QVariant();
-            }
+            if(section == 0)
+                return (int)Qt::AlignBottom | (int)Qt::AlignLeft;
+            else if(section == 1)
+                return (int)Qt::AlignBottom | (int)Qt::AlignHCenter;
+            else
+                return (int)Qt::AlignBottom | (int)Qt::AlignRight;
         }
     }
     return QVariant();
@@ -139,22 +144,23 @@ QVariant ProcessTableModel::data(const QModelIndex & index, int role) const
     {
         if(index.column() > 1)
         {
-            //if(maxProperty.at(index.column()) == 0)
-                return QBrush(QColor(255, 198, 61, 80));
-           // else
-             //   return QBrush(QColor(255, 198, 61, 80 + 175 * (process->property(index.column()).toFloat()) / maxProperty.at(index.column())));
+            int level =  process->property(index.column()).toFloat() / (maxProperty.at(index.column()) / 5);
+            level = level > 4 ? 4 : level;
+            return QBrush(QColor(255, 198, 61, 80 + 100 * ((float)level / 4)));
         }
+
+        return QVariant();
     }
     else if (role == Qt::TextAlignmentRole)
     {
         switch(index.column())
         {
         case Process::ProcessName:
-            return Qt::AlignLeft;
+            return (int)Qt::AlignLeft | (int)Qt::AlignVCenter;
         case Process::ID:
-            return Qt::AlignHCenter;
+            return (int)Qt::AlignHCenter | (int)Qt::AlignVCenter;
         default:
-            return Qt::AlignRight;
+            return (int)Qt::AlignRight | (int)Qt::AlignVCenter;
         }
     }
     return QVariant();
@@ -162,11 +168,17 @@ QVariant ProcessTableModel::data(const QModelIndex & index, int role) const
 
 void ProcessTableModel::sortByColumn(int column, Qt::SortOrder order)
 {
+    if(column < 0 || column >= Process::PropertyCount)
+        return;
+
+    sortColumn = column;
+    sortOrder = order;
     sort(column, order);
 }
 
 void ProcessTableModel::sort(int column, Qt::SortOrder order)
 {
+    layoutAboutToBeChanged();
     if(order == Qt::AscendingOrder)
         std::sort(processList.begin(),processList.end(),
               [=](Process * left, Process * right)
@@ -188,5 +200,5 @@ void ProcessTableModel::sort(int column, Qt::SortOrder order)
                 return left->property(column).toFloat() > right->property(column).toFloat();
         });
 
-    dataChanged(QModelIndex(), QModelIndex());
+    layoutChanged();
 }

@@ -9,6 +9,10 @@ class ProcessTableModel : public QAbstractTableModel
 private:
     QList<Process *> processList;
     QSet<unsigned int> pidSet;
+    QList<float> maxProperty;
+
+    int sortColumn;
+    Qt::SortOrder sortOrder;
 public:
     explicit ProcessTableModel(QObject * parent = nullptr);
     virtual ~ProcessTableModel();

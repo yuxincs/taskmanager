@@ -17,14 +17,16 @@ SOURCES += main.cpp\
     Process.cpp \
     ProcessTableModel.cpp \
     Temperature.cpp \
-    PerformanceModel.cpp
+    PerformanceModel.cpp \
+    ProcessViewDelegate.cpp
 
 HEADERS  += Mainwindow.h \
     stable.h \
     Process.h \
     ProcessTableModel.h \
     Temperature.h \
-    PerformanceModel.h
+    PerformanceModel.h \
+    ProcessViewDelegate.h
 
 FORMS    += Mainwindow.ui
 

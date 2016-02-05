@@ -3,29 +3,25 @@
 Process::Process(unsigned int id, QObject * parent)
     :QObject(parent)
 {
-    // Open files
-    stat.setFileName(QString("/proc/%1/stat").arg(id));
-    statm.setFileName(QString("/proc/%1/statm").arg(id));
-    stat.open(QIODevice::ReadOnly);
-    statm.open(QIODevice::ReadOnly);
+    // Append info into the property list
+    propertyList << QString() << id << 0.0f << 0.0f << 0.0f << 0.0f;
 
-    // Append process name
+    // Open files
+    QFile stat(QString("/proc/%1/stat").arg(id));
+    QFile statm(QString("/proc/%1/statm").arg(id));
+    if(!stat.exists() || !statm.exists())
+        return;
+    if(!stat.open(QIODevice::ReadOnly) || !statm.open(QIODevice::ReadOnly))
+        return;
+
+    // Get process name
     QString statContent(stat.readAll());
     QString name = statContent.split(" ").at(1);
     name.chop(1);
     name.remove(0, 1);
-    propertyList.append(name);
 
-    // Append process Uid
-    propertyList.append(id);
+    propertyList[ProcessName] = name;
 
-    // Append Empty CPU Usage, Memory Usage, Disk Usage, Network Usage
-    propertyList.append(0.0f);
-    propertyList.append(0.0f);
-    propertyList.append(0.0f);
-    propertyList.append(0.0f);
-
-    // Close files
     stat.close();
     statm.close();
 }
@@ -42,7 +38,11 @@ const QVariant & Process::property(int propertyName)
 
 bool Process::refresh()
 {
-    // If the process doesn't exist anymore
+    // Open files
+    QFile stat(QString("/proc/%1/stat").arg(propertyList.at(ID).toUInt()));
+    QFile statm(QString("/proc/%1/statm").arg(propertyList.at(ID).toUInt()));
+    if(!stat.exists() || !statm.exists())
+        return false;
     if(!stat.open(QIODevice::ReadOnly) || !statm.open(QIODevice::ReadOnly))
         return false;
 
@@ -54,7 +54,6 @@ bool Process::refresh()
 
     propertyList[MemoryUsage] = statmItemList.at(1).toUInt() * (getpagesize() / 1024);
 
-    // Close files
     stat.close();
     statm.close();
     return true;
