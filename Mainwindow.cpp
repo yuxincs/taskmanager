@@ -13,19 +13,19 @@ MainWindow::MainWindow(QWidget *parent) :
 
     ui->setupUi(this);
 
-    ui->processesView->setModel(&processModel);
-    ui->processesView->setSelectionBehavior(QAbstractItemView::SelectRows);
-    ui->processesView->setSelectionMode(QAbstractItemView::SingleSelection);
-    ui->processesView->setColumnWidth(0,200);
-    ui->processesView->setColumnWidth(1,60);
-    ui->processesView->setColumnWidth(2,60);
-    ui->processesView->setColumnWidth(3,100);
-    ui->processesView->setColumnWidth(4,90);
-    ui->processesView->setColumnWidth(5,80);
-    ui->processesView->setSortingEnabled(true);
+    ui->processView->setModel(&processModel);
+    ui->processView->setSelectionBehavior(QAbstractItemView::SelectRows);
+    ui->processView->setSelectionMode(QAbstractItemView::SingleSelection);
+    ui->processView->setColumnWidth(0,200);
+    ui->processView->setColumnWidth(1,60);
+    ui->processView->setColumnWidth(2,60);
+    ui->processView->setColumnWidth(3,100);
+    ui->processView->setColumnWidth(4,90);
+    ui->processView->setColumnWidth(5,80);
+    ui->processView->setSortingEnabled(true);
 
     // connect the sorting signals / slots
-    connect(ui->processesView->header(), &QHeaderView::sortIndicatorChanged,
+    connect(ui->processView->header(), &QHeaderView::sortIndicatorChanged,
             &processModel, &ProcessTableModel::sortByColumn);
 
     // connect refresh timers
@@ -43,7 +43,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     connect(ui->killProcessButton, &QPushButton::clicked,
             [=]{
-        QModelIndex curIndex = ui->processesView->currentIndex();
+        QModelIndex curIndex = ui->processView->currentIndex();
         if(curIndex.isValid())
         {
             unsigned int pid = curIndex.sibling(curIndex.row(), 1).data().toUInt();

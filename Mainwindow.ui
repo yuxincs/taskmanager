@@ -218,7 +218,7 @@ QWidget#titleWidget{
           </size>
          </property>
          <property name="text">
-          <string>x</string>
+          <string>╳ </string>
          </property>
         </widget>
        </item>
@@ -231,9 +231,9 @@ QWidget#titleWidget{
        <string notr="true"/>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>1</number>
       </property>
-      <widget class="QWidget" name="tabProcesses">
+      <widget class="QWidget" name="processTab">
        <attribute name="title">
         <string>Processes</string>
        </attribute>
@@ -254,7 +254,7 @@ QWidget#titleWidget{
          <number>0</number>
         </property>
         <item>
-         <widget class="QTreeView" name="processesView"/>
+         <widget class="QTreeView" name="processView"/>
         </item>
         <item>
          <widget class="QWidget" name="killProcessWidget" native="true">
@@ -286,49 +286,68 @@ QWidget#titleWidget{
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="tabPerformance">
+      <widget class="QWidget" name="performanceTab">
        <attribute name="title">
         <string>Performance</string>
        </attribute>
-       <layout class="QVBoxLayout" name="verticalLayout_3">
-        <property name="spacing">
-         <number>0</number>
-        </property>
-        <property name="leftMargin">
-         <number>0</number>
-        </property>
-        <property name="topMargin">
-         <number>0</number>
-        </property>
-        <property name="rightMargin">
-         <number>0</number>
-        </property>
-        <property name="bottomMargin">
-         <number>0</number>
-        </property>
+       <layout class="QHBoxLayout" name="horizontalLayout_3">
         <item>
-         <widget class="QTabWidget" name="tabWidget_2">
-          <property name="tabPosition">
-           <enum>QTabWidget::West</enum>
-          </property>
-          <property name="currentIndex">
-           <number>1</number>
-          </property>
-          <widget class="QWidget" name="tab">
-           <attribute name="title">
-            <string>Tab 1</string>
-           </attribute>
+         <widget class="QListWidget" name="usageOptionList">
+          <item>
+           <property name="text">
+            <string>CPU</string>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>15</pointsize>
+            </font>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Memory</string>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>15</pointsize>
+            </font>
+           </property>
+          </item>
+         </widget>
+        </item>
+        <item>
+         <widget class="QStackedWidget" name="stackedWidget">
+          <widget class="QWidget" name="couPage">
+           <widget class="UsagePlot" name="cpuUsagePLot" native="true">
+            <property name="geometry">
+             <rect>
+              <x>30</x>
+              <y>40</y>
+              <width>211</width>
+              <height>91</height>
+             </rect>
+            </property>
+           </widget>
+           <zorder>usageOptionList</zorder>
+           <zorder>cpuUsagePLot</zorder>
           </widget>
-          <widget class="QWidget" name="tab_2">
-           <attribute name="title">
-            <string>Tab 2</string>
-           </attribute>
+          <widget class="QWidget" name="memoryPage">
+           <widget class="UsagePlot" name="memoryUsagePlot" native="true">
+            <property name="geometry">
+             <rect>
+              <x>20</x>
+              <y>70</y>
+              <width>231</width>
+              <height>121</height>
+             </rect>
+            </property>
+           </widget>
           </widget>
          </widget>
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="tabSystem">
+      <widget class="QWidget" name="systemTab">
        <attribute name="title">
         <string>System</string>
        </attribute>
@@ -349,6 +368,14 @@ QWidget#titleWidget{
   </widget>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
+  <customwidget>
+   <class>UsagePlot</class>
+   <extends>QWidget</extends>
+   <header location="global">UsagePlot.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

@@ -1,4 +1,5 @@
 #include "ProcessTableModel.h"
+#include "Mainwindow.h"
 
 // initialize static members
 unsigned long ProcessTableModel::lastCpuTime = -1;
@@ -168,12 +169,13 @@ QVariant ProcessTableModel::data(const QModelIndex & index, int role) const
         case Process::DiskUsage:
         {
             unsigned int diskIO = process->property(Process::DiskUsage).toUInt();
-            if(diskIO == 0)
+            unsigned int averageDiskIO = diskIO / (MainWindow::REFRESH_RATE / 1000);
+            if(averageDiskIO == 0)
                 return "0 MB/Sec";
-            else if(diskIO < 1024 * 100)
+            else if(averageDiskIO < 1024 * 100)
                 return "0.1 MB/Sec";
             else
-                return QString::number(diskIO / (float)(1024 * 1024), 'f', 1) + " MB/Sec";
+                return QString::number(averageDiskIO / (float)(1024 * 1024), 'f', 1) + " MB/Sec";
         }
         case Process::NetworkUsage:
             return process->property(Process::NetworkUsage).toString() + " Mbps";

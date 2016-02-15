@@ -75,12 +75,12 @@ bool Process::refresh()
     if(ProcessTableModel::lastTotalCpuTime() > 0)
     {
         float totalDiff = ProcessTableModel::curTotalCpuTime() - ProcessTableModel::lastTotalCpuTime();
-        float procDiff = curCpuTime - lastCpuTime;
+        float diff = curCpuTime - lastCpuTime;
 
-        if(totalDiff == 0 || procDiff == 0)
+        if(totalDiff == 0 || diff == 0)
             propertyList[CPUUsage] = 0;
         else
-            propertyList[CPUUsage] = 100 * (procDiff / totalDiff);
+            propertyList[CPUUsage] = 100 * (diff / totalDiff);
     }
     if(lastDiskIO > 0)
         propertyList[DiskUsage] = curDiskIO - lastDiskIO;
