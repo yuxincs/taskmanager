@@ -13,9 +13,14 @@ private:
 
     int sortColumn;
     Qt::SortOrder sortOrder;
+
+    static unsigned long lastCpuTime;
+    static unsigned long curCpuTime;
 public:
     explicit ProcessTableModel(QObject * parent = nullptr);
     virtual ~ProcessTableModel();
+    static unsigned long lastTotalCpuTime();
+    static unsigned long curTotalCpuTime();
 protected:
     int rowCount(const QModelIndex & parent = QModelIndex()) const;
     int columnCount(const QModelIndex & parent) const;
@@ -23,6 +28,7 @@ protected:
     QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
     void sort(int column, Qt::SortOrder order = Qt::AscendingOrder);
 public slots:
+    void killProcess(unsigned int pid);
     void sortByColumn(int column, Qt::SortOrder order);
     void refresh();
 };

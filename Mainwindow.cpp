@@ -1,6 +1,9 @@
 #include "Mainwindow.h"
 #include "ui_Mainwindow.h"
 
+// initialize static members
+const int MainWindow::REFRESH_RATE = 1000;
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -17,15 +20,15 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->processesView->setColumnWidth(1,60);
     ui->processesView->setColumnWidth(2,60);
     ui->processesView->setColumnWidth(3,100);
-    ui->processesView->setColumnWidth(4,80);
+    ui->processesView->setColumnWidth(4,90);
     ui->processesView->setColumnWidth(5,80);
     ui->processesView->setSortingEnabled(true);
 
-    // Connect the sorting signals / slots
+    // connect the sorting signals / slots
     connect(ui->processesView->header(), &QHeaderView::sortIndicatorChanged,
             &processModel, &ProcessTableModel::sortByColumn);
 
-    // Connect refresh timers
+    // connect refresh timers
     connect(&refreshTimer, &QTimer::timeout,
             &processModel, &ProcessTableModel::refresh);
 
@@ -38,8 +41,18 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->minimizeButton, &QPushButton::clicked,
             this, &MainWindow::showMinimized);
 
-    // Refresh every 500 ms
-    refreshTimer.start(500);
+    connect(ui->killProcessButton, &QPushButton::clicked,
+            [=]{
+        QModelIndex curIndex = ui->processesView->currentIndex();
+        if(curIndex.isValid())
+        {
+            unsigned int pid = curIndex.sibling(curIndex.row(), 1).data().toUInt();
+            processModel.killProcess(pid);
+        }
+    });
+
+    // set refresh rate
+    refreshTimer.start(REFRESH_RATE);
 }
 
 MainWindow::~MainWindow()

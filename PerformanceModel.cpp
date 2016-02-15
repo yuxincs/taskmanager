@@ -1,15 +1,16 @@
 #include "PerformanceModel.h"
+#include "UsagePlot.h"
 
 PerformanceModel::PerformanceModel(QObject * parent)
     :QObject(parent)
 {
-    // Iterate all temp*_* files
+    // iterate all temp*_* files
     for(int i = 1;;i++)
     {
         QFile labelFile(QString("/sys/class/hwmon/hwmon1/temp%1_label").arg(i));
         QFile inputFile(QString("/sys/class/hwmon/hwmon1/temp%1_input").arg(i));
 
-        // If files don't exist stop iteration
+        // if files don't exist stop iteration
         if(!labelFile.open(QIODevice::ReadOnly) || !inputFile.open(QIODevice::ReadOnly))
             break;
 

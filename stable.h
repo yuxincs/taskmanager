@@ -4,4 +4,5 @@
 #include <QtCore>
 #include <QtWidgets>
 #include <QtGui>
+#include "qcustomplot.h"
 #endif // STABLE_H

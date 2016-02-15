@@ -7,7 +7,7 @@
 QT       += core gui
 CONFIG   += c++11
 
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+greaterThan(QT_MAJOR_VERSION, 4): QT += widgets printsupport
 
 TARGET = TaskManager
 TEMPLATE = app
@@ -18,7 +18,8 @@ SOURCES += main.cpp\
     ProcessTableModel.cpp \
     Temperature.cpp \
     PerformanceModel.cpp \
-    ProcessViewDelegate.cpp
+    qcustomplot.cpp \
+    UsagePlot.cpp
 
 HEADERS  += Mainwindow.h \
     stable.h \
@@ -26,7 +27,8 @@ HEADERS  += Mainwindow.h \
     ProcessTableModel.h \
     Temperature.h \
     PerformanceModel.h \
-    ProcessViewDelegate.h
+    qcustomplot.h \
+    UsagePlot.h
 
 FORMS    += Mainwindow.ui
 

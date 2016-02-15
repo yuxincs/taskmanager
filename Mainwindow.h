@@ -21,6 +21,7 @@ private:
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
+    static const int REFRESH_RATE;
 protected:
     void mousePressEvent(QMouseEvent * event);
     void mouseMoveEvent(QMouseEvent * event);

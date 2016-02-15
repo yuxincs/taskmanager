@@ -16,6 +16,8 @@ public:
         PropertyCount
     };
 private:
+    unsigned int lastCpuTime;
+    unsigned int lastDiskIO;
     // This list holds process' properties by the order below:
     // Process Name, Unique ID, CPU Usage, Memory Usage, Disk Usage, Network Usage
     QVariantList propertyList;

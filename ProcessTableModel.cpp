@@ -1,14 +1,22 @@
 #include "ProcessTableModel.h"
 
+// initialize static members
+unsigned long ProcessTableModel::lastCpuTime = -1;
+unsigned long ProcessTableModel::curCpuTime = -1;
+
+
 ProcessTableModel::ProcessTableModel(QObject *parent)
     :QAbstractTableModel(parent)
 {
     sortColumn = -1;
     sortOrder = Qt::AscendingOrder;
 
-    // Set maximum property
+    // set maximum property
     maxProperty << 0 << 0 << 100 << 1024 * 128 << 50 << 1;
+
     refresh();
+    // refresh again after 100 ms to calculate cpu usage
+    QTimer::singleShot(100, this, &ProcessTableModel::refresh);
 }
 
 
@@ -16,32 +24,51 @@ void ProcessTableModel::refresh()
 {
     emit layoutAboutToBeChanged();
 
-    // Iterate through /proc directory to find new process
-    for(const QString entry : QDir("/proc").entryList(QDir::NoDotAndDotDot | QDir::Dirs))
+    // read current total cpu time
+    QFile stat("/proc/stat");
+    stat.open(QIODevice::ReadOnly);
+    QStringList statContent = QString(stat.readLine()).split(" ");
+    curCpuTime = 0;
+    for(int i = 1;i < statContent.size(); i ++)
+    {
+        const QString & item = statContent.at(i);
+        curCpuTime += item.toULong();
+    }
+
+    // iterate through /proc directory to find new process
+    for(const QString & entry : QDir("/proc").entryList(QDir::NoDotAndDotDot | QDir::Dirs))
     {
         bool isProc = false;
-        int uid = entry.toInt(&isProc);
+        int pid = entry.toInt(&isProc);
 
-        // If it is a new process
-        if(isProc && !pidSet.contains(uid))
+        // if it is a new process
+        if(isProc && !pidSet.contains(pid))
         {
-            processList.append(new Process(uid, this));
-            pidSet.insert(uid);
+            processList.append(new Process(pid, this));
+            pidSet.insert(pid);
         }
     }
 
-    // Iterate through current process list to refresh info
+    QList<Process *> toDelete;
+    // iterate through current process list to refresh info
     // and remove those have already been killed
-    for(Process * process: processList)
+    for(Process * process : processList)
     {
-        // If process doesn't exist anymore
+        // if process doesn't exist anymore
+        // queue for deletion
         if(!process->refresh())
-        {
-            pidSet.remove(process->property(Process::ID).toUInt());
-            processList.removeOne(process);
-            delete process;
-        }
+            toDelete.append(process);
     }
+    // execute deletion
+    for(Process * process : toDelete)
+    {
+        pidSet.remove(process->property(Process::ID).toUInt());
+        processList.removeOne(process);
+        delete process;
+    }
+
+    // refresh cpu time
+    lastCpuTime = curCpuTime;
 
     sortByColumn(sortColumn, sortOrder);
     emit layoutChanged();
@@ -121,7 +148,13 @@ QVariant ProcessTableModel::data(const QModelIndex & index, int role) const
         case Process::ID:
             return process->property(Process::ID);
         case Process::CPUUsage:
-            return process->property(Process::CPUUsage).toString() + " %";
+        {
+            float cpuUsage = process->property(Process::CPUUsage).toFloat();
+            if(cpuUsage == 0)
+                return "0 %";
+            else
+                return QString::number(cpuUsage, 'f', 1) + " %";
+        }
         case Process::MemoryUsage:
         {
             unsigned int memory = process->property(Process::MemoryUsage).toUInt();
@@ -133,7 +166,15 @@ QVariant ProcessTableModel::data(const QModelIndex & index, int role) const
                 return QString::number(memory / (1024 * 1024), 'f', 1) + " GB";
         }
         case Process::DiskUsage:
-            return process->property(Process::DiskUsage).toString() + " MB/Sec";
+        {
+            unsigned int diskIO = process->property(Process::DiskUsage).toUInt();
+            if(diskIO == 0)
+                return "0 MB/Sec";
+            else if(diskIO < 1024 * 100)
+                return "0.1 MB/Sec";
+            else
+                return QString::number(diskIO / (float)(1024 * 1024), 'f', 1) + " MB/Sec";
+        }
         case Process::NetworkUsage:
             return process->property(Process::NetworkUsage).toString() + " Mbps";
         default:
@@ -178,7 +219,8 @@ void ProcessTableModel::sortByColumn(int column, Qt::SortOrder order)
 
 void ProcessTableModel::sort(int column, Qt::SortOrder order)
 {
-    layoutAboutToBeChanged();
+    emit layoutAboutToBeChanged();
+
     if(order == Qt::AscendingOrder)
         std::sort(processList.begin(),processList.end(),
               [=](Process * left, Process * right)
@@ -200,5 +242,21 @@ void ProcessTableModel::sort(int column, Qt::SortOrder order)
                 return left->property(column).toFloat() > right->property(column).toFloat();
         });
 
-    layoutChanged();
+    emit layoutChanged();
+}
+
+void ProcessTableModel::killProcess(unsigned int pid)
+{
+    QString cmd = QString("kill -s 9 %1").arg(pid);
+    system(cmd.toLatin1().data());
+}
+
+unsigned long ProcessTableModel::lastTotalCpuTime()
+{
+    return lastCpuTime;
+}
+
+unsigned long ProcessTableModel::curTotalCpuTime()
+{
+    return curCpuTime;
 }
