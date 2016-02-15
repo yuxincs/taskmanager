@@ -12,6 +12,7 @@ MainWindow::MainWindow(QWidget *parent) :
     isDragging = false;
 
     ui->setupUi(this);
+    setupUsagePlots();
 
     ui->processView->setModel(&processModel);
     ui->processView->setSelectionBehavior(QAbstractItemView::SelectRows);
@@ -28,12 +29,19 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->processView->header(), &QHeaderView::sortIndicatorChanged,
             &processModel, &ProcessTableModel::sortByColumn);
 
+    // connect list widget's signals to stack widget
+    connect(ui->usageOptionList, &QListWidget::currentRowChanged,
+            ui->stackedWidget, &QStackedWidget::setCurrentIndex);
+
     // connect refresh timers
     connect(&refreshTimer, &QTimer::timeout,
             &processModel, &ProcessTableModel::refresh);
 
     connect(&refreshTimer, &QTimer::timeout,
             &performanceModel, &PerformanceModel::refresh);
+
+    connect(&refreshTimer, &QTimer::timeout,
+            this, &MainWindow::updateUsageOptionIcon);
 
     connect(ui->closeButton, &QPushButton::clicked,
             qApp, &QApplication::quit);
@@ -79,5 +87,32 @@ void MainWindow::mouseMoveEvent(QMouseEvent * event)
 void MainWindow::mouseReleaseEvent(QMouseEvent * event)
 {
     isDragging = false;
+}
+
+void MainWindow::setupUsagePlots()
+{
+    // setup cpu usage plot
+    ui->cpuUsagePLot->setPlotName("% Utilization");
+    ui->cpuUsagePLot->setMaximumTime(60);
+    ui->cpuUsagePLot->setMaximumUsage(100);
+    ui->cpuUsagePLot->setUsageUnit("%");
+    ui->cpuUsagePLot->setThemeColor(QColor(17, 125, 187));
+
+    // setup memory usage plot
+    ui->memoryUsagePlot->setPlotName("Memory Usage");
+    ui->memoryUsagePlot->setMaximumTime(60);
+    ui->memoryUsagePlot->setMaximumUsage(12);
+    ui->memoryUsagePlot->setUsageUnit("GB");
+    ui->memoryUsagePlot->setThemeColor(QColor(139,18,174));
+
+    updateUsageOptionIcon();
+}
+
+void MainWindow::updateUsageOptionIcon()
+{
+    QPixmap cpuPixmap = ui->cpuUsagePLot->toPixmap();
+    cpuPixmap = cpuPixmap.copy(0, 22, cpuPixmap.width(), cpuPixmap.height() - 44);
+    ui->usageOptionList->item(0)->setIcon(QIcon(cpuPixmap));
+    ui->usageOptionList->item(1)->setIcon(QIcon(ui->memoryUsagePlot->toPixmap()));
 }
 

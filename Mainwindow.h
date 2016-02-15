@@ -18,6 +18,9 @@ private:
     QTimer refreshTimer;
     ProcessTableModel processModel;
     PerformanceModel performanceModel;
+    void setupUsagePlots();
+private slots:
+    void updateUsageOptionIcon();
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
