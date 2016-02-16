@@ -33,3 +33,6 @@ FORMS    += Mainwindow.ui
 # Use Precompiled headers (PCH)
 PRECOMPILED_HEADER  = stable.h
 
+RESOURCES += \
+    taskmanager.qrc
+

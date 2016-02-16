@@ -12,13 +12,14 @@ PerformanceModel::PerformanceModel(QObject * parent)
 
 void PerformanceModel::refresh()
 {
+    refreshCpuInfo();
     refreshMemoryInfo();
     refreshCpuTime();
     refreshCpuTemperatures();
 
     unsigned int totalDiff = curCpuTime - lastCpuTime;
     unsigned int totalIdleDiff = curCpuIdleTime - lastCpuIdleTime;
-    propertyList[CpuUtilization] = 100 * (totalDiff - totalIdleDiff) / totalDiff;
+    propertyList[CpuUtilization] = 100 * totalIdleDiff / totalDiff;
 
     unsigned int memoryUtilization = 100 * (propertyList[MemoryTotal].toUInt() - propertyList[MemoryAvailable].toUInt()) / propertyList[MemoryTotal].toUInt();
 
@@ -55,8 +56,49 @@ void PerformanceModel::refreshCpuTime()
 
 void PerformanceModel::refreshMemoryInfo()
 {
-    propertyList[MemoryTotal] = 12.0f;
-    propertyList[MemoryAvailable] = 6.3f;
-    propertyList[MemoryUsed] = 5.7f;
+    QRegularExpression rx;
+    QFile meminfo("/proc/meminfo");
+    if(meminfo.open(QIODevice::ReadOnly))
+    {
+        QString content(meminfo.readAll());
+        rx.setPattern("MemTotal:(.*) kB\n");
+        propertyList[MemoryTotal] = rx.match(content).captured(1).toUInt();
+
+        rx.setPattern("MemAvailable:(.*) kB\n");
+        propertyList[MemoryAvailable] = rx.match(content).captured(1).toUInt();
+
+        rx.setPattern("Cached:(.*) kB\n");
+        propertyList[MemoryCached] = rx.match(content).captured(1).toUInt();
+    }
+}
+
+void PerformanceModel::refreshCpuInfo()
+{
+    // refresh uptime
+    QFile uptime("/proc/uptime");
+    if(uptime.open(QIODevice::ReadOnly))
+    {
+        QStringList uptimeContent = QString(uptime.readAll()).split(" ");
+        int seconds = uptimeContent.at(0).toFloat();
+
+        propertyList[CpuUpTime] = QTime(0, 0).addSecs(seconds);
+    }
+
+    QRegularExpression rx;
+    QFile cpuinfo("/proc/cpuinfo");
+    if(cpuinfo.open(QIODevice::ReadOnly))
+    {
+        QString content(cpuinfo.readAll());
+        rx.setPattern("cpu MHz		: (.*)\n");
+        propertyList[CpuSpeed] = rx.match(content).captured(1).toFloat();
+    }
+
+    QFile stat("/proc/stat");
+    if(stat.open(QIODevice::ReadOnly))
+    {
+        QString content(stat.readAll());
+        rx.setPattern("processes (.*)\n");
+        propertyList[Processes] = rx.match(content).captured(1);
+    }
 }
 

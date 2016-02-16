@@ -19,8 +19,8 @@ private:
 public:
     enum Type
     {
-        CpuUtilization, CpuSpeed, Processes, Threads, CpuUpTime, CpuTemperature,
-        MemoryUsed, MemoryAvailable, MemoryTotal,
+        CpuUtilization, CpuSpeed, Processes, CpuUpTime, CpuTemperature,
+        MemoryAvailable, MemoryTotal, MemoryCached,
         TypeCount
     };
 

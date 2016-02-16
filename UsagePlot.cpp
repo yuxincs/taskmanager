@@ -14,6 +14,8 @@ void UsagePlot::resizeEvent(QResizeEvent *event)
 UsagePlot::UsagePlot(QWidget * parent /*= nullptr*/)
 	:QCustomPlot(parent), time(60), usage(60)
 {
+    isReplotBlocked = false;
+
 	// set minimum margins
 	axisRect()->setMinimumMargins(QMargins(0, 22, 0, 22));
 
@@ -101,25 +103,27 @@ void UsagePlot::setMaximumUsage(double max)
 	yAxis2->setRange(0, max);
 }
 
-void UsagePlot::setThemeColor(const QColor & themeColor)
+void UsagePlot::setThemeColor(const QColor & themeColor, unsigned int scale)
 {
 	QColor color = themeColor;
 
 	// set axises' colors
 	color.setAlpha(50);
-	xAxis->grid()->setPen(QPen(color));
-	yAxis->grid()->setPen(QPen(color));
+    xAxis->grid()->setPen(QPen(color, 1 * scale));
+    yAxis->grid()->setPen(QPen(color, 1 * scale));
 	color.setAlpha(255);
-    xAxis->setBasePen(QPen(color, 2));
-    xAxis2->setBasePen(QPen(color, 2));
-    yAxis->setBasePen(QPen(color, 2));
-    yAxis2->setBasePen(QPen(color, 2));
+    xAxis->setBasePen(QPen(color, 2 * scale));
+    xAxis2->setBasePen(QPen(color, 2 * scale));
+    yAxis->setBasePen(QPen(color, 2 * scale));
+    yAxis2->setBasePen(QPen(color, 2 * scale));
 
 	// set line color
 	color.setAlpha(220);
-	graph(0)->setPen(QPen(color));
+    graph(0)->setPen(QPen(color, 1 * scale));
 	color.setAlpha(30);
-	graph(0)->setBrush(QBrush(color));
+    graph(0)->setBrush(QBrush(color));
+
+    replot();
 }
 
 void UsagePlot::setUsageUnit(const QString & unit)
@@ -139,4 +143,38 @@ void UsagePlot::addData(double data)
 	usage.prepend(data);
 	graph(0)->setData(time, usage);
     replot();
+}
+
+QPixmap UsagePlot::toPixmap(int width, int height, double scale)
+{
+    // block replotting to prevent flashing
+    isReplotBlocked = true;
+
+    // disable grid line
+    xAxis->grid()->setVisible(false);
+    yAxis->grid()->setVisible(false);
+
+    // backup themecolor
+    QColor color = xAxis->basePen().color();
+    // make everything bolder and covert
+    setThemeColor(color, 4);
+
+    QPixmap pixmap = QCustomPlot::toPixmap(width, height, scale);
+
+    // reset style
+    setThemeColor(color);
+    // enable grid line
+    xAxis->grid()->setVisible(true);
+    yAxis->grid()->setVisible(true);
+
+    isReplotBlocked = false;
+    return pixmap;
+}
+
+void UsagePlot::replot()
+{
+    if(isReplotBlocked)
+        return;
+    else
+        QCustomPlot::replot();
 }

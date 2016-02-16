@@ -22,7 +22,6 @@
   <property name="styleSheet">
    <string notr="true">QMainWindow{
 	background-color:white;
-	border-radius:1px;
 	border:1px solid rgb(130, 130, 130);
 }
 
@@ -127,7 +126,8 @@ QPushButton#closeButton:pressed{
 }
 
 QLabel#titleLabel{
-	font:16pt white &quot;Segoe UI&quot; ;
+	font: 14pt &quot;Segoe UI&quot;;
+	color:white;
 }
 
 QWidget#titleWidget{
@@ -193,7 +193,7 @@ QListView::item{
       <property name="styleSheet">
        <string notr="true"/>
       </property>
-      <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="3,1,1">
+      <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="0,3,1,1">
        <property name="spacing">
         <number>0</number>
        </property>
@@ -210,9 +210,31 @@ QListView::item{
         <number>0</number>
        </property>
        <item>
+        <widget class="QLabel" name="label">
+         <property name="maximumSize">
+          <size>
+           <width>25</width>
+           <height>25</height>
+          </size>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+         <property name="pixmap">
+          <pixmap resource="taskmanager.qrc">:/Icon/icon.png</pixmap>
+         </property>
+         <property name="scaledContents">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
         <widget class="QLabel" name="titleLabel">
          <property name="text">
           <string>Task Manager</string>
+         </property>
+         <property name="indent">
+          <number>5</number>
          </property>
         </widget>
        </item>
@@ -251,7 +273,7 @@ QListView::item{
        <string notr="true"/>
       </property>
       <property name="currentIndex">
-       <number>1</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="processTab">
        <attribute name="title">
@@ -310,7 +332,7 @@ QListView::item{
        <attribute name="title">
         <string>Performance</string>
        </attribute>
-       <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="1,0">
+       <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="1,2">
         <property name="spacing">
          <number>10</number>
         </property>
@@ -527,7 +549,44 @@ QListView::item{
                    </widget>
                   </item>
                   <item row="3" column="1">
-                   <widget class="QLabel" name="threads">
+                   <widget class="QLabel" name="temperature">
+                    <property name="palette">
+                     <palette>
+                      <active>
+                       <colorrole role="WindowText">
+                        <brush brushstyle="SolidPattern">
+                         <color alpha="255">
+                          <red>242</red>
+                          <green>98</green>
+                          <blue>31</blue>
+                         </color>
+                        </brush>
+                       </colorrole>
+                      </active>
+                      <inactive>
+                       <colorrole role="WindowText">
+                        <brush brushstyle="SolidPattern">
+                         <color alpha="255">
+                          <red>242</red>
+                          <green>98</green>
+                          <blue>31</blue>
+                         </color>
+                        </brush>
+                       </colorrole>
+                      </inactive>
+                      <disabled>
+                       <colorrole role="WindowText">
+                        <brush brushstyle="SolidPattern">
+                         <color alpha="255">
+                          <red>160</red>
+                          <green>160</green>
+                          <blue>160</blue>
+                         </color>
+                        </brush>
+                       </colorrole>
+                      </disabled>
+                     </palette>
+                    </property>
                     <property name="font">
                      <font>
                       <family>Segoe UI</family>
@@ -592,7 +651,7 @@ QListView::item{
                      </font>
                     </property>
                     <property name="text">
-                     <string>Threads</string>
+                     <string>Temperature</string>
                     </property>
                    </widget>
                   </item>
@@ -676,6 +735,21 @@ QListView::item{
                   </property>
                  </widget>
                 </item>
+                <item row="0" column="1">
+                 <widget class="QLabel" name="maxSpeed">
+                  <property name="font">
+                   <font>
+                    <family>Segoe UI</family>
+                    <pointsize>12</pointsize>
+                    <weight>50</weight>
+                    <bold>false</bold>
+                   </font>
+                  </property>
+                  <property name="text">
+                   <string>TextLabel</string>
+                  </property>
+                 </widget>
+                </item>
                 <item row="1" column="0">
                  <widget class="QLabel" name="label_7">
                   <property name="palette">
@@ -693,6 +767,21 @@ QListView::item{
                   </property>
                   <property name="text">
                    <string>Cores:</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="1">
+                 <widget class="QLabel" name="cores">
+                  <property name="font">
+                   <font>
+                    <family>Segoe UI</family>
+                    <pointsize>12</pointsize>
+                    <weight>50</weight>
+                    <bold>false</bold>
+                   </font>
+                  </property>
+                  <property name="text">
+                   <string>TextLabel</string>
                   </property>
                  </widget>
                 </item>
@@ -716,73 +805,8 @@ QListView::item{
                   </property>
                  </widget>
                 </item>
-                <item row="0" column="1">
-                 <widget class="QLabel" name="maxSpeed">
-                  <property name="font">
-                   <font>
-                    <family>Segoe UI</family>
-                    <pointsize>12</pointsize>
-                    <weight>50</weight>
-                    <bold>false</bold>
-                   </font>
-                  </property>
-                  <property name="text">
-                   <string>TextLabel</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="1" column="1">
-                 <widget class="QLabel" name="cores">
-                  <property name="font">
-                   <font>
-                    <family>Segoe UI</family>
-                    <pointsize>12</pointsize>
-                    <weight>50</weight>
-                    <bold>false</bold>
-                   </font>
-                  </property>
-                  <property name="text">
-                   <string>TextLabel</string>
-                  </property>
-                 </widget>
-                </item>
                 <item row="2" column="1">
                  <widget class="QLabel" name="logicalProcessors">
-                  <property name="font">
-                   <font>
-                    <family>Segoe UI</family>
-                    <pointsize>12</pointsize>
-                    <weight>50</weight>
-                    <bold>false</bold>
-                   </font>
-                  </property>
-                  <property name="text">
-                   <string>TextLabel</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="3" column="0">
-                 <widget class="QLabel" name="label_17">
-                  <property name="palette">
-                   <palette>
-                    <active/>
-                    <inactive/>
-                    <disabled/>
-                   </palette>
-                  </property>
-                  <property name="font">
-                   <font>
-                    <family>Segoe UI</family>
-                    <pointsize>10</pointsize>
-                   </font>
-                  </property>
-                  <property name="text">
-                   <string>Temperature:</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="3" column="1">
-                 <widget class="QLabel" name="temperature">
                   <property name="font">
                    <font>
                     <family>Segoe UI</family>
@@ -890,7 +914,7 @@ QListView::item{
               <item>
                <layout class="QGridLayout" name="gridLayout_2">
                 <property name="bottomMargin">
-                 <number>40</number>
+                 <number>80</number>
                 </property>
                 <property name="horizontalSpacing">
                  <number>5</number>
@@ -939,7 +963,7 @@ QListView::item{
                  </widget>
                 </item>
                 <item row="3" column="0">
-                 <widget class="QLabel" name="processes_2">
+                 <widget class="QLabel" name="cached">
                   <property name="font">
                    <font>
                     <family>Segoe UI</family>
@@ -999,7 +1023,7 @@ QListView::item{
                  </widget>
                 </item>
                 <item row="2" column="0">
-                 <widget class="QLabel" name="label_18">
+                 <widget class="QLabel" name="cachedLabel">
                   <property name="palette">
                    <palette>
                     <active/>
@@ -1014,7 +1038,7 @@ QListView::item{
                    </font>
                   </property>
                   <property name="text">
-                   <string>Reserved</string>
+                   <string>Cached</string>
                   </property>
                  </widget>
                 </item>
@@ -1147,7 +1171,7 @@ QListView::item{
                    </font>
                   </property>
                   <property name="text">
-                   <string>TextLabel</string>
+                   <string>2/2</string>
                   </property>
                  </widget>
                 </item>
@@ -1249,6 +1273,8 @@ QListView::item{
   <tabstop>usageOptionList</tabstop>
   <tabstop>tableView</tabstop>
  </tabstops>
- <resources/>
+ <resources>
+  <include location="taskmanager.qrc"/>
+ </resources>
  <connections/>
 </ui>

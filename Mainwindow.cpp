@@ -11,7 +11,14 @@ MainWindow::MainWindow(QWidget *parent) :
     setWindowFlags(Qt::FramelessWindowHint);
     isDragging = false;
 
+    setWindowIcon(QIcon("/Icon/icon.png"));
+
     ui->setupUi(this);
+
+    // setup performance tab
+    setupUsagePlots();
+
+    setupStaticInformation();
 
     // setup process tab
     ui->processView->setModel(&processModel);
@@ -25,14 +32,10 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->processView->setColumnWidth(5,80);
     ui->processView->setSortingEnabled(true);
 
-    setupStaticInformation();
-
     // setup data widget mapping
     connect(&performanceModel, &PerformanceModel::updateWidget,
             this, &MainWindow::updateWidget);
 
-    // setup performance tab
-    setupUsagePlots();
     ui->usageOptionList->setIconSize(QSize(60,50));
 
     // connect the sorting signals / slots
@@ -116,8 +119,6 @@ void MainWindow::setupUsagePlots()
     // setup memory usage plot
     ui->memoryUsagePlot->setPlotName("Memory Usage");
     ui->memoryUsagePlot->setMaximumTime(60);
-    ui->memoryUsagePlot->setMaximumUsage(12);
-    ui->memoryUsagePlot->setUsageUnit("GB");
     ui->memoryUsagePlot->setThemeColor(QColor(139,18,174));
 
     updateUsageOptionIcon();
@@ -144,17 +145,66 @@ void MainWindow::refresh()
 void MainWindow::updateWidget(const QVariantList & property)
 {
     ui->utilization->setText(property[PerformanceModel::CpuUtilization].toString() + " %");
-    ui->availableMemory->setText(QString::number(property[PerformanceModel::MemoryAvailable].toFloat(), 'f', 1) + " GB");
-    ui->usedMemory->setText(QString::number(property[PerformanceModel::MemoryUsed].toFloat(), 'f', 1) + " GB");
-    ui->speed->setText(property[PerformanceModel::CpuSpeed].toString() + " GHz");
+
+    float cpuSpeed = property[PerformanceModel::CpuSpeed].toFloat();
+    if(cpuSpeed < 1024)
+        ui->speed->setText(QString::number(cpuSpeed, 'f', 1) + " MHz");
+    else
+        ui->speed->setText(QString::number(cpuSpeed / 1024, 'f', 1) + " GHz");
+
     ui->processes->setText(property[PerformanceModel::Processes].toString());
-    ui->threads->setText(property[PerformanceModel::Threads].toString());
     ui->upTime->setText(property[PerformanceModel::CpuUpTime].toString());
 
     ui->cpuUsagePLot->addData(property[PerformanceModel::CpuUtilization].toDouble());
-    ui->memoryUsagePlot->addData(property[PerformanceModel::MemoryUsed].toDouble());
+
+    double memoryUsed = property[PerformanceModel::MemoryTotal].toDouble() - property[PerformanceModel::MemoryAvailable].toDouble();
+    memoryUsed /= 1024 * 1024;
+    ui->memoryUsagePlot->addData(memoryUsed);
+    memoryUsed = qRound(memoryUsed * 10) / 10.0;
+    ui->usedMemory->setText(QString("%1 GB").arg(memoryUsed));
+
+    double memoryAvailable = property[PerformanceModel::MemoryAvailable].toUInt();
+    memoryAvailable /= 1024 * 1024;
+    memoryAvailable = qRound(memoryAvailable * 10) / 10.0;
+    ui->availableMemory->setText(QString("%1 GB").arg(memoryAvailable));
+
+    double memoryCached = property[PerformanceModel::MemoryAvailable].toUInt();
+    memoryCached /= 1024 * 1024;
+    memoryCached = qRound(memoryCached * 10) / 10.0;
+    ui->cached->setText(QString("%1 GB").arg(memoryCached));
+    ui->temperature->setText(QString("%1 ℃").arg(property[PerformanceModel::CpuTemperature].toFloat()));
 }
 
 void MainWindow::setupStaticInformation()
 {
+    QFile cpuinfo("/proc/cpuinfo");
+    QRegularExpression rx;
+    if(cpuinfo.open(QIODevice::ReadOnly))
+    {
+        QString content(cpuinfo.readAll());
+        rx.setPattern("model name	: (.*)\n");
+        QStringList modelName = rx.match(content).captured(1).split(" @ ");
+        ui->cpuName->setText(modelName.at(0));
+        ui->maxSpeed->setText(modelName.at(1));
+
+        rx.setPattern("cpu cores	: (.*)\n");
+        ui->cores->setText(rx.match(content).captured(1));
+
+        rx.setPattern("siblings	: (.*)\n");
+        ui->logicalProcessors->setText(rx.match(content).captured(1));
+    }
+
+    QFile meminfo("/proc/meminfo");
+    if(meminfo.open(QIODevice::ReadOnly))
+    {
+        QString content(meminfo.readAll());
+        rx.setPattern("MemTotal:       (.*) kB\n");
+        float memTotal = rx.match(content).captured(1).toUInt();
+
+        memTotal /= 1024 * 1024;
+        memTotal = qRound(memTotal * 10) / 10.0;
+        ui->memoryName->setText(QString::number(memTotal) + " GB");
+        ui->memoryUsagePlot->setMaximumUsage(memTotal);
+        ui->memoryUsagePlot->setUsageUnit("GB");
+    }
 }

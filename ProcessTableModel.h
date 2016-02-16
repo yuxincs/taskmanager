@@ -12,6 +12,7 @@ private:
     unsigned int cpuUtilization;
     unsigned int memoryUtilization;
     unsigned long totalCpuTimeDiff;
+
     QList<Process *> processList;
     QSet<unsigned int> pidSet;
 
