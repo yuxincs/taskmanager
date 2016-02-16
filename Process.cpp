@@ -45,7 +45,7 @@ const QVariant & Process::property(int propertyName)
     return propertyList.at(propertyName);
 }
 
-bool Process::refresh()
+bool Process::refresh(unsigned int totalCpuTimeDiff)
 {
     // open files
     QFile stat(QString("/proc/%1/stat").arg(propertyList.at(ID).toUInt()));
@@ -61,7 +61,7 @@ bool Process::refresh()
     QStringList statmContent = QString(statm.readAll()).split(" ");
     QStringList ioContent = QString(io.readAll()).split("\n");
 
-    // get cpu time snapshot
+    // get data snapshot
     unsigned int curCpuTime = 0;
     for(int i = 13; i <= 16; i ++)
     {
@@ -72,15 +72,14 @@ bool Process::refresh()
     curDiskIO += ioContent[5].split(" ").at(1).toULong();
     curDiskIO += ioContent[6].split(" ").at(1).toULong();
 
-    if(ProcessTableModel::lastTotalCpuTime() > 0)
+    // calculate if data is ready
+    if(lastCpuTime > 0)
     {
-        float totalDiff = ProcessTableModel::curTotalCpuTime() - ProcessTableModel::lastTotalCpuTime();
-        float diff = curCpuTime - lastCpuTime;
-
-        if(totalDiff == 0 || diff == 0)
+        float curCpuTimeDiff = curCpuTime - lastCpuTime;
+        if(totalCpuTimeDiff == 0 || curCpuTimeDiff == 0)
             propertyList[CPUUsage] = 0;
         else
-            propertyList[CPUUsage] = 100 * (diff / totalDiff);
+            propertyList[CPUUsage] = 100 * (curCpuTimeDiff / totalCpuTimeDiff);
     }
     if(lastDiskIO > 0)
         propertyList[DiskUsage] = curDiskIO - lastDiskIO;

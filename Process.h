@@ -24,7 +24,7 @@ private:
 public:
     explicit Process(unsigned int id, QObject * parent = nullptr);
     virtual ~Process();
-    bool refresh();
+    bool refresh(unsigned int totalCpuTimeDiff);
     const QVariant & property(int propertyName);
 };
 

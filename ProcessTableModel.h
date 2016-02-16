@@ -2,20 +2,23 @@
 #define PROCESSTABLEMODEL_H
 #include "stable.h"
 #include "Process.h"
+#include "PerformanceModel.h"
 
 class ProcessTableModel : public QAbstractTableModel
 {
     Q_OBJECT
 private:
+    // shared data with PerformanceModel
+    unsigned int cpuUtilization;
+    unsigned int memoryUtilization;
+    unsigned long totalCpuTimeDiff;
     QList<Process *> processList;
     QSet<unsigned int> pidSet;
-    QList<float> maxProperty;
 
+    QList<float> maxProperty;
     int sortColumn;
     Qt::SortOrder sortOrder;
 
-    static unsigned long lastCpuTime;
-    static unsigned long curCpuTime;
 public:
     explicit ProcessTableModel(QObject * parent = nullptr);
     virtual ~ProcessTableModel();
@@ -28,9 +31,10 @@ protected:
     QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
     void sort(int column, Qt::SortOrder order = Qt::AscendingOrder);
 public slots:
+    void refresh();
     void killProcess(unsigned int pid);
     void sortByColumn(int column, Qt::SortOrder order);
-    void refresh();
+    void updateSharedData(unsigned int cpuUtilization, unsigned int memoryUtilization, unsigned long totalCpuTimeDiff);
 };
 
 #endif // PROCESSTABLEMODEL_H

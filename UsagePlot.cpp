@@ -110,10 +110,10 @@ void UsagePlot::setThemeColor(const QColor & themeColor)
 	xAxis->grid()->setPen(QPen(color));
 	yAxis->grid()->setPen(QPen(color));
 	color.setAlpha(255);
-	xAxis->setBasePen(QPen(color));
-	xAxis2->setBasePen(QPen(color));
-	yAxis->setBasePen(QPen(color));
-	yAxis2->setBasePen(QPen(color));
+    xAxis->setBasePen(QPen(color, 2));
+    xAxis2->setBasePen(QPen(color, 2));
+    yAxis->setBasePen(QPen(color, 2));
+    yAxis2->setBasePen(QPen(color, 2));
 
 	// set line color
 	color.setAlpha(220);
@@ -138,4 +138,5 @@ void UsagePlot::addData(double data)
 	usage.removeLast();
 	usage.prepend(data);
 	graph(0)->setData(time, usage);
+    replot();
 }

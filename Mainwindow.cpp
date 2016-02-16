@@ -12,8 +12,8 @@ MainWindow::MainWindow(QWidget *parent) :
     isDragging = false;
 
     ui->setupUi(this);
-    setupUsagePlots();
 
+    // setup process tab
     ui->processView->setModel(&processModel);
     ui->processView->setSelectionBehavior(QAbstractItemView::SelectRows);
     ui->processView->setSelectionMode(QAbstractItemView::SingleSelection);
@@ -25,6 +25,16 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->processView->setColumnWidth(5,80);
     ui->processView->setSortingEnabled(true);
 
+    setupStaticInformation();
+
+    // setup data widget mapping
+    connect(&performanceModel, &PerformanceModel::updateWidget,
+            this, &MainWindow::updateWidget);
+
+    // setup performance tab
+    setupUsagePlots();
+    ui->usageOptionList->setIconSize(QSize(60,50));
+
     // connect the sorting signals / slots
     connect(ui->processView->header(), &QHeaderView::sortIndicatorChanged,
             &processModel, &ProcessTableModel::sortByColumn);
@@ -33,12 +43,12 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->usageOptionList, &QListWidget::currentRowChanged,
             ui->stackedWidget, &QStackedWidget::setCurrentIndex);
 
+    connect(&performanceModel, &PerformanceModel::sendSharedData,
+            &processModel, &ProcessTableModel::updateSharedData);
+
     // connect refresh timers
     connect(&refreshTimer, &QTimer::timeout,
-            &processModel, &ProcessTableModel::refresh);
-
-    connect(&refreshTimer, &QTimer::timeout,
-            &performanceModel, &PerformanceModel::refresh);
+            this, &MainWindow::refresh);
 
     connect(&refreshTimer, &QTimer::timeout,
             this, &MainWindow::updateUsageOptionIcon);
@@ -58,6 +68,11 @@ MainWindow::MainWindow(QWidget *parent) :
             processModel.killProcess(pid);
         }
     });
+
+    refresh();
+
+    // refresh again after 100 ms to get sampling data ready
+    QTimer::singleShot(100, this, &MainWindow::refresh);
 
     // set refresh rate
     refreshTimer.start(REFRESH_RATE);
@@ -111,8 +126,35 @@ void MainWindow::setupUsagePlots()
 void MainWindow::updateUsageOptionIcon()
 {
     QPixmap cpuPixmap = ui->cpuUsagePLot->toPixmap();
-    cpuPixmap = cpuPixmap.copy(0, 22, cpuPixmap.width(), cpuPixmap.height() - 44);
+    cpuPixmap = cpuPixmap.copy(0, 18, cpuPixmap.width(), cpuPixmap.height() - 36);
     ui->usageOptionList->item(0)->setIcon(QIcon(cpuPixmap));
-    ui->usageOptionList->item(1)->setIcon(QIcon(ui->memoryUsagePlot->toPixmap()));
+    QPixmap memoryPixmap = ui->memoryUsagePlot->toPixmap();
+    memoryPixmap = memoryPixmap.copy(0, 18, memoryPixmap.width(), memoryPixmap.height() - 36);
+    ui->usageOptionList->item(1)->setIcon(QIcon(memoryPixmap));
 }
 
+void MainWindow::refresh()
+{
+    performanceModel.refresh();
+
+    // refresh other models using global resource model
+    processModel.refresh();
+}
+
+void MainWindow::updateWidget(const QVariantList & property)
+{
+    ui->utilization->setText(property[PerformanceModel::CpuUtilization].toString() + " %");
+    ui->availableMemory->setText(QString::number(property[PerformanceModel::MemoryAvailable].toFloat(), 'f', 1) + " GB");
+    ui->usedMemory->setText(QString::number(property[PerformanceModel::MemoryUsed].toFloat(), 'f', 1) + " GB");
+    ui->speed->setText(property[PerformanceModel::CpuSpeed].toString() + " GHz");
+    ui->processes->setText(property[PerformanceModel::Processes].toString());
+    ui->threads->setText(property[PerformanceModel::Threads].toString());
+    ui->upTime->setText(property[PerformanceModel::CpuUpTime].toString());
+
+    ui->cpuUsagePLot->addData(property[PerformanceModel::CpuUtilization].toDouble());
+    ui->memoryUsagePlot->addData(property[PerformanceModel::MemoryUsed].toDouble());
+}
+
+void MainWindow::setupStaticInformation()
+{
+}

@@ -4,43 +4,59 @@
 PerformanceModel::PerformanceModel(QObject * parent)
     :QObject(parent)
 {
-    // iterate all temp*_* files
-    for(int i = 1;;i++)
-    {
-        QFile labelFile(QString("/sys/class/hwmon/hwmon1/temp%1_label").arg(i));
-        QFile inputFile(QString("/sys/class/hwmon/hwmon1/temp%1_input").arg(i));
-
-        // if files don't exist stop iteration
-        if(!labelFile.open(QIODevice::ReadOnly) || !inputFile.open(QIODevice::ReadOnly))
-            break;
-
-        QString label(labelFile.readAll());
-        float temp = QString(inputFile.readAll()).toInt() / 1000;
-        cpuTempList.append(new Temperature(label, temp));
-    }
+    lastCpuTime = curCpuTime = lastCpuIdleTime = curCpuIdleTime =  -1;
+    for(int i = 0; i < TypeCount; i ++)
+        propertyList.append(0);
 }
 
-const QList<Temperature *> & PerformanceModel::cpuTemperatureList()
-{
-    return cpuTempList;
-}
 
 void PerformanceModel::refresh()
 {
+    refreshMemoryInfo();
+    refreshCpuTime();
     refreshCpuTemperatures();
+
+    unsigned int totalDiff = curCpuTime - lastCpuTime;
+    unsigned int totalIdleDiff = curCpuIdleTime - lastCpuIdleTime;
+    propertyList[CpuUtilization] = 100 * (totalDiff - totalIdleDiff) / totalDiff;
+
+    unsigned int memoryUtilization = 100 * (propertyList[MemoryTotal].toUInt() - propertyList[MemoryAvailable].toUInt()) / propertyList[MemoryTotal].toUInt();
+
+    if(lastCpuTime > 0)
+        emit sendSharedData(propertyList[CpuUtilization].toUInt(), memoryUtilization, totalDiff);
+
+    updateWidget(propertyList);
 }
 
 void PerformanceModel::refreshCpuTemperatures()
 {
-    for(int i = 1; i < cpuTempList.size() + 1; i ++)
-    {
-        QFile inputFile(QString("/sys/class/hwmon/hwmon1/temp%1_input").arg(i));
+        QFile inputFile(QString("/sys/class/hwmon/hwmon1/temp1_input"));
         if(!inputFile.open(QIODevice::ReadOnly))
             return;
-
-        float temp = QString(inputFile.readAll()).toInt() / 1000;
-        cpuTempList[i - 1]->setValue(temp);
-    }
+        propertyList[CpuTemperature] = QString(inputFile.readAll()).toInt() / 1000;
 }
 
+void PerformanceModel::refreshCpuTime()
+{
+    // store last cpu time
+    lastCpuTime = curCpuTime;
+    lastCpuIdleTime = curCpuIdleTime;
+
+    // read current total cpu time
+    QFile stat("/proc/stat");
+    stat.open(QIODevice::ReadOnly);
+    QStringList statContent = QString(stat.readLine()).split(" ");
+    curCpuTime = 0;
+    for(int i = 1;i < statContent.size(); i ++)
+        curCpuTime += statContent.at(i).toULong();
+
+    curCpuIdleTime = statContent.at(4).toULong();
+}
+
+void PerformanceModel::refreshMemoryInfo()
+{
+    propertyList[MemoryTotal] = 12.0f;
+    propertyList[MemoryAvailable] = 6.3f;
+    propertyList[MemoryUsed] = 5.7f;
+}
 

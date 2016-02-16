@@ -16,7 +16,6 @@ SOURCES += main.cpp\
         Mainwindow.cpp \
     Process.cpp \
     ProcessTableModel.cpp \
-    Temperature.cpp \
     PerformanceModel.cpp \
     qcustomplot.cpp \
     UsagePlot.cpp
@@ -25,7 +24,6 @@ HEADERS  += Mainwindow.h \
     stable.h \
     Process.h \
     ProcessTableModel.h \
-    Temperature.h \
     PerformanceModel.h \
     qcustomplot.h \
     UsagePlot.h

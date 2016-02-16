@@ -1,40 +1,25 @@
 #include "ProcessTableModel.h"
 #include "Mainwindow.h"
 
-// initialize static members
-unsigned long ProcessTableModel::lastCpuTime = -1;
-unsigned long ProcessTableModel::curCpuTime = -1;
-
 
 ProcessTableModel::ProcessTableModel(QObject *parent)
     :QAbstractTableModel(parent)
 {
+    totalCpuTimeDiff = 0;
+    cpuUtilization = 0;
+    memoryUtilization = 0;
+
     sortColumn = -1;
     sortOrder = Qt::AscendingOrder;
 
     // set maximum property
     maxProperty << 0 << 0 << 100 << 1024 * 128 << 50 << 1;
-
-    refresh();
-    // refresh again after 100 ms to calculate cpu usage
-    QTimer::singleShot(100, this, &ProcessTableModel::refresh);
 }
 
 
 void ProcessTableModel::refresh()
 {
     emit layoutAboutToBeChanged();
-
-    // read current total cpu time
-    QFile stat("/proc/stat");
-    stat.open(QIODevice::ReadOnly);
-    QStringList statContent = QString(stat.readLine()).split(" ");
-    curCpuTime = 0;
-    for(int i = 1;i < statContent.size(); i ++)
-    {
-        const QString & item = statContent.at(i);
-        curCpuTime += item.toULong();
-    }
 
     // iterate through /proc directory to find new process
     for(const QString & entry : QDir("/proc").entryList(QDir::NoDotAndDotDot | QDir::Dirs))
@@ -57,7 +42,7 @@ void ProcessTableModel::refresh()
     {
         // if process doesn't exist anymore
         // queue for deletion
-        if(!process->refresh())
+        if(!process->refresh(totalCpuTimeDiff))
             toDelete.append(process);
     }
     // execute deletion
@@ -67,9 +52,6 @@ void ProcessTableModel::refresh()
         processList.removeOne(process);
         delete process;
     }
-
-    // refresh cpu time
-    lastCpuTime = curCpuTime;
 
     sortByColumn(sortColumn, sortOrder);
     emit layoutChanged();
@@ -110,9 +92,9 @@ QVariant ProcessTableModel::headerData(int section, Qt::Orientation orientation,
             case Process::ID:
                 return QString("PID");
             case Process::CPUUsage:
-                return QString("CPU");
+                return QString("%1 %\n\nCPU").arg(cpuUtilization);
             case Process::MemoryUsage:
-                return QString("Memory");
+                return QString("%1 %\n\nMemory").arg(memoryUtilization);
             case Process::DiskUsage:
                 return QString("Disk");
             case Process::NetworkUsage:
@@ -151,7 +133,7 @@ QVariant ProcessTableModel::data(const QModelIndex & index, int role) const
         case Process::CPUUsage:
         {
             float cpuUsage = process->property(Process::CPUUsage).toFloat();
-            if(cpuUsage == 0)
+            if(cpuUsage < 0.1)
                 return "0 %";
             else
                 return QString::number(cpuUsage, 'f', 1) + " %";
@@ -253,12 +235,10 @@ void ProcessTableModel::killProcess(unsigned int pid)
     system(cmd.toLatin1().data());
 }
 
-unsigned long ProcessTableModel::lastTotalCpuTime()
-{
-    return lastCpuTime;
-}
 
-unsigned long ProcessTableModel::curTotalCpuTime()
+void ProcessTableModel::updateSharedData(unsigned int cpuUtilization, unsigned int memoryUtilization, unsigned long totalCpuTimeDiff)
 {
-    return curCpuTime;
+    this->cpuUtilization = cpuUtilization;
+    this->memoryUtilization = memoryUtilization;
+    this->totalCpuTimeDiff = totalCpuTimeDiff;
 }

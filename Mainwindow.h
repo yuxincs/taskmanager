@@ -19,12 +19,15 @@ private:
     ProcessTableModel processModel;
     PerformanceModel performanceModel;
     void setupUsagePlots();
+    void setupStaticInformation();
 private slots:
     void updateUsageOptionIcon();
+    void refresh();
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
     static const int REFRESH_RATE;
+    void updateWidget(const QVariantList & property);
 protected:
     void mousePressEvent(QMouseEvent * event);
     void mouseMoveEvent(QMouseEvent * event);
