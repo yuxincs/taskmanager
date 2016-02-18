@@ -11,7 +11,7 @@ MainWindow::MainWindow(QWidget *parent) :
     setWindowFlags(Qt::FramelessWindowHint);
     isDragging = false;
 
-    setWindowIcon(QIcon("/Icon/icon.png"));
+    setWindowIcon(QIcon(":/Icon/icon.png"));
 
     ui->setupUi(this);
 
