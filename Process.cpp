@@ -63,7 +63,7 @@ bool Process::refresh(unsigned int totalCpuTimeDiff)
 
     // get data snapshot
     unsigned int curCpuTime = 0;
-    for(int i = 13; i <= 16; i ++)
+    for(int i = 13; i <= 14; i ++)
     {
         const QString & item = statContent.at(i);
         curCpuTime += item.toUInt();
@@ -79,7 +79,7 @@ bool Process::refresh(unsigned int totalCpuTimeDiff)
         if(totalCpuTimeDiff == 0 || curCpuTimeDiff == 0)
             propertyList[CPUUsage] = 0;
         else
-            propertyList[CPUUsage] = 100 * (curCpuTimeDiff / totalCpuTimeDiff);
+            propertyList[CPUUsage] = 100 * ((float)curCpuTimeDiff / totalCpuTimeDiff);
     }
     if(lastDiskIO > 0)
         propertyList[DiskUsage] = curDiskIO - lastDiskIO;

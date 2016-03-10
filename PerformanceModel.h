@@ -6,8 +6,8 @@ class PerformanceModel : public QObject
 {
     Q_OBJECT
 private:
-    unsigned long lastCpuIdleTime;
-    unsigned long curCpuIdleTime;
+    unsigned long lastCpuUseTime;
+    unsigned long curCpuUseTime;
     unsigned long lastCpuTime;
     unsigned long curCpuTime;
 

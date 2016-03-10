@@ -4,7 +4,7 @@
 PerformanceModel::PerformanceModel(QObject * parent)
     :QObject(parent)
 {
-    lastCpuTime = curCpuTime = lastCpuIdleTime = curCpuIdleTime =  -1;
+    lastCpuTime = curCpuTime = lastCpuUseTime = curCpuUseTime =  -1;
     for(int i = 0; i < TypeCount; i ++)
         propertyList.append(0);
 }
@@ -18,8 +18,8 @@ void PerformanceModel::refresh()
     refreshCpuTemperatures();
 
     unsigned int totalDiff = curCpuTime - lastCpuTime;
-    unsigned int totalIdleDiff = curCpuIdleTime - lastCpuIdleTime;
-    propertyList[CpuUtilization] = 100 * totalIdleDiff / totalDiff;
+    unsigned int totalUseDiff = curCpuUseTime - lastCpuUseTime;
+    propertyList[CpuUtilization] = 100 * (float)totalUseDiff / totalDiff;
 
     unsigned int memoryUtilization = 100 * (propertyList[MemoryTotal].toUInt() - propertyList[MemoryAvailable].toUInt()) / propertyList[MemoryTotal].toUInt();
 
@@ -41,17 +41,17 @@ void PerformanceModel::refreshCpuTime()
 {
     // store last cpu time
     lastCpuTime = curCpuTime;
-    lastCpuIdleTime = curCpuIdleTime;
+    lastCpuUseTime = curCpuUseTime;
 
     // read current total cpu time
     QFile stat("/proc/stat");
     stat.open(QIODevice::ReadOnly);
     QStringList statContent = QString(stat.readLine()).split(" ");
     curCpuTime = 0;
-    for(int i = 1;i < statContent.size(); i ++)
+    for(int i = 1;i <= 5; i ++)
         curCpuTime += statContent.at(i).toULong();
 
-    curCpuIdleTime = statContent.at(4).toULong();
+    curCpuUseTime = statContent.at(1).toULong() + statContent.at(2).toULong();
 }
 
 void PerformanceModel::refreshMemoryInfo()
@@ -67,7 +67,7 @@ void PerformanceModel::refreshMemoryInfo()
         rx.setPattern("MemAvailable:(.*) kB\n");
         propertyList[MemoryAvailable] = rx.match(content).captured(1).toUInt();
 
-        rx.setPattern("Cached:(.*) kB\n");
+        rx.setPattern("Buffers:(.*) kB\n");
         propertyList[MemoryCached] = rx.match(content).captured(1).toUInt();
     }
 }

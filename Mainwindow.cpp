@@ -144,7 +144,7 @@ void MainWindow::refresh()
 
 void MainWindow::updateWidget(const QVariantList & property)
 {
-    ui->utilization->setText(property[PerformanceModel::CpuUtilization].toString() + " %");
+    ui->utilization->setText(QString::number(property[PerformanceModel::CpuUtilization].toUInt()) + " %");
 
     float cpuSpeed = property[PerformanceModel::CpuSpeed].toFloat();
     if(cpuSpeed < 1024)
@@ -168,7 +168,7 @@ void MainWindow::updateWidget(const QVariantList & property)
     memoryAvailable = qRound(memoryAvailable * 10) / 10.0;
     ui->availableMemory->setText(QString("%1 GB").arg(memoryAvailable));
 
-    double memoryCached = property[PerformanceModel::MemoryAvailable].toUInt();
+    double memoryCached = property[PerformanceModel::MemoryCached].toUInt();
     memoryCached /= 1024 * 1024;
     memoryCached = qRound(memoryCached * 10) / 10.0;
     ui->cached->setText(QString("%1 GB").arg(memoryCached));
