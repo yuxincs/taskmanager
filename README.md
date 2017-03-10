@@ -1,6 +1,5 @@
 # TaskManager
-###### By : Ryan Wang @ HUST
-###### Email : wangyuxin@hust.edu.cn
+
 A Windows-Like Task Manager Built for Linux Based on Qt.
 
 ### Features
