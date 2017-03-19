@@ -20,9 +20,9 @@ A Windows-Like Task Manager Built for Linux Based on Qt.
 ![#1](https://github.com/RyanWangGit/TaskManager/raw/master/Screenshots/2.png)
 
 ### Libraries
- * `QT 5.5.1 for linux`
- * `QCustomPlot` library.
+* `QT 5.5.1 for linux`
+* `QCustomPlot` library.
 
 ### License
- GPLv3.
+[GPLv3](https://github.com/RyanWangGit/TaskManager/blob/master/LICENSE).
 
