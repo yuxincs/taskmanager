@@ -1,5 +1,5 @@
-#include "Process.h"
-#include "ProcessTableModel.h"
+#include "process.h"
+#include "process_table_model.h"
 
 Process::Process(unsigned int id, QObject * parent)
     :QObject(parent)

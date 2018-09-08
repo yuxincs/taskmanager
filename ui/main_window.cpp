@@ -1,4 +1,4 @@
-#include "Mainwindow.h"
+#include "main_window.h"
 #include "ui_Mainwindow.h"
 
 // initialize static members
@@ -11,7 +11,7 @@ MainWindow::MainWindow(QWidget *parent) :
     setWindowFlags(Qt::FramelessWindowHint);
     isDragging = false;
 
-    setWindowIcon(QIcon(":/Icon/icon.png"));
+    setWindowIcon(QIcon(":/icon.png"));
 
     ui->setupUi(this);
 

@@ -1,5 +1,5 @@
 #include "stable.h"
-#include "UsagePlot.h"
+#include "usage_plot.h"
 
 void UsagePlot::resizeEvent(QResizeEvent *event)
 {

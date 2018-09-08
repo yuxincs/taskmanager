@@ -1,5 +1,5 @@
-#include "PerformanceModel.h"
-#include "UsagePlot.h"
+#include "performance_model.h"
+#include "usage_plot.h"
 
 PerformanceModel::PerformanceModel(QObject * parent)
     :QObject(parent)
