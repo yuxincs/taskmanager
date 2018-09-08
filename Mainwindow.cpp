@@ -182,15 +182,15 @@ void MainWindow::setupStaticInformation()
     if(cpuinfo.open(QIODevice::ReadOnly))
     {
         QString content(cpuinfo.readAll());
-        rx.setPattern("model name	: (.*)\n");
+        rx.setPattern("model name    : (.*)\n");
         QStringList modelName = rx.match(content).captured(1).split(" @ ");
         ui->cpuName->setText(modelName.at(0));
         ui->maxSpeed->setText(modelName.at(1));
 
-        rx.setPattern("cpu cores	: (.*)\n");
+        rx.setPattern("cpu cores    : (.*)\n");
         ui->cores->setText(rx.match(content).captured(1));
 
-        rx.setPattern("siblings	: (.*)\n");
+        rx.setPattern("siblings    : (.*)\n");
         ui->logicalProcessors->setText(rx.match(content).captured(1));
     }
 

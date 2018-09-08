@@ -89,7 +89,7 @@ void PerformanceModel::refreshCpuInfo()
     if(cpuinfo.open(QIODevice::ReadOnly))
     {
         QString content(cpuinfo.readAll());
-        rx.setPattern("cpu MHz		: (.*)\n");
+        rx.setPattern("cpu MHz        : (.*)\n");
         propertyList[CpuSpeed] = rx.match(content).captured(1).toFloat();
     }
 
