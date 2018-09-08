@@ -1,5 +1,5 @@
-#include "ProcessTableModel.h"
-#include "Mainwindow.h"
+#include "process_table_model.h"
+#include "main_window.h"
 
 
 ProcessTableModel::ProcessTableModel(QObject *parent)

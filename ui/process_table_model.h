@@ -1,8 +1,8 @@
 #ifndef PROCESSTABLEMODEL_H
 #define PROCESSTABLEMODEL_H
 #include "stable.h"
-#include "Process.h"
-#include "PerformanceModel.h"
+#include "process.h"
+#include "performance_model.h"
 
 class ProcessTableModel : public QAbstractTableModel
 {

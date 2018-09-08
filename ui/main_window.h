@@ -1,8 +1,8 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 #include "stable.h"
-#include "ProcessTableModel.h"
-#include "PerformanceModel.h"
+#include "process_table_model.h"
+#include "performance_model.h"
 
 namespace Ui {
 class MainWindow;
