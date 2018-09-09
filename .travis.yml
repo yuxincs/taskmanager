@@ -7,18 +7,6 @@ matrix:
     sudo: required
     compiler: gcc
     env:
-     - QT_BASE=52
-  - os: linux
-    dist: trusty
-    sudo: required
-    compiler: gcc
-    env:
-     - QT_BASE=53
-  - os: linux
-    dist: trusty
-    sudo: required
-    compiler: gcc
-    env:
      - QT_BASE=54
   - os: linux
     dist: trusty
