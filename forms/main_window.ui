@@ -56,7 +56,7 @@ QTreeView::item:selected{
 
 QTreeView::item:hover:!selected {
     background-color: rgb(229, 243, 255);
-} 
+}
 
 QTreeView::item{
 	min-height:30px;
@@ -148,7 +148,7 @@ QListView::item:selected{
 QListView::item:hover:!selected {
    background-color: rgb(229, 243, 255);
 	border:1px solid rgb(17, 125, 187);
-} 
+}
 
 QListView::item{
 	min-height:80px;
@@ -221,7 +221,7 @@ QListView::item{
           <string/>
          </property>
          <property name="pixmap">
-          <pixmap resource="taskmanager.qrc">:/Icon/icon.png</pixmap>
+          <pixmap resource="../task_manager.qrc">:/assets/icon.png</pixmap>
          </property>
          <property name="scaledContents">
           <bool>true</bool>
@@ -1260,7 +1260,7 @@ QListView::item{
   <customwidget>
    <class>UsagePlot</class>
    <extends>QWidget</extends>
-   <header location="global">UsagePlot.h</header>
+   <header location="global">usage_plot.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>
@@ -1274,7 +1274,7 @@ QListView::item{
   <tabstop>tableView</tabstop>
  </tabstops>
  <resources>
-  <include location="taskmanager.qrc"/>
+  <include location="../task_manager.qrc"/>
  </resources>
  <connections/>
 </ui>
