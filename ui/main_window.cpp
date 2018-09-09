@@ -1,5 +1,5 @@
 #include "main_window.h"
-#include "ui_Mainwindow.h"
+#include "ui_main_window.h"
 
 // initialize static members
 const int MainWindow::REFRESH_RATE = 1000;
