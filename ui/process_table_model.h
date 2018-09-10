@@ -1,5 +1,4 @@
-#ifndef PROCESSTABLEMODEL_H
-#define PROCESSTABLEMODEL_H
+#pragma once
 #include "stable.h"
 #include "process.h"
 #include "performance_model.h"
@@ -37,5 +36,3 @@ public slots:
     void sortByColumn(int column, Qt::SortOrder order);
     void updateSharedData(unsigned int cpuUtilization, unsigned int memoryUtilization, unsigned long totalCpuTimeDiff);
 };
-
-#endif // PROCESSTABLEMODEL_H

@@ -1,5 +1,4 @@
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#pragma once
 #include "stable.h"
 #include "process_table_model.h"
 #include "performance_model.h"
@@ -35,5 +34,3 @@ protected:
 private:
     Ui::MainWindow *ui;
 };
-
-#endif // MAINWINDOW_H

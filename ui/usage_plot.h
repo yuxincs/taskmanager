@@ -1,5 +1,4 @@
-#ifndef USAGEPLOT_H
-#define USAGEPLOT_H
+#pragma once
 #include "stable.h"
 
 class UsagePlot : public QCustomPlot
@@ -27,5 +26,3 @@ public:
     QPixmap toPixmap(int width = 0, int height = 0, double scale = 1.0);
     void replot();
 };
-
-#endif // USAGEPLOT_H

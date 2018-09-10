@@ -1,5 +1,4 @@
-#ifndef SYSTEMMODEL_H
-#define SYSTEMMODEL_H
+#pragma once
 #include "stable.h"
 
 class PerformanceModel : public QObject
@@ -30,5 +29,3 @@ signals:
     void sendSharedData(unsigned int cpuUtilization, unsigned int memoryUtilization, unsigned long totalCpuTimeDiff);
     void updateWidget(const QVariantList & property);
 };
-
-#endif // SYSTEMMODEL_H

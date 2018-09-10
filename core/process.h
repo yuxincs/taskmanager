@@ -1,5 +1,4 @@
-#ifndef PROCESS_H
-#define PROCESS_H
+#pragma once
 #include "stable.h"
 
 class Process : public QObject
@@ -27,5 +26,3 @@ public:
     bool refresh(unsigned int totalCpuTimeDiff);
     const QVariant & property(int propertyName);
 };
-
-#endif // PROCESS_H
