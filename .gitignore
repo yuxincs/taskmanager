@@ -1,1 +1,16 @@
+# qt creator generated files
 *.pro.user
+
+# qmake generated files
+moc_*.cpp
+moc_*.h
+*.stash
+Makefile
+qrc_*.cpp
+ui_*.h
+
+# compiled files
+*.o
+
+# release file for macOS
+TaskManager.app/
