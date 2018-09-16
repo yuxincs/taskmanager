@@ -14,7 +14,8 @@ SOURCES += core/main.cpp\
     ui/process_table_model.cpp \
     ui/performance_model.cpp \
     ui/qcustomplot.cpp \
-    ui/usage_plot.cpp
+    ui/usage_plot.cpp \
+    core/linuxstatscore.cpp
 
 HEADERS  += core/stable.h \
     core/process.h \
@@ -23,7 +24,8 @@ HEADERS  += core/stable.h \
     ui/process_table_model.h \
     ui/performance_model.h \
     ui/qcustomplot.h \
-    ui/usage_plot.h
+    ui/usage_plot.h \
+    core/linuxstatscore.h
 
 FORMS    += forms/main_window.ui
 
