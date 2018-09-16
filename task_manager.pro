@@ -2,28 +2,30 @@ TARGET = TaskManager
 QT       += core gui widgets printsupport
 CONFIG   += c++11
 
-INCLUDEPATH += ./core \
-    ./ui
+INCLUDEPATH += core \
+    ui
 
-PRECOMPILED_HEADER  = ./core/stable.h
+PRECOMPILED_HEADER  = core/stable.h
 
-SOURCES += ./core/main.cpp\
-    ./core/process.cpp \
-    ./ui/main_window.cpp \
-    ./ui/process_table_model.cpp \
-    ./ui/performance_model.cpp \
-    ./ui/qcustomplot.cpp \
-    ./ui/usage_plot.cpp
+SOURCES += core/main.cpp\
+    core/process.cpp \
+    core/statscore.cpp \
+    ui/main_window.cpp \
+    ui/process_table_model.cpp \
+    ui/performance_model.cpp \
+    ui/qcustomplot.cpp \
+    ui/usage_plot.cpp
 
-HEADERS  += ./core/stable.h \
-    ./core/process.h \
-    ./ui/main_window.h \
-    ./ui/process_table_model.h \
-    ./ui/performance_model.h \
-    ./ui/qcustomplot.h \
-    ./ui/usage_plot.h
+HEADERS  += core/stable.h \
+    core/process.h \
+    core/statscore.h \
+    ui/main_window.h \
+    ui/process_table_model.h \
+    ui/performance_model.h \
+    ui/qcustomplot.h \
+    ui/usage_plot.h
 
-FORMS    += ./forms/main_window.ui
+FORMS    += forms/main_window.ui
 
 
 
