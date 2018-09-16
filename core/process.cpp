@@ -4,8 +4,8 @@
 Process::Process(unsigned int id, QObject * parent)
     :QObject(parent)
 {
-    lastCpuTime = -1;
-    lastDiskIO = -1;
+    lastCpuTime = 0;
+    lastDiskIO = 0;
 
     // append info into the property list
     propertyList << QString() << id << 0.0f << 0.0f << 0.0f << 0.0f;
