@@ -93,3 +93,8 @@ bool Process::refresh(unsigned int totalCpuTimeDiff)
     statm.close();
     return true;
 }
+
+void Process::setProperty(int propertyName, const QVariant &property)
+{
+    this->propertyList[propertyName] = property;
+}

@@ -25,4 +25,5 @@ public:
     virtual ~Process();
     bool refresh(unsigned int totalCpuTimeDiff);
     const QVariant & property(int propertyName);
+    void setProperty(int propertyName, const QVariant &property);
 };
