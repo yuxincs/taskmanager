@@ -5,13 +5,18 @@
 class StatsCore : public QObject
 {
     Q_OBJECT
+private:
+    void refreshProcesses();
 protected:
     QTimer refreshTimer;
+    QList<const Process *> processes;
+    virtual void updateProcesses() = 0;
+    virtual void killProcess(int pid) = 0;
 
 public:
-    StatsCore();
+    StatsCore(int msec);
     void setRefreshRate(int msec);
 
 signals:
-    void processes(const QList<const Process *> processes);
+    void processUpdate(const QList<const Process *> processes);
 };
