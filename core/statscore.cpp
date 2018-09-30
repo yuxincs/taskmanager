@@ -17,3 +17,8 @@ void StatsCore::refreshProcesses()
     this->updateProcesses();
     emit processUpdate(this->processes);
 }
+
+StatsCore::~StatsCore()
+{
+
+}

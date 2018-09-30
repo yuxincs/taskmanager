@@ -15,6 +15,7 @@ protected:
 
 public:
     StatsCore(int msec);
+    virtual ~StatsCore();
     void setRefreshRate(int msec);
 
 signals:
