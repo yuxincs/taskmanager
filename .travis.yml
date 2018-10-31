@@ -53,10 +53,6 @@ matrix:
   - os: osx
     compiler: clang
     env:
-     - QT_BASE=55
-  - os: osx
-    compiler: clang
-    env:
      - QT_BASE=latest
 
 before_install:
