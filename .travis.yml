@@ -4,49 +4,41 @@ matrix:
  include:
   - os: linux
     dist: trusty
-    sudo: required
     compiler: gcc
     env:
      - QT_BASE=54
   - os: linux
     dist: trusty
-    sudo: required
     compiler: gcc
     env:
      - QT_BASE=55
   - os: linux
     dist: trusty
-    sudo: required
     compiler: gcc
     env:
      - QT_BASE=56
   - os: linux
     dist: trusty
-    sudo: required
     compiler: gcc
     env:
      - QT_BASE=57
   - os: linux
     dist: trusty
-    sudo: required
     compiler: gcc
     env:
      - QT_BASE=58
   - os: linux
     dist: trusty
-    sudo: required
     compiler: gcc
     env:
      - QT_BASE=59
   - os: linux
     dist: trusty
-    sudo: required
     compiler: gcc
     env:
      - QT_BASE=510
   - os: linux
     dist: trusty
-    sudo: required
     compiler: gcc
     env:
      - QT_BASE=511
