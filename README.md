@@ -1,4 +1,4 @@
-# TaskManager-QT [![Build Status](https://travis-ci.com/RyanWangGit/TaskManager-QT.svg?branch=master)](https://travis-ci.com/RyanWangGit/TaskManager-QT)
+# TaskManager [![Build Status](https://travis-ci.com/RyanWangGit/task-manager.svg?branch=master)](https://travis-ci.com/RyanWangGit/task-manager)
 
 A Windows-Like Task Manager Built for Linux Based on Qt.
 
