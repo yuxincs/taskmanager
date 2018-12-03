@@ -1,12 +1,11 @@
 #pragma once
 #include "stable.h"
-#include "process.h"
 
 class StatsCore : public QObject
 {
     Q_OBJECT
 protected:
-    QTimer refreshTimer;
+    QTimer refreshTimer_;
     QSqlTableModel processModel_;
     virtual void updateProcesses() = 0;
     virtual void killProcess(int pid) = 0;

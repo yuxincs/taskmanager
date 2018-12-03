@@ -2,13 +2,13 @@
 
 StatsCore::StatsCore(int msec)
 {
-    connect(&this->refreshTimer, &QTimer::timeout, this, &StatsCore::updateProcesses);
-    this->refreshTimer.start(msec);
+    connect(&this->refreshTimer_, &QTimer::timeout, this, &StatsCore::updateProcesses);
+    this->refreshTimer_.start(msec);
 }
 
 void StatsCore::setRefreshRate(int msec)
 {
-    this->refreshTimer.setInterval(msec);
+    this->refreshTimer_.setInterval(msec);
 }
 
 StatsCore::~StatsCore()
