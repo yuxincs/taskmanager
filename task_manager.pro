@@ -1,5 +1,5 @@
 TARGET = TaskManager
-QT       += core gui widgets printsupport
+QT       += core gui widgets printsupport sql
 CONFIG   += c++11
 
 INCLUDEPATH += core \
@@ -28,8 +28,6 @@ HEADERS  += core/stable.h \
     core/linuxstatscore.h
 
 FORMS    += forms/main_window.ui
-
-
 
 RESOURCES += \
     task_manager.qrc
