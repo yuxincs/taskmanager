@@ -8,7 +8,6 @@ INCLUDEPATH += core \
 PRECOMPILED_HEADER  = core/stable.h
 
 SOURCES += core/main.cpp\
-    core/process.cpp \
     core/statscore.cpp \
     ui/main_window.cpp \
     ui/process_table_model.cpp \
@@ -18,7 +17,6 @@ SOURCES += core/main.cpp\
     core/linuxstatscore.cpp
 
 HEADERS  += core/stable.h \
-    core/process.h \
     core/statscore.h \
     ui/main_window.h \
     ui/process_table_model.h \
