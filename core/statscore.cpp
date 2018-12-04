@@ -3,7 +3,10 @@
 StatsCore::StatsCore(int msec, QObject *parent)
     :QObject(parent)
 {
+    // connect timer to update functions
     connect(&this->refreshTimer_, &QTimer::timeout, this, &StatsCore::updateProcesses);
+
+    // create a in-memory sqlite database to store all information
     this->database_ = QSqlDatabase::addDatabase("QSQLITE");
     this->database_.setDatabaseName(":memory:");
     this->database_.open();
@@ -17,6 +20,7 @@ StatsCore::StatsCore(int msec, QObject *parent)
                          `network`	TEXT,\
                          PRIMARY KEY(`pid`)\
                      );");
+    // create and set a QSqlTableModel for GUI
     this->processModel_ = new QSqlTableModel(this, this->database_);
     this->processModel_->setTable("process");
 
