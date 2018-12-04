@@ -10,9 +10,6 @@ class MainWindow : public QMainWindow
 {
     Q_OBJECT
 private:
-    QPoint origin;
-    bool isDragging;
-
     StatsCore *core;
     void setupUsagePlots();
     void setupStaticInformation();
@@ -22,7 +19,6 @@ private slots:
 public:
     explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
-    static const int REFRESH_RATE;
     void updateWidget(const QVariantList & property);
 private:
     Ui::MainWindow *ui;
