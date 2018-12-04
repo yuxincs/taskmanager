@@ -12,7 +12,7 @@ protected:
     virtual void killProcess(quint64 pid);
 
 public:
-    StatsCore(int msec);
+    StatsCore(int msec, QObject *parent=nullptr);
     virtual ~StatsCore();
     void setRefreshRate(int msec);
     const QSqlTableModel &processModel();

@@ -1,6 +1,7 @@
 #include "statscore.h"
 
-StatsCore::StatsCore(int msec)
+StatsCore::StatsCore(int msec, QObject *parent)
+    :QObject(parent)
 {
     connect(&this->refreshTimer_, &QTimer::timeout, this, &StatsCore::updateProcesses);
     this->refreshTimer_.start(msec);
