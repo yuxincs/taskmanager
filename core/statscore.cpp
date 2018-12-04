@@ -40,27 +40,28 @@ void StatsCore::updateProcesses()
     // update the processes based on a `ps` solution
     QProcess psProcess;
     psProcess.start("ps axo pid,%cpu,%mem,comm");
-    psProcess.waitForFinished();
-    QString psOutput = psProcess.readAllStandardOutput();
-    QStringList processList = psOutput.split('\n');
-    // remove the first line (title) and last line (blank line)
-    processList.removeFirst();
-    processList.removeLast();
+    connect(&psProcess, &QProcess::readyReadStandardOutput, [&] {
+        QString psOutput = psProcess.readAllStandardOutput();
+        QStringList processList = psOutput.split('\n');
+        // remove the first line (title) and last line (blank line)
+        processList.removeFirst();
+        processList.removeLast();
 
-    // begin transaction
-    this->database_.transaction();
-    QSqlQuery query(this->database_);
+        // begin transaction
+        this->database_.transaction();
+        QSqlQuery query(this->database_);
 
-    // clear process table data
-    query.exec("DELETE from  process;");
+        // clear process table data
+        query.exec("DELETE from process;");
 
-    for(const QString &process: processList)
-    {
-        quint64 pid = process.section(' ', 0, 0, QString::SectionSkipEmpty).toULongLong();
-        double cpuPercent = process.section(' ', 1, 1, QString::SectionSkipEmpty).toDouble();
-        double memPercent = process.section(' ', 2, 2, QString::SectionSkipEmpty).toDouble();
-        QString name = process.section(' ', 3, -1, QString::SectionSkipEmpty);
-        name = name.mid(name.lastIndexOf('/') + 1);
-    }
-    this->database_.commit();
+        for(const QString &process: processList)
+        {
+            quint64 pid = process.section(' ', 0, 0, QString::SectionSkipEmpty).toULongLong();
+            double cpuPercent = process.section(' ', 1, 1, QString::SectionSkipEmpty).toDouble();
+            double memPercent = process.section(' ', 2, 2, QString::SectionSkipEmpty).toDouble();
+            QString name = process.section(' ', 3, -1, QString::SectionSkipEmpty);
+            name = name.mid(name.lastIndexOf('/') + 1);
+        }
+        this->database_.commit();
+    });
 }
