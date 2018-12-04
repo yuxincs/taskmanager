@@ -49,45 +49,53 @@ QSqlTableModel *StatsCore::processModel()
 void StatsCore::updateProcesses()
 {
     // update the processes based on a `ps` implementation
-    QProcess *psProcess = new QProcess();
-    psProcess->start("ps axo pid,%cpu,%mem,comm");
-    connect(psProcess, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished),
-            [=] {
-        QString psOutput = psProcess->readAllStandardOutput();
-        QStringList processList = psOutput.split('\n');
-        // remove the first line (title) and last line (blank line)
-        processList.removeFirst();
-        processList.removeLast();
+    static QProcess *psProcess = nullptr;
+    if (psProcess == nullptr)
+    {
+        // initialize the process object and connect to a function that updates the database
+        psProcess = new QProcess(this);
+        connect(psProcess, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), [=] {
+            QString psOutput = psProcess->readAllStandardOutput();
+            QStringList processList = psOutput.split('\n');
+            // remove the first line (title) and last line (blank line)
+            processList.removeFirst();
+            processList.removeLast();
 
-        // begin transaction
-        this->database_.transaction();
-        QSqlQuery query(this->database_);
+            // begin transaction
+            this->database_.transaction();
+            QSqlQuery query(this->database_);
 
-        // clear process table data
-        query.exec("DELETE from process;");
+            // clear process table data
+            query.exec("DELETE from process;");
 
-        for(const QString &process: processList)
-        {
-            quint64 pid = process.section(' ', 0, 0, QString::SectionSkipEmpty).toULongLong();
-            double cpuPercent = process.section(' ', 1, 1, QString::SectionSkipEmpty).toDouble();
-            double memPercent = process.section(' ', 2, 2, QString::SectionSkipEmpty).toDouble();
-            QString name = process.section(' ', 3, -1, QString::SectionSkipEmpty);
-            name = name.mid(name.lastIndexOf('/') + 1);
-            query.prepare("INSERT INTO process (pid, name, cpu, memory, disk, network)"
-                          "VALUES (:pid, :name, :cpu, :memory, :disk, :network)");
-            query.bindValue(":pid", pid);
-            query.bindValue(":name", name);
-            query.bindValue(":cpu", cpuPercent);
-            query.bindValue(":memory", memPercent);
-            query.bindValue(":disk", "0.0 MB/s");
-            query.bindValue(":network", "0.0 MB/s");
-            query.exec();
-        }
-        this->database_.commit();
-        qDebug() << "Updated " << processList.size() << "processes.";
-        this->processModel_->select();
-        psProcess->deleteLater();
-    });
+            for(const QString &process: processList)
+            {
+                quint64 pid = process.section(' ', 0, 0, QString::SectionSkipEmpty).toULongLong();
+                double cpuPercent = process.section(' ', 1, 1, QString::SectionSkipEmpty).toDouble();
+                double memPercent = process.section(' ', 2, 2, QString::SectionSkipEmpty).toDouble();
+                QString name = process.section(' ', 3, -1, QString::SectionSkipEmpty);
+                name = name.mid(name.lastIndexOf('/') + 1);
+                query.prepare("INSERT INTO process (pid, name, cpu, memory, disk, network)"
+                              "VALUES (:pid, :name, :cpu, :memory, :disk, :network)");
+                query.bindValue(":pid", pid);
+                query.bindValue(":name", name);
+                query.bindValue(":cpu", cpuPercent);
+                query.bindValue(":memory", memPercent);
+                query.bindValue(":disk", "0.0 MB/s");
+                query.bindValue(":network", "0.0 MB/s");
+                query.exec();
+            }
+            this->database_.commit();
+            qDebug() << "Updated " << processList.size() << "processes.";
+            this->processModel_->select();
+        });
+    }
+    // if the last update is still running
+    if (psProcess->state() == QProcess::Running)
+        return;
+    // else start updating
+    else
+        psProcess->start("ps axo pid,%cpu,%mem,comm");
 }
 
 void StatsCore::killProcess(quint64 pid)
