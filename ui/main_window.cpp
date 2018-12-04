@@ -19,6 +19,13 @@ MainWindow::MainWindow(QWidget *parent) :
 
     // setup process table
     QSqlTableModel *model = core->processModel();
+    model->select();
+    model->setHeaderData(0, Qt::Horizontal, "Name");
+    model->setHeaderData(1, Qt::Horizontal, "PID");
+    model->setHeaderData(2, Qt::Horizontal, "CPU");
+    model->setHeaderData(3, Qt::Horizontal, "Memory");
+    model->setHeaderData(4, Qt::Horizontal, "Disk");
+    model->setHeaderData(5, Qt::Horizontal, "Network");
     ui->processView->setModel(model);
     ui->processView->setSelectionBehavior(QTableView::SelectRows);
     ui->processView->setSelectionMode(QTableView::SingleSelection);
