@@ -8,6 +8,13 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
+    // setup StatsCore based on the OS-specific implementations
+    #if defined(unix) || defined(__unix__) || defined(__unix)
+    this->core = new StatsCore(1000);
+    #elif defined (__APPLE__)
+    this->core = new StatsCore(1000);
+    #endif
+
     setWindowFlags(Qt::FramelessWindowHint);
     isDragging = false;
 
@@ -15,15 +22,10 @@ MainWindow::MainWindow(QWidget *parent) :
 
     ui->setupUi(this);
 
-    // setup performance tab
-    setupUsagePlots();
-
-    setupStaticInformation();
-
-    // setup process tab
-    ui->processView->setModel(&processModel);
-    ui->processView->setSelectionBehavior(QAbstractItemView::SelectRows);
-    ui->processView->setSelectionMode(QAbstractItemView::SingleSelection);
+    // setup process table
+    ui->processView->setModel(core->processModel());
+    ui->processView->setSelectionBehavior(QTableView::SelectRows);
+    ui->processView->setSelectionMode(QTableView::SingleSelection);
     ui->processView->setColumnWidth(0,200);
     ui->processView->setColumnWidth(1,60);
     ui->processView->setColumnWidth(2,60);
@@ -31,6 +33,33 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->processView->setColumnWidth(4,90);
     ui->processView->setColumnWidth(5,80);
     ui->processView->setSortingEnabled(true);
+
+    // setup performance tab
+    setupUsagePlots();
+
+    // setup other widgets
+    connect(ui->closeButton, &QPushButton::clicked,
+            qApp, &QApplication::quit);
+
+    connect(ui->minimizeButton, &QPushButton::clicked,
+            this, &MainWindow::showMinimized);
+
+    connect(ui->killProcessButton, &QPushButton::clicked,
+            [=]{
+        QModelIndex curIndex = ui->processView->currentIndex();
+        if(curIndex.isValid())
+        {
+            unsigned int pid = curIndex.sibling(curIndex.row(), 1).data().toUInt();
+            this->core->killProcess(pid);
+        }
+    });
+
+    /*
+    setupStaticInformation();
+
+    // setup process tab
+    ui->processView->setModel(&processModel);
+
 
     // setup data widget mapping
     connect(&performanceModel, &PerformanceModel::updateWidget,
@@ -56,22 +85,6 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(&refreshTimer, &QTimer::timeout,
             this, &MainWindow::updateUsageOptionIcon);
 
-    connect(ui->closeButton, &QPushButton::clicked,
-            qApp, &QApplication::quit);
-
-    connect(ui->minimizeButton, &QPushButton::clicked,
-            this, &MainWindow::showMinimized);
-
-    connect(ui->killProcessButton, &QPushButton::clicked,
-            [=]{
-        QModelIndex curIndex = ui->processView->currentIndex();
-        if(curIndex.isValid())
-        {
-            unsigned int pid = curIndex.sibling(curIndex.row(), 1).data().toUInt();
-            processModel.killProcess(pid);
-        }
-    });
-
     refresh();
 
     // refresh again after 100 ms to get sampling data ready
@@ -79,6 +92,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     // set refresh rate
     refreshTimer.start(REFRESH_RATE);
+*/
 }
 
 MainWindow::~MainWindow()
@@ -136,14 +150,17 @@ void MainWindow::updateUsageOptionIcon()
 
 void MainWindow::refresh()
 {
+    /*
     performanceModel.refresh();
 
     // refresh other models using global resource model
     processModel.refresh();
+    */
 }
 
 void MainWindow::updateWidget(const QVariantList & property)
 {
+    /*
     ui->utilization->setText(QString::number(property[PerformanceModel::CpuUtilization].toUInt()) + " %");
 
     float cpuSpeed = property[PerformanceModel::CpuSpeed].toFloat();
@@ -173,10 +190,12 @@ void MainWindow::updateWidget(const QVariantList & property)
     memoryCached = qRound(memoryCached * 10) / 10.0;
     ui->cached->setText(QString("%1 GB").arg(memoryCached));
     ui->temperature->setText(QString("%1 ℃").arg(property[PerformanceModel::CpuTemperature].toFloat()));
+    */
 }
 
 void MainWindow::setupStaticInformation()
 {
+    /*
     QFile cpuinfo("/proc/cpuinfo");
     QRegularExpression rx;
     if(cpuinfo.open(QIODevice::ReadOnly))
@@ -207,4 +226,5 @@ void MainWindow::setupStaticInformation()
         ui->memoryUsagePlot->setMaximumUsage(memTotal);
         ui->memoryUsagePlot->setUsageUnit("GB");
     }
+    */
 }
