@@ -39,10 +39,11 @@ QSqlTableModel *StatsCore::processModel()
 void StatsCore::updateProcesses()
 {
     // update the processes based on a `ps` implementation
-    QProcess psProcess;
-    psProcess.start("ps axo pid,%cpu,%mem,comm");
-    connect(&psProcess, &QProcess::readyReadStandardOutput, [&] {
-        QString psOutput = psProcess.readAllStandardOutput();
+    QProcess *psProcess = new QProcess();
+    psProcess->start("ps axo pid,%cpu,%mem,comm");
+    connect(psProcess, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished),
+            [=] {
+        QString psOutput = psProcess->readAllStandardOutput();
         QStringList processList = psOutput.split('\n');
         // remove the first line (title) and last line (blank line)
         processList.removeFirst();
@@ -73,6 +74,8 @@ void StatsCore::updateProcesses()
             query.exec();
         }
         this->database_.commit();
+        qDebug() << "Updated " << processList.size() << "processes.";
+        psProcess->deleteLater();
     });
 }
 
