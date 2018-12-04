@@ -8,6 +8,13 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
+    // setup StatsCore based on the OS-specific implementations
+    #if defined(unix) || defined(__unix__) || defined(__unix)
+    this->core = new StatsCore(1000);
+    #elif defined (__APPLE__)
+    this->core = new StatsCore(1000);
+    #endif
+
     setWindowFlags(Qt::FramelessWindowHint);
     isDragging = false;
 
