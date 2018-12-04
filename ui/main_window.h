@@ -1,7 +1,6 @@
 #pragma once
 #include "stable.h"
-#include "process_table_model.h"
-#include "performance_model.h"
+#include "statscore.h"
 
 namespace Ui {
 class MainWindow;
@@ -14,9 +13,7 @@ private:
     QPoint origin;
     bool isDragging;
 
-    QTimer refreshTimer;
-    ProcessTableModel processModel;
-    PerformanceModel performanceModel;
+    StatsCore *core;
     void setupUsagePlots();
     void setupStaticInformation();
 private slots:
