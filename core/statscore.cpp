@@ -12,8 +12,8 @@ StatsCore::StatsCore(int msec, QObject *parent)
     this->database_.open();
     // create process info table
     this->database_.exec("CREATE TABLE `process` (\
-                         `pid`	INTEGER UNIQUE,\
                          `name`	TEXT,\
+                         `pid`	INTEGER UNIQUE,\
                          `cpu`	REAL,\
                          `memory`	REAL,\
                          `disk`	TEXT,\
