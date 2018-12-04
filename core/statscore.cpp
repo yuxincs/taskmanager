@@ -4,7 +4,6 @@ StatsCore::StatsCore(int msec, QObject *parent)
     :QObject(parent)
 {
     connect(&this->refreshTimer_, &QTimer::timeout, this, &StatsCore::updateProcesses);
-    this->refreshTimer_.start(msec);
     this->database_ = QSqlDatabase::addDatabase("QSQLITE");
     this->database_.setDatabaseName(":memory:");
     this->database_.open();
@@ -20,6 +19,12 @@ StatsCore::StatsCore(int msec, QObject *parent)
                      );");
     this->processModel_ = new QSqlTableModel(this, this->database_);
     this->processModel_->setTable("process");
+
+    // initial update
+    this->updateProcesses();
+
+    // start timer
+    this->refreshTimer_.start(msec);
 }
 
 void StatsCore::setRefreshRate(int msec)
