@@ -20,7 +20,8 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
 
     // setup process table
-    ui->processView->setModel(core->processModel());
+    QSqlTableModel *model = core->processModel();
+    ui->processView->setModel(model);
     ui->processView->setSelectionBehavior(QTableView::SelectRows);
     ui->processView->setSelectionMode(QTableView::SingleSelection);
     ui->processView->setColumnWidth(0,200);
@@ -30,6 +31,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->processView->setColumnWidth(4,90);
     ui->processView->setColumnWidth(5,80);
     ui->processView->setSortingEnabled(true);
+    ui->processView->setEditTriggers(QTableView::NoEditTriggers);
 
     // setup performance tab
     setupUsagePlots();
