@@ -75,6 +75,7 @@ void StatsCore::updateProcesses()
         }
         this->database_.commit();
         qDebug() << "Updated " << processList.size() << "processes.";
+        this->processModel_->select();
         psProcess->deleteLater();
     });
 }
