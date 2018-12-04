@@ -8,8 +8,8 @@ protected:
     QTimer refreshTimer_;
     QSqlDatabase database_;
     QSqlTableModel *processModel_;
-    virtual void updateProcesses() = 0;
-    virtual void killProcess(int pid) = 0;
+    virtual void updateProcesses();
+    virtual void killProcess(quint64 pid);
 
 public:
     StatsCore(int msec);

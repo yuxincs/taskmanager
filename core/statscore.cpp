@@ -37,7 +37,7 @@ const QSqlTableModel &StatsCore::processModel()
 
 void StatsCore::updateProcesses()
 {
-    // update the processes based on a `ps` solution
+    // update the processes based on a `ps` implementation
     QProcess psProcess;
     psProcess.start("ps axo pid,%cpu,%mem,comm");
     connect(&psProcess, &QProcess::readyReadStandardOutput, [&] {
@@ -73,4 +73,11 @@ void StatsCore::updateProcesses()
         }
         this->database_.commit();
     });
+}
+
+void StatsCore::killProcess(quint64 pid)
+{
+    // a command based implementation
+    QProcess process;
+    process.start("kill", {"-s", "9", QString::number(pid)});
 }
