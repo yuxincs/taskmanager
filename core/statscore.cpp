@@ -7,6 +7,7 @@ StatsCore::StatsCore(int msec, QObject *parent)
     this->refreshTimer_.start(msec);
     this->database_ = QSqlDatabase::addDatabase("QSQLITE");
     this->database_.setDatabaseName(":memory:");
+    this->database_.open();
     // create process info table
     this->database_.exec("CREATE TABLE `process` (\
                          `pid`	INTEGER UNIQUE,\
