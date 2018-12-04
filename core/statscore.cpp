@@ -31,9 +31,9 @@ StatsCore::~StatsCore()
 
 }
 
-const QSqlTableModel &StatsCore::processModel()
+QSqlTableModel *StatsCore::processModel()
 {
-    return *this->processModel_;
+    return this->processModel_;
 }
 
 void StatsCore::updateProcesses()

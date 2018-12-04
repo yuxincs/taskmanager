@@ -14,6 +14,6 @@ public:
     StatsCore(int msec, QObject *parent=nullptr);
     virtual ~StatsCore();
     void setRefreshRate(int msec);
-    const QSqlTableModel &processModel();
+    QSqlTableModel *processModel();
     virtual void killProcess(quint64 pid);
 };
