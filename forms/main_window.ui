@@ -1144,21 +1144,6 @@ QListView::item{
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="systemTab">
-       <attribute name="title">
-        <string>System</string>
-       </attribute>
-       <widget class="QTableView" name="tableView">
-        <property name="geometry">
-         <rect>
-          <x>40</x>
-          <y>40</y>
-          <width>256</width>
-          <height>192</height>
-         </rect>
-        </property>
-       </widget>
-      </widget>
      </widget>
     </item>
    </layout>
@@ -1178,7 +1163,6 @@ QListView::item{
   <tabstop>processView</tabstop>
   <tabstop>killProcessButton</tabstop>
   <tabstop>usageOptionList</tabstop>
-  <tabstop>tableView</tabstop>
  </tabstops>
  <resources/>
  <connections/>
