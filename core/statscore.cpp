@@ -61,6 +61,15 @@ void StatsCore::updateProcesses()
             double memPercent = process.section(' ', 2, 2, QString::SectionSkipEmpty).toDouble();
             QString name = process.section(' ', 3, -1, QString::SectionSkipEmpty);
             name = name.mid(name.lastIndexOf('/') + 1);
+            query.prepare("INSERT INTO process (pid, name, cpu, memory, disk, network)"
+                          "VALUES (:pid, :name, :cpu, :memory, :disk, :network)");
+            query.bindValue(":pid", pid);
+            query.bindValue(":name", name);
+            query.bindValue(":cpu", cpuPercent);
+            query.bindValue(":memory", memPercent);
+            query.bindValue(":disk", "0.0 MB/s");
+            query.bindValue(":network", "0.0 MB/s");
+            query.exec();
         }
         this->database_.commit();
     });
