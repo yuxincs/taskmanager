@@ -9,11 +9,11 @@ protected:
     QSqlDatabase database_;
     QSqlTableModel *processModel_;
     virtual void updateProcesses();
-    virtual void killProcess(quint64 pid);
 
 public:
     StatsCore(int msec, QObject *parent=nullptr);
     virtual ~StatsCore();
     void setRefreshRate(int msec);
     const QSqlTableModel &processModel();
+    virtual void killProcess(quint64 pid);
 };
