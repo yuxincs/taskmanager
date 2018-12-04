@@ -177,97 +177,6 @@ QListView::item{
      <number>0</number>
     </property>
     <item>
-     <widget class="QWidget" name="titleWidget" native="true">
-      <property name="minimumSize">
-       <size>
-        <width>0</width>
-        <height>30</height>
-       </size>
-      </property>
-      <property name="maximumSize">
-       <size>
-        <width>16777215</width>
-        <height>30</height>
-       </size>
-      </property>
-      <property name="styleSheet">
-       <string notr="true"/>
-      </property>
-      <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="0,3,1,1">
-       <property name="spacing">
-        <number>0</number>
-       </property>
-       <property name="leftMargin">
-        <number>10</number>
-       </property>
-       <property name="topMargin">
-        <number>0</number>
-       </property>
-       <property name="rightMargin">
-        <number>0</number>
-       </property>
-       <property name="bottomMargin">
-        <number>0</number>
-       </property>
-       <item>
-        <widget class="QLabel" name="label">
-         <property name="maximumSize">
-          <size>
-           <width>25</width>
-           <height>25</height>
-          </size>
-         </property>
-         <property name="text">
-          <string/>
-         </property>
-         <property name="pixmap">
-          <pixmap resource="../task_manager.qrc">:/assets/icon.png</pixmap>
-         </property>
-         <property name="scaledContents">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLabel" name="titleLabel">
-         <property name="text">
-          <string>Task Manager</string>
-         </property>
-         <property name="indent">
-          <number>5</number>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="minimizeButton">
-         <property name="maximumSize">
-          <size>
-           <width>30</width>
-           <height>16777215</height>
-          </size>
-         </property>
-         <property name="text">
-          <string>-</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="closeButton">
-         <property name="maximumSize">
-          <size>
-           <width>30</width>
-           <height>16777215</height>
-          </size>
-         </property>
-         <property name="text">
-          <string>╳ </string>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </widget>
-    </item>
-    <item>
      <widget class="QTabWidget" name="centralTabWidget">
       <property name="styleSheet">
        <string notr="true"/>
@@ -1266,15 +1175,11 @@ QListView::item{
  </customwidgets>
  <tabstops>
   <tabstop>centralTabWidget</tabstop>
-  <tabstop>closeButton</tabstop>
-  <tabstop>minimizeButton</tabstop>
   <tabstop>processView</tabstop>
   <tabstop>killProcessButton</tabstop>
   <tabstop>usageOptionList</tabstop>
   <tabstop>tableView</tabstop>
  </tabstops>
- <resources>
-  <include location="../task_manager.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>

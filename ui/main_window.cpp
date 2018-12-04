@@ -15,9 +15,6 @@ MainWindow::MainWindow(QWidget *parent) :
     this->core = new StatsCore(1000);
     #endif
 
-    setWindowFlags(Qt::FramelessWindowHint);
-    isDragging = false;
-
     setWindowIcon(QIcon(":/icon.png"));
 
     ui->setupUi(this);
@@ -38,12 +35,6 @@ MainWindow::MainWindow(QWidget *parent) :
     setupUsagePlots();
 
     // setup other widgets
-    connect(ui->closeButton, &QPushButton::clicked,
-            qApp, &QApplication::quit);
-
-    connect(ui->minimizeButton, &QPushButton::clicked,
-            this, &MainWindow::showMinimized);
-
     connect(ui->killProcessButton, &QPushButton::clicked,
             [=]{
         QModelIndex curIndex = ui->processView->currentIndex();
@@ -52,6 +43,11 @@ MainWindow::MainWindow(QWidget *parent) :
             unsigned int pid = curIndex.sibling(curIndex.row(), 1).data().toUInt();
             this->core->killProcess(pid);
         }
+    });
+
+    connect(model, &QSqlTableModel::rowsAboutToBeInserted, [=] {
+        QModelIndexList list = ui->processView->selectionModel()->selectedRows();
+        qDebug() << "layout changed" << list.count();
     });
 
     /*
@@ -98,27 +94,6 @@ MainWindow::MainWindow(QWidget *parent) :
 MainWindow::~MainWindow()
 {
     delete ui;
-}
-
-
-void MainWindow::mousePressEvent(QMouseEvent * event)
-{
-    if(ui->titleWidget->rect().contains(event->pos()))
-    {
-        isDragging = true;
-        origin = event->pos();
-    }
-}
-
-void MainWindow::mouseMoveEvent(QMouseEvent * event)
-{
-    if ((event->buttons() & Qt::LeftButton) && isDragging)
-        move(event->globalX() - origin.x(), event->globalY() - origin.y());
-}
-
-void MainWindow::mouseReleaseEvent(QMouseEvent * event)
-{
-    isDragging = false;
 }
 
 void MainWindow::setupUsagePlots()
