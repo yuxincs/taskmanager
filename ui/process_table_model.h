@@ -1,6 +1,5 @@
 #pragma once
 #include "stable.h"
-#include "process.h"
 #include "performance_model.h"
 
 class ProcessTableModel : public QAbstractTableModel
