@@ -15,9 +15,9 @@ StatsCore::StatsCore(int msec, QObject *parent)
                          `name`	TEXT,\
                          `pid`	INTEGER UNIQUE,\
                          `cpu`	REAL,\
-                         `memory`	REAL,\
-                         `disk`	TEXT,\
-                         `network`	TEXT,\
+                         `memory`	INTEGER,\
+                         `disk`	INTEGER,\
+                         `network`	INTEGER,\
                          PRIMARY KEY(`pid`)\
                      );");
     // create and set a QSqlTableModel for GUI
@@ -72,7 +72,7 @@ void StatsCore::updateProcesses()
             {
                 quint64 pid = process.section(' ', 0, 0, QString::SectionSkipEmpty).toULongLong();
                 double cpuPercent = process.section(' ', 1, 1, QString::SectionSkipEmpty).toDouble();
-                double memPercent = process.section(' ', 2, 2, QString::SectionSkipEmpty).toDouble();
+                double memory = process.section(' ', 2, 2, QString::SectionSkipEmpty).toDouble();
                 QString name = process.section(' ', 3, -1, QString::SectionSkipEmpty);
                 name = name.mid(name.lastIndexOf('/') + 1);
                 query.prepare("INSERT INTO process (pid, name, cpu, memory, disk, network)"
@@ -80,9 +80,9 @@ void StatsCore::updateProcesses()
                 query.bindValue(":pid", pid);
                 query.bindValue(":name", name);
                 query.bindValue(":cpu", cpuPercent);
-                query.bindValue(":memory", memPercent);
-                query.bindValue(":disk", "0.0 MB/s");
-                query.bindValue(":network", "0.0 MB/s");
+                query.bindValue(":memory", memory);
+                query.bindValue(":disk", 0);
+                query.bindValue(":network", 0);
                 query.exec();
             }
             this->database_.commit();
@@ -95,7 +95,7 @@ void StatsCore::updateProcesses()
         return;
     // else start updating
     else
-        psProcess->start("ps axo pid,%cpu,%mem,comm");
+        psProcess->start("ps axo pid,%cpu,rss,,comm");
 }
 
 void StatsCore::killProcess(quint64 pid)
