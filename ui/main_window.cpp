@@ -72,7 +72,7 @@ MainWindow::MainWindow(QWidget *parent) :
                 // the first fetch has been done by library
                 if(current != 0)
                     ui->processView->model()->fetchMore(QModelIndex());
-                qDebug() << "hooray" << ui->processView->model()->rowCount();
+
                 int rowCount = ui->processView->model()->rowCount();
                 for (; current < rowCount; current ++)
                 {
