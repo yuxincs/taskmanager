@@ -32,6 +32,17 @@ QVariant ProcessProxyModel::data(const QModelIndex &index, int role) const
             return QString("%1 Mbps").arg(unmodifiedData.toULongLong());
         }
     }
+    else if (role == Qt::BackgroundRole)
+    {
+        if(index.column() > 1)
+        {
+            // TODO: determine the percentage
+            // default color
+            return QBrush(QColor(255, 198, 61, 70));
+        }
+
+        return QVariant();
+    }
     else if (role == Qt::TextAlignmentRole)
         {
             switch(index.column())
