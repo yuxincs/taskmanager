@@ -11,6 +11,7 @@ protected:
     virtual void updateProcesses();
 
 public:
+    enum ProcessField { Name = 0, PID, CPU, Memory, Disk, Network };
     StatsCore(int msec, QObject *parent=nullptr);
     virtual ~StatsCore();
     void setRefreshRate(int msec);
