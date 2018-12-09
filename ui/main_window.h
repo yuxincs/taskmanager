@@ -11,6 +11,7 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 private:
     StatsCore *core;
+    quint64 curSelectedPID;
     void setupUsagePlots();
     void setupStaticInformation();
 private slots:

@@ -13,6 +13,9 @@ MainWindow::MainWindow(QWidget *parent) :
     this->core = new StatsCore(1000);
     #endif
 
+    // setup local variables
+    this->curSelectedPID = 0;
+
     setWindowIcon(QIcon(":/icon.png"));
 
     ui->setupUi(this);
@@ -52,9 +55,39 @@ MainWindow::MainWindow(QWidget *parent) :
         }
     });
 
-    connect(model, &QSqlTableModel::rowsAboutToBeInserted, [=] {
-        QModelIndexList list = ui->processView->selectionModel()->selectedRows();
-        qDebug() << "layout changed" << list.count();
+    connect(model, &QSqlTableModel::modelAboutToBeReset, this, [=] {
+        // store the current selected PID
+        QModelIndex index = ui->processView->selectionModel()->currentIndex();
+        if (index.isValid())
+            this->curSelectedPID = index.siblingAtColumn(1).data().toULongLong();
+    });
+
+    connect(model, &QSqlTableModel::modelReset, this, [=] {
+        // restore the current selected PID
+        if(this->curSelectedPID != 0)
+        {
+            int current = 0;
+            while(ui->processView->model()->canFetchMore(QModelIndex()))
+            {
+                // the first fetch has been done by library
+                if(current != 0)
+                    ui->processView->model()->fetchMore(QModelIndex());
+                qDebug() << "hooray" << ui->processView->model()->rowCount();
+                int rowCount = ui->processView->model()->rowCount();
+                for (; current < rowCount; current ++)
+                {
+                    const QModelIndex &index = ui->processView->model()->index(current, 1);
+                    if(index.data().toULongLong() == this->curSelectedPID)
+                    {
+                        ui->processView->selectionModel()->setCurrentIndex(index,
+                                                                           QItemSelectionModel::Rows | QItemSelectionModel::ClearAndSelect);
+                        return;
+                    }
+                }
+            };
+            // if cannot find the current PID (which means it has been removed)
+            this->curSelectedPID = 0;
+        }
     });
 
     /*
