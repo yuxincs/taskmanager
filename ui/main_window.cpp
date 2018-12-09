@@ -1,8 +1,6 @@
 #include "main_window.h"
 #include "ui_main_window.h"
 
-// initialize static members
-const int MainWindow::REFRESH_RATE = 1000;
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -15,15 +13,23 @@ MainWindow::MainWindow(QWidget *parent) :
     this->core = new StatsCore(1000);
     #endif
 
-    setWindowFlags(Qt::FramelessWindowHint);
-    isDragging = false;
+    // setup local variables
+    this->curSelectedPID = 0;
 
     setWindowIcon(QIcon(":/icon.png"));
 
     ui->setupUi(this);
 
     // setup process table
-    ui->processView->setModel(core->processModel());
+    QSqlTableModel *model = core->processModel();
+    model->select();
+    model->setHeaderData(0, Qt::Horizontal, "Name");
+    model->setHeaderData(1, Qt::Horizontal, "PID");
+    model->setHeaderData(2, Qt::Horizontal, "CPU");
+    model->setHeaderData(3, Qt::Horizontal, "Memory");
+    model->setHeaderData(4, Qt::Horizontal, "Disk");
+    model->setHeaderData(5, Qt::Horizontal, "Network");
+    ui->processView->setModel(model);
     ui->processView->setSelectionBehavior(QTableView::SelectRows);
     ui->processView->setSelectionMode(QTableView::SingleSelection);
     ui->processView->setColumnWidth(0,200);
@@ -33,17 +39,12 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->processView->setColumnWidth(4,90);
     ui->processView->setColumnWidth(5,80);
     ui->processView->setSortingEnabled(true);
+    ui->processView->setEditTriggers(QTableView::NoEditTriggers);
 
     // setup performance tab
     setupUsagePlots();
 
     // setup other widgets
-    connect(ui->closeButton, &QPushButton::clicked,
-            qApp, &QApplication::quit);
-
-    connect(ui->minimizeButton, &QPushButton::clicked,
-            this, &MainWindow::showMinimized);
-
     connect(ui->killProcessButton, &QPushButton::clicked,
             [=]{
         QModelIndex curIndex = ui->processView->currentIndex();
@@ -51,6 +52,41 @@ MainWindow::MainWindow(QWidget *parent) :
         {
             unsigned int pid = curIndex.sibling(curIndex.row(), 1).data().toUInt();
             this->core->killProcess(pid);
+        }
+    });
+
+    connect(model, &QSqlTableModel::modelAboutToBeReset, this, [=] {
+        // store the current selected PID
+        QModelIndex index = ui->processView->selectionModel()->currentIndex();
+        if (index.isValid())
+            this->curSelectedPID = index.siblingAtColumn(1).data().toULongLong();
+    });
+
+    connect(model, &QSqlTableModel::modelReset, this, [=] {
+        // restore the current selected PID
+        if(this->curSelectedPID != 0)
+        {
+            int current = 0;
+            while(ui->processView->model()->canFetchMore(QModelIndex()))
+            {
+                // the first fetch has been done by library
+                if(current != 0)
+                    ui->processView->model()->fetchMore(QModelIndex());
+
+                int rowCount = ui->processView->model()->rowCount();
+                for (; current < rowCount; current ++)
+                {
+                    const QModelIndex &index = ui->processView->model()->index(current, 1);
+                    if(index.data().toULongLong() == this->curSelectedPID)
+                    {
+                        ui->processView->selectionModel()->setCurrentIndex(index,
+                                                                           QItemSelectionModel::Rows | QItemSelectionModel::ClearAndSelect);
+                        return;
+                    }
+                }
+            };
+            // if cannot find the current PID (which means it has been removed)
+            this->curSelectedPID = 0;
         }
     });
 
@@ -98,27 +134,6 @@ MainWindow::MainWindow(QWidget *parent) :
 MainWindow::~MainWindow()
 {
     delete ui;
-}
-
-
-void MainWindow::mousePressEvent(QMouseEvent * event)
-{
-    if(ui->titleWidget->rect().contains(event->pos()))
-    {
-        isDragging = true;
-        origin = event->pos();
-    }
-}
-
-void MainWindow::mouseMoveEvent(QMouseEvent * event)
-{
-    if ((event->buttons() & Qt::LeftButton) && isDragging)
-        move(event->globalX() - origin.x(), event->globalY() - origin.y());
-}
-
-void MainWindow::mouseReleaseEvent(QMouseEvent * event)
-{
-    isDragging = false;
 }
 
 void MainWindow::setupUsagePlots()
