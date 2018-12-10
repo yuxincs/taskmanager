@@ -3,27 +3,27 @@ language: cpp
 matrix:
  include:
   - os: linux
-    dist: trusty
+    dist: xenial
     compiler: gcc
     env:
      - QT_BASE=57
   - os: linux
-    dist: trusty
+    dist: xenial
     compiler: gcc
     env:
      - QT_BASE=58
   - os: linux
-    dist: trusty
+    dist: xenial
     compiler: gcc
     env:
      - QT_BASE=59
   - os: linux
-    dist: trusty
+    dist: xenial
     compiler: gcc
     env:
      - QT_BASE=510
   - os: linux
-    dist: trusty
+    dist: xenial
     compiler: gcc
     env:
      - QT_BASE=511
@@ -33,11 +33,11 @@ matrix:
      - QT_BASE=latest
 
 before_install:
-  - if [ "$QT_BASE" = "57" ]; then sudo add-apt-repository ppa:beineri/opt-qt571-trusty -y; fi
-  - if [ "$QT_BASE" = "58" ]; then sudo add-apt-repository ppa:beineri/opt-qt58-trusty -y; fi
-  - if [ "$QT_BASE" = "59" ]; then sudo add-apt-repository ppa:beineri/opt-qt594-trusty -y; fi
-  - if [ "$QT_BASE" = "510" ]; then sudo add-apt-repository ppa:beineri/opt-qt-5.10.1-trusty -y; fi
-  - if [ "$QT_BASE" = "511" ]; then sudo add-apt-repository ppa:forkotov02/opt-qt-5.11.1-trusty -y; fi
+  - if [ "$QT_BASE" = "57" ]; then sudo add-apt-repository ppa:beineri/opt-qt571-xenial -y; fi
+  - if [ "$QT_BASE" = "58" ]; then sudo add-apt-repository ppa:beineri/opt-qt58-xenial -y; fi
+  - if [ "$QT_BASE" = "59" ]; then sudo add-apt-repository ppa:beineri/opt-qt596-xenial -y; fi
+  - if [ "$QT_BASE" = "510" ]; then sudo add-apt-repository ppa:beineri/opt-qt-5.10.1-xenial -y; fi
+  - if [ "$QT_BASE" = "511" ]; then sudo add-apt-repository ppa:beineri/opt-qt-5.11.2-xenial -y; fi
   - if [ "$TRAVIS_OS_NAME" = "linux" ]; then
       sudo apt-get update -qq;
     else
