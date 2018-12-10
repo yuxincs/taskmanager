@@ -13,10 +13,8 @@ private:
     StatsCore *core;
     quint64 curSelectedPID;
     void setupUsagePlots();
-    void setupStaticInformation();
 private slots:
     void updateUsageOptionIcon();
-    void refresh();
 public:
     explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
