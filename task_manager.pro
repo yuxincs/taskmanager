@@ -11,15 +11,15 @@ SOURCES += core/main.cpp\
     core/statscore.cpp \
     ui/main_window.cpp \
     ui/qcustomplot.cpp \
-    ui/usage_plot.cpp \
-    core/linuxstatscore.cpp
+    core/linuxstatscore.cpp \
+    ui/usageplot.cpp
 
 HEADERS  += core/stable.h \
     core/statscore.h \
     ui/main_window.h \
     ui/qcustomplot.h \
-    ui/usage_plot.h \
-    core/linuxstatscore.h
+    core/linuxstatscore.h \
+    ui/usageplot.h
 
 FORMS    += forms/main_window.ui
 
