@@ -10,7 +10,6 @@ PRECOMPILED_HEADER  = core/stable.h
 SOURCES += core/main.cpp\
     core/statscore.cpp \
     ui/main_window.cpp \
-    ui/performance_model.cpp \
     ui/qcustomplot.cpp \
     ui/usage_plot.cpp \
     core/linuxstatscore.cpp
@@ -18,7 +17,6 @@ SOURCES += core/main.cpp\
 HEADERS  += core/stable.h \
     core/statscore.h \
     ui/main_window.h \
-    ui/performance_model.h \
     ui/qcustomplot.h \
     ui/usage_plot.h \
     core/linuxstatscore.h
