@@ -59,7 +59,7 @@ MainWindow::MainWindow(QWidget *parent) :
         // store the current selected PID
         QModelIndex index = ui->processView->selectionModel()->currentIndex();
         if (index.isValid())
-            this->curSelectedPID = index.siblingAtColumn(1).data().toULongLong();
+            this->curSelectedPID = index.sibling(index.row(), 1).data().toULongLong();
     });
 
     connect(model, &QSqlTableModel::modelReset, this, [=] {
