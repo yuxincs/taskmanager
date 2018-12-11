@@ -1,5 +1,3 @@
-TEMPLATE = app
-
 TARGET = testcore
 QT += testlib
 
