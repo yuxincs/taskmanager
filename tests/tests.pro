@@ -1,5 +1,5 @@
 TARGET = testcore
-QT += testlib
+QT = testlib
 
 CONFIG += testcase
 
