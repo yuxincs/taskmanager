@@ -1,4 +1,10 @@
+TEMPLATE = app
+
+TARGET = testcore
+QT += testlib
+
 CONFIG += testcase
-target = testcore
-QT = core testlib
+
 SOURCES += testcore.cpp
+
+LIBS += -L../core -lstatscore
