@@ -4,7 +4,7 @@ CONFIG += c++11
 TEMPLATE = app
 
 INCLUDEPATH += ../core/include src/
-PRECOMPILED_HEADER  = stable.h
+PRECOMPILED_HEADER  = src/stable.h
 
 SOURCES += main.cpp\
     src/main_window.cpp \
