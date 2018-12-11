@@ -61,6 +61,12 @@ install:
 
 script:
   - qmake -v
+  # run tests
+  - mkdir testbuild && cd testbuild
+  - qmake -r ../tests/
+  - make
+  - cd ../
+  # compile application
   - mkdir build && cd build
   - qmake -r ../
   - make

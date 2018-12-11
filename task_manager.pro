@@ -1,5 +1,5 @@
 TARGET = TaskManager
-QT       += core gui widgets printsupport sql testlib
+QT       += core gui widgets printsupport sql
 CONFIG   += c++11
 
 INCLUDEPATH += core \
@@ -13,8 +13,7 @@ SOURCES += main.cpp\
     ui/qcustomplot.cpp \
     ui/usageplot.cpp \
     core/linuxstatscore.cpp \
-    ui/processproxymodel.cpp \
-    tests/testcore.cpp
+    ui/processproxymodel.cpp
 
 HEADERS  += core/stable.h \
     core/statscore.h \
