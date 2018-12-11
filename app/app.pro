@@ -22,3 +22,5 @@ FORMS    += forms/main_window.ui
 
 RESOURCES += \
     task_manager.qrc
+
+LIBS += -L../core -lstatscore
