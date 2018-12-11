@@ -7,7 +7,7 @@ INCLUDEPATH += core \
 
 PRECOMPILED_HEADER  = core/stable.h
 
-SOURCES += core/main.cpp\
+SOURCES += main.cpp\
     core/statscore.cpp \
     ui/main_window.cpp \
     ui/qcustomplot.cpp \
