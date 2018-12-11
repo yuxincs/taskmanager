@@ -788,7 +788,7 @@ QListView::item{
   <customwidget>
    <class>UsagePlot</class>
    <extends>QWidget</extends>
-   <header location="global">usage_plot.h</header>
+   <header location="global">usageplot.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>
