@@ -11,15 +11,17 @@ SOURCES += core/main.cpp\
     core/statscore.cpp \
     ui/main_window.cpp \
     ui/qcustomplot.cpp \
+    ui/usageplot.cpp \
     core/linuxstatscore.cpp \
-    ui/usageplot.cpp
+    ui/processproxymodel.cpp
 
 HEADERS  += core/stable.h \
     core/statscore.h \
     ui/main_window.h \
     ui/qcustomplot.h \
+    ui/usageplot.h \
     core/linuxstatscore.h \
-    ui/usageplot.h
+    ui/processproxymodel.h
 
 FORMS    += forms/main_window.ui
 

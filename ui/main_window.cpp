@@ -1,5 +1,6 @@
 #include "main_window.h"
 #include "ui_main_window.h"
+#include "processproxymodel.h"
 
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -23,10 +24,13 @@ MainWindow::MainWindow(QWidget *parent) :
     // setup process table
     QSqlTableModel *model = core->processModel();
     model->select();
-    ui->processView->setModel(model);
+    // setup a proxy model to add color and other UI-related elements to it
+    ProcessProxyModel *proxyModel = new ProcessProxyModel(model);
+    proxyModel->setSourceModel(model);
+    ui->processView->setModel(proxyModel);
     ui->processView->setSelectionBehavior(QTableView::SelectRows);
     ui->processView->setSelectionMode(QTableView::SingleSelection);
-    ui->processView->setColumnWidth(0,200);
+    ui->processView->setColumnWidth(0,190);
     ui->processView->setColumnWidth(1,60);
     ui->processView->setColumnWidth(2,60);
     ui->processView->setColumnWidth(3,100);
