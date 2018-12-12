@@ -1,6 +1,6 @@
 TARGET = statscore
 QT       += core sql
-CONFIG   += c++11
+CONFIG   += c++11 staticlib
 TEMPLATE = lib
 
 INCLUDEPATH += src include
