@@ -1,5 +1,6 @@
 #pragma once
-#include "stable.h"
+#include <QtCore>
+#include <QtSql>
 
 class StatsCore : public QObject
 {
