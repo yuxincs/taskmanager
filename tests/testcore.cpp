@@ -1,12 +1,25 @@
 #include <QTest>
+#include "statscore.h"
 
 class TestCore: public QObject
 {
     Q_OBJECT
+private:
+    StatsCore *core;
 private slots:
+    void initTestCase()
+    {
+        this->core = new StatsCore(1000, this);
+    }
+
     void testProcessModel()
     {
         QVERIFY(true);
+    }
+
+    void cleanupTestCase()
+    {
+        delete this->core;
     }
 };
 
