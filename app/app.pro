@@ -1,4 +1,4 @@
-TARGET = TaskManager
+TARGET = ../TaskManager # move target one dir up to top-level
 QT += core gui widgets printsupport sql
 CONFIG += c++11
 TEMPLATE = app
