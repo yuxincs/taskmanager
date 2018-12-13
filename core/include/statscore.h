@@ -1,5 +1,6 @@
 #pragma once
-#include "stable.h"
+#include <QtCore>
+#include <QtSql>
 
 class StatsCore : public QObject
 {
@@ -17,4 +18,7 @@ public:
     void setRefreshRate(int msec);
     QSqlTableModel *processModel();
     virtual void killProcess(quint64 pid);
+
+private:
+    QProcess *process__;
 };

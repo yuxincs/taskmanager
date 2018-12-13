@@ -64,6 +64,7 @@ script:
   - mkdir build && cd build
   - qmake -r ../
   - make
+  - make check
 
 notifications:
   email: false

@@ -25,6 +25,7 @@ StatsCore::StatsCore(int msec, QObject *parent)
     this->processModel_->setTable("process");
 
     // initial update
+    this->process__ = nullptr;
     this->updateProcesses();
 
     // start timer
@@ -38,7 +39,18 @@ void StatsCore::setRefreshRate(int msec)
 
 StatsCore::~StatsCore()
 {
-
+    // kill and delete the process object
+    if(this->process__ != nullptr)
+    {
+        // disconnect all slots connected to finished signal,
+        // otherwise QProcess::waitForFinished() won't work
+        disconnect(this->process__, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished),
+                   nullptr, nullptr);
+        this->process__->kill();
+        this->process__->waitForFinished();
+        delete this->process__;
+    }
+    delete this->processModel_;
 }
 
 QSqlTableModel *StatsCore::processModel()
@@ -49,13 +61,12 @@ QSqlTableModel *StatsCore::processModel()
 void StatsCore::updateProcesses()
 {
     // update the processes based on a `ps` implementation
-    static QProcess *psProcess = nullptr;
-    if (psProcess == nullptr)
+    if (this->process__ == nullptr)
     {
         // initialize the process object and connect to a function that updates the database
-        psProcess = new QProcess(this);
-        connect(psProcess, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), [=] {
-            QString psOutput = psProcess->readAllStandardOutput();
+        this->process__ = new QProcess(this);
+        connect(this->process__, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), [=] {
+            QString psOutput = this->process__->readAllStandardOutput();
             QStringList processList = psOutput.split('\n');
             // remove the first line (title) and last line (blank line)
             processList.removeFirst();
@@ -91,11 +102,11 @@ void StatsCore::updateProcesses()
         });
     }
     // if the last update is still running
-    if (psProcess->state() == QProcess::Running)
+    if (this->process__->state() == QProcess::Running)
         return;
     // else start updating
     else
-        psProcess->start("ps axo pid,%cpu,rss,,comm");
+        this->process__->start("ps axo pid,%cpu,rss,comm");
 }
 
 void StatsCore::killProcess(quint64 pid)
