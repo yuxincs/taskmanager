@@ -113,7 +113,7 @@ void StatsCore::killProcess(quint64 pid)
 {
     // a command based implementation
     QProcess *process = new QProcess(this);
-    process->start("kill", {"-s", "9", QString::number(pid)});
+    process->start("kill", {"-s", "KILL", QString::number(pid)});
     connect(process, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished),
             process, &QObject::deleteLater);
     qDebug() << "Killed " << pid;
