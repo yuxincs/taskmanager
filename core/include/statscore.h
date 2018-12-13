@@ -19,6 +19,6 @@ public:
     QSqlTableModel *processModel();
     virtual void killProcess(quint64 pid);
 
-private:
-    QProcess *process__;
+signals:
+    void shuttingDown();
 };
