@@ -95,7 +95,7 @@ void StatsCore::updateProcesses()
         });
     }
     // if the last update is still running
-    else if (this->process__->state() == QProcess::Running)
+    if (this->process__->state() == QProcess::Running)
         return;
     // else start updating
     else
