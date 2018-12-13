@@ -74,11 +74,11 @@ void UsagePlot::setMaximumTime(unsigned int max)
 {
     // set time vector
     time.clear();
-    for (int i = 0; i <= max; i++)
+    for (unsigned int i = 0; i <= max; i++)
         time.append(i);
 
     // resize usage vector
-    usage.resize(max + 1);
+    usage.resize(static_cast<int>(max + 1));
 
     // set axis range
     xAxis->setRange(0, max);
