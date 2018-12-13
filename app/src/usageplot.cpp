@@ -11,7 +11,7 @@ void UsagePlot::resizeEvent(QResizeEvent *event)
     cornorLabel[BottomRight]->move(event->size().width() - cornorLabel[TopRight]->width() - DEFAULT_MINIMUM_MARGIN, event->size().height() - cornorLabel[BottomLeft]->height());
 }
 
-UsagePlot::UsagePlot(QWidget * parent /*= nullptr*/)
+UsagePlot::UsagePlot(QWidget *parent)
     :QCustomPlot(parent), time(60), usage(60)
 {
     isReplotBlocked = false;
@@ -41,9 +41,6 @@ UsagePlot::UsagePlot(QWidget * parent /*= nullptr*/)
     xAxis2->setVisible(true);
     yAxis2->setVisible(true);
 
-    // disable auto-sets
-    //xAxis->setAutoTickLabels(false);
-    //xAxis2->setAutoTickLabels(false);
 
     // disable axises' labels
     xAxis->setTickLabels(false);
@@ -103,7 +100,7 @@ void UsagePlot::setMaximumUsage(double max)
     yAxis2->setRange(0, max);
 }
 
-void UsagePlot::setThemeColor(const QColor & themeColor, unsigned int scale)
+void UsagePlot::setThemeColor(const QColor &themeColor, unsigned int scale)
 {
     QColor color = themeColor;
 
@@ -126,12 +123,12 @@ void UsagePlot::setThemeColor(const QColor & themeColor, unsigned int scale)
     replot();
 }
 
-void UsagePlot::setUsageUnit(const QString & unit)
+void UsagePlot::setUsageUnit(const QString &unit)
 {
     cornorLabel[TopRight]->setText(QString("%1 %2").arg(yAxis2->range().upper).arg(unit));
 }
 
-void UsagePlot::setLabelFont(const QFont & font)
+void UsagePlot::setLabelFont(const QFont &font)
 {
     for (QLabel * label : cornorLabel)
         label->setFont(font);
