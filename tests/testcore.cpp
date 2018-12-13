@@ -17,6 +17,16 @@ private slots:
         QVERIFY(true);
     }
 
+    void testKillProcess()
+    {
+        QProcess process;
+        process.start("tail", {"-f", "/dev/null"});
+        this->core->killProcess(static_cast<quint64>(process.pid()));
+        process.waitForFinished();
+        QVERIFY(process.exitStatus() == QProcess::NormalExit ||
+                process.exitStatus() == QProcess::CrashExit);
+    }
+
     void cleanupTestCase()
     {
         delete this->core;
