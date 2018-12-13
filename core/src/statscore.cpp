@@ -42,6 +42,10 @@ StatsCore::~StatsCore()
     // kill and delete the process object
     if(this->process__ != nullptr)
     {
+        // disconnect all slots connected to finished signal,
+        // otherwise QProcess::waitForFinished() won't work
+        disconnect(this->process__, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished),
+                   nullptr, nullptr);
         this->process__->kill();
         this->process__->waitForFinished();
         delete this->process__;
