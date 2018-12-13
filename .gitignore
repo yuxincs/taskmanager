@@ -12,5 +12,8 @@ ui_*.h
 # compiled files
 *.o
 
+# ignore build directory
+build/
+
 # release file for macOS
 TaskManager.app/
