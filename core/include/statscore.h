@@ -18,4 +18,7 @@ public:
     void setRefreshRate(int msec);
     QSqlTableModel *processModel();
     virtual void killProcess(quint64 pid);
+
+private:
+    QProcess *process__;
 };
