@@ -25,6 +25,7 @@ StatsCore::StatsCore(int msec, QObject *parent)
     this->processModel_->setTable("process");
 
     // initial update
+    this->process__ = nullptr;
     this->updateProcesses();
 
     // start timer
