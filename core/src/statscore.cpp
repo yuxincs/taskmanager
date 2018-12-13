@@ -40,9 +40,12 @@ void StatsCore::setRefreshRate(int msec)
 StatsCore::~StatsCore()
 {
     // kill and delete the process object
-    this->process__->kill();
-    this->process__->waitForFinished();
-    delete this->process__;
+    if(this->process__ != nullptr)
+    {
+        this->process__->kill();
+        this->process__->waitForFinished();
+        delete this->process__;
+    }
     delete this->processModel_;
 }
 
