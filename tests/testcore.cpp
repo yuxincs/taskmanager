@@ -14,7 +14,9 @@ private slots:
 
     void testProcessModel()
     {
-        QVERIFY(true);
+        QSqlTableModel *model = this->core->processModel();
+        QVERIFY(model != nullptr);
+        QVERIFY(!model->record(0).isEmpty());
     }
 
     void testKillProcess()
