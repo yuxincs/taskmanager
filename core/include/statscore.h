@@ -5,12 +5,6 @@
 class StatsCore : public QObject
 {
     Q_OBJECT
-protected:
-    QTimer refreshTimer_;
-    QSqlDatabase database_;
-    QSqlTableModel *processModel_;
-    virtual void updateProcesses();
-
 public:
     enum ProcessField { Name = 0, PID, CPU, Memory, Disk, Network };
     StatsCore(int msec, QObject *parent=nullptr);
@@ -21,4 +15,10 @@ public:
 
 signals:
     void shuttingDown();
+
+protected:
+    QTimer refreshTimer_;
+    QSqlDatabase database_;
+    QSqlTableModel *processModel_;
+    virtual void updateProcesses();
 };
