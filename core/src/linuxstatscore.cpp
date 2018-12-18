@@ -2,14 +2,14 @@
 #include "linuxstatscore.h"
 
 LinuxStatsCore::LinuxStatsCore(int msec, QObject *parent)
-    :StatsCore(msec, parent)
+    :GenericStatsCore(msec, parent)
 {
 
 }
 
-void LinuxStatsCore::updateProcesses()
+LinuxStatsCore::~LinuxStatsCore()
 {
-    return StatsCore::updateProcesses();
+
 }
 
 #endif

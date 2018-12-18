@@ -1,12 +1,11 @@
 #pragma once
 #if defined(unix) || defined(__unix__) || defined(__unix)
-#include "statscore.h"
+#include "genericstatscore.h"
 #include <unistd.h>
 
-class LinuxStatsCore : public StatsCore
+class LinuxStatsCore : public GenericStatsCore
 {
-protected:
-    virtual void updateProcesses();
+    Q_OBJECT
 public:
     LinuxStatsCore(int msec, QObject *parent=nullptr);
     virtual ~LinuxStats();
