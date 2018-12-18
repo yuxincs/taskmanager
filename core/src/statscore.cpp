@@ -1,4 +1,6 @@
 #include "statscore.h"
+#include "macstatscore.h"
+#include "linuxstatscore.h"
 
 StatsCore::StatsCore(int msec, QObject *parent)
     :QObject(parent)
@@ -29,6 +31,15 @@ StatsCore::StatsCore(int msec, QObject *parent)
 
     // start timer
     this->refreshTimer_.start(msec);
+}
+
+StatsCore *StatsCore::createCore(int msec, QObject *parent)
+{
+    #if defined(unix) || defined(__unix__) || defined(__unix)
+    return new LinuxStatsCore(msec, parent);
+    #elif defined(__APPLE__)
+    return new MacStatsCore(msec, parent);
+    #endif
 }
 
 void StatsCore::setRefreshRate(int msec)
