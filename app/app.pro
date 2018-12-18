@@ -1,10 +1,11 @@
+include(../core/core.pri)
 TARGET = ../TaskManager # move target one dir up to top-level
 QT += core gui widgets printsupport sql
 CONFIG += c++11
 TEMPLATE = app
 
-INCLUDEPATH += ../core/include src/
-PRECOMPILED_HEADER  = src/stable.h
+INCLUDEPATH += src/
+PRECOMPILED_HEADER = src/stable.h
 
 SOURCES += main.cpp\
     src/main_window.cpp \
@@ -22,5 +23,3 @@ FORMS    += forms/main_window.ui
 
 RESOURCES += \
     task_manager.qrc
-
-LIBS += -L../core -lstatscore
