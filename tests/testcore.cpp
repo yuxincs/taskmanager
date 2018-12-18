@@ -9,7 +9,7 @@ private:
 private slots:
     void initTestCase()
     {
-        this->core = new StatsCore(1000, this);
+        this->core = StatsCore::createCore(1000, this);
     }
 
     void testProcessModel()
