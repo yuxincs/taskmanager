@@ -92,7 +92,7 @@ void GenericStatsCore::updateProcesses()
                 query.exec();
             }
             this->database_.commit();
-            qDebug() << "Updated " << processList.size() << "processes.";
+            qDebug() << "Updated" << processList.size() << "processes.";
             this->processModel_->select();
         });
         connect(this, &StatsCore::shuttingDown, [=]{
