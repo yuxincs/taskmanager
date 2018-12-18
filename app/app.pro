@@ -8,13 +8,13 @@ INCLUDEPATH += src/
 PRECOMPILED_HEADER = src/stable.h
 
 SOURCES += main.cpp\
-    src/main_window.cpp \
+    src/mainwindow.cpp \
     src/qcustomplot.cpp \
     src/usageplot.cpp \
     src/processproxymodel.cpp
 
 HEADERS  += src/stable.h \
-    src/main_window.h \
+    src/mainwindow.h \
     src/qcustomplot.h \
     src/usageplot.h \
     src/processproxymodel.h
