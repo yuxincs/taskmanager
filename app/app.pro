@@ -19,7 +19,7 @@ HEADERS  += src/stable.h \
     src/usageplot.h \
     src/processproxymodel.h
 
-FORMS    += forms/main_window.ui
+FORMS    += forms/mainwindow.ui
 
 RESOURCES += \
     taskmanager.qrc
