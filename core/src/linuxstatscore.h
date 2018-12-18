@@ -8,7 +8,7 @@ class LinuxStatsCore : public GenericStatsCore
     Q_OBJECT
 public:
     LinuxStatsCore(int msec, QObject *parent=nullptr);
-    virtual ~LinuxStats();
+    virtual ~LinuxStatsCore();
 };
 
 #endif
