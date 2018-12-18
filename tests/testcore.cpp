@@ -1,4 +1,9 @@
 #include <QTest>
+#include <QAbstractItemModel>
+#include <QProcess>
+#include <QDebug>
+#include <QTimer>
+#include <QSignalSpy>
 #include "statscore.h"
 
 class TestCore: public QObject
@@ -9,14 +14,17 @@ private:
 private slots:
     void initTestCase()
     {
-        this->core = new StatsCore(1000, this);
+        this->core = StatsCore::createCore(1000, this);
     }
 
     void testProcessModel()
     {
-        QSqlTableModel *model = this->core->processModel();
+        QAbstractTableModel *model = this->core->processModel();
         QVERIFY(model != nullptr);
-        QVERIFY(!model->record(0).isEmpty());
+        // wait until the model is updated for the first time
+        QSignalSpy spy(model, &QAbstractTableModel::modelReset);
+        QVERIFY(spy.wait(1500));
+        QVERIFY(model->index(0, 0).isValid());
     }
 
     void testKillProcess()

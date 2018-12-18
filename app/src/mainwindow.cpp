@@ -7,12 +7,8 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
-    // setup StatsCore based on the OS-specific implementations
-    #if defined(unix) || defined(__unix__) || defined(__unix)
-    this->core = new StatsCore(1000);
-    #elif defined (__APPLE__)
-    this->core = new StatsCore(1000);
-    #endif
+    // setup StatsCore
+    this->core = StatsCore::createCore(1000);
 
     // setup local variables
     this->curSelectedPID = 0;
@@ -22,8 +18,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
 
     // setup process table
-    QSqlTableModel *model = core->processModel();
-    model->select();
+    QAbstractTableModel *model = core->processModel();
     // setup a proxy model to add color and other UI-related elements to it
     ProcessProxyModel *proxyModel = new ProcessProxyModel(model);
     proxyModel->setSourceModel(model);

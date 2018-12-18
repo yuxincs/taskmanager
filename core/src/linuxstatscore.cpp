@@ -1,13 +1,13 @@
 #if defined(unix) || defined(__unix__) || defined(__unix)
 #include "linuxstatscore.h"
 
-LinuxStatsCore::LinuxStatsCore(int msec)
-    :StatsCore(msec)
+LinuxStatsCore::LinuxStatsCore(int msec, QObject *parent)
+    :GenericStatsCore(msec, parent)
 {
 
 }
 
-void LinuxStatsCore::updateProcesses()
+LinuxStatsCore::~LinuxStatsCore()
 {
 
 }
