@@ -6,9 +6,10 @@
 class LinuxStatsCore : public StatsCore
 {
 protected:
-    void updateProcesses();
+    virtual void updateProcesses();
 public:
-    LinuxStatsCore(int msec);
+    LinuxStatsCore(int msec, QObject *parent=nullptr);
+    virtual ~LinuxStats();
 };
 
 #endif
