@@ -1,4 +1,4 @@
-#include "main_window.h"
+#include "mainwindow.h"
 #include "ui_main_window.h"
 #include "processproxymodel.h"
 
