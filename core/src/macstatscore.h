@@ -1,4 +1,5 @@
 #pragma once
+#if defined (__APPLE__)
 #include "genericstatscore.h"
 
 class MacStatsCore : public GenericStatsCore
@@ -10,3 +11,5 @@ public:
 protected:
     virtual void updateProcesses();
 };
+
+#endif

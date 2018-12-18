@@ -1,4 +1,4 @@
-#ifdef __APPLE__
+#if defined (__APPLE__)
 #include "macstatscore.h"
 
 MacStatsCore::MacStatsCore(int msec, QObject *parent)
