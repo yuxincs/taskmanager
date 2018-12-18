@@ -13,7 +13,7 @@ public:
     GenericStatsCore(int msec, QObject *parent=nullptr);
     virtual ~GenericStatsCore();
     virtual void setRefreshRate(int msec);
-    virtual QAbstractTableModel *processModel();
+    virtual QAbstractItemModel *processModel();
     virtual void killProcess(quint64 pid);
 
 protected:

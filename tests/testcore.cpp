@@ -19,7 +19,7 @@ private slots:
 
     void testProcessModel()
     {
-        QAbstractTableModel *model = this->core->processModel();
+        QAbstractItemModel *model = this->core->processModel();
         QVERIFY(model != nullptr);
         // wait until the model is updated for the first time
         QSignalSpy spy(model, &QAbstractTableModel::modelReset);

@@ -47,9 +47,9 @@ GenericStatsCore::~GenericStatsCore()
     delete this->processModel_;
 }
 
-QAbstractTableModel *GenericStatsCore::processModel()
+QAbstractItemModel *GenericStatsCore::processModel()
 {
-    return static_cast<QAbstractTableModel *>(this->processModel_);
+    return static_cast<QAbstractItemModel *>(this->processModel_);
 }
 
 void GenericStatsCore::updateProcesses()
