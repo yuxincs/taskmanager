@@ -1,8 +1,9 @@
 #pragma once
-#include "statscore.h"
+#include "genericstatscore.h"
 
-class MacStatsCore : public StatsCore
+class MacStatsCore : public GenericStatsCore
 {
+    Q_OBJECT
 public:
     MacStatsCore(int msec, QObject *parent=nullptr);
     virtual ~MacStatsCore();

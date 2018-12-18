@@ -2,7 +2,7 @@
 #include "macstatscore.h"
 
 MacStatsCore::MacStatsCore(int msec, QObject *parent)
-    :StatsCore(msec, parent)
+    :GenericStatsCore(msec, parent)
 {
 
 }
@@ -14,7 +14,7 @@ MacStatsCore::~MacStatsCore()
 
 void MacStatsCore::updateProcesses()
 {
-    return StatsCore::updateProcesses();
+    return GenericStatsCore::updateProcesses();
 }
 
 #endif
