@@ -24,4 +24,5 @@ protected:
     QSqlTableModel *processModel_;
     QStringListModel *systemModel_;
     virtual void updateProcesses();
+    virtual void updateSystemInfos(bool updateStatic = false);
 };

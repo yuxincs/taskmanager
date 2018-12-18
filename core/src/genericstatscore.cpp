@@ -1,6 +1,7 @@
 #include "genericstatscore.h"
 #include <QSqlQuery>
 #include <QSqlTableModel>
+#include <QStringListModel>
 #include <QProcess>
 #include <QDebug>
 
@@ -9,6 +10,9 @@ GenericStatsCore::GenericStatsCore(int msec, QObject *parent)
 {
     // connect timer to update functions
     connect(&this->refreshTimer_, &QTimer::timeout, this, &GenericStatsCore::updateProcesses);
+    connect(&this->refreshTimer_, &QTimer::timeout, this, [=] {
+        this->updateSystemInfos(false);
+    });
 
     // create a in-memory sqlite database to store all information
     this->database_ = QSqlDatabase::addDatabase("QSQLITE");
@@ -38,6 +42,7 @@ GenericStatsCore::GenericStatsCore(int msec, QObject *parent)
 
     // initial update
     this->updateProcesses();
+    this->updateSystemInfos(true);
 
     // start timer
     this->refreshTimer_.start(msec);
@@ -116,6 +121,15 @@ void GenericStatsCore::updateProcesses()
     // else start updating
     else
         process->start("ps axo pid,%cpu,rss,comm");
+}
+
+void GenericStatsCore::updateSystemInfos(bool updateStatic)
+{
+    if(updateStatic)
+    {
+
+    }
+    qDebug() << "System information updated.";
 }
 
 void GenericStatsCore::killProcess(quint64 pid)
