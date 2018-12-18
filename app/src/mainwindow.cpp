@@ -18,8 +18,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
 
     // setup process table
-    QSqlTableModel *model = core->processModel();
-    model->select();
+    QAbstractTableModel *model = core->processModel();
     // setup a proxy model to add color and other UI-related elements to it
     ProcessProxyModel *proxyModel = new ProcessProxyModel(model);
     proxyModel->setSourceModel(model);
