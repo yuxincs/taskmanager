@@ -29,6 +29,13 @@ GenericStatsCore::GenericStatsCore(int msec, QObject *parent)
     this->processModel_->setTable("process");
     this->processModel_->select();
 
+    // create empty system info model
+    this->systemModel_ = new QStringListModel(this);
+    QStringList infos;
+    for(int i = 0; i < StatsCore::SystemField::TotalSystemProperties; i ++)
+        infos << QString::null;
+    this->systemModel_->setStringList(infos);
+
     // initial update
     this->updateProcesses();
 
@@ -123,4 +130,9 @@ void GenericStatsCore::killProcess(quint64 pid)
     });
     process->start("kill", {"-s", "KILL", QString::number(pid)});
     qDebug() << "Killed " << pid;
+}
+
+QAbstractItemModel *GenericStatsCore::systemModel()
+{
+    return static_cast<QAbstractItemModel *>(this->systemModel_);
 }

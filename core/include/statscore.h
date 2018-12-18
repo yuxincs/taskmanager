@@ -15,6 +15,7 @@ public:
     virtual void setRefreshRate(int msec) = 0;
     virtual QAbstractItemModel *processModel() = 0;
     virtual void killProcess(quint64 pid) = 0;
+    virtual QAbstractItemModel *systemModel() = 0;
     static StatsCore *createCore(int msec, QObject *parent=nullptr);
 
 signals:
