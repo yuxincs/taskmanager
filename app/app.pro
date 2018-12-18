@@ -22,4 +22,4 @@ HEADERS  += src/stable.h \
 FORMS    += forms/main_window.ui
 
 RESOURCES += \
-    task_manager.qrc
+    taskmanager.qrc
