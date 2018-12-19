@@ -15,6 +15,7 @@ public:
     virtual ~GenericStatsCore();
     virtual void setRefreshRate(int msec);
     virtual QAbstractItemModel *processModel();
+    virtual QStringList staticInformation();
     virtual void killProcess(quint64 pid);
     virtual QAbstractItemModel *systemModel();
 
@@ -23,6 +24,8 @@ protected:
     QSqlDatabase database_;
     QSqlTableModel *processModel_;
     QStringListModel *systemModel_;
+    QStringList staticSystemInfo_;
     virtual void updateProcesses();
-    virtual void updateSystemInfos(bool updateStatic = false);
+    virtual void gatherStaticInformation();
+    virtual void updateSystemInfo();
 };

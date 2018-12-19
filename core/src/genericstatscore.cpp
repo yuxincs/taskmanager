@@ -10,9 +10,7 @@ GenericStatsCore::GenericStatsCore(int msec, QObject *parent)
 {
     // connect timer to update functions
     connect(&this->refreshTimer_, &QTimer::timeout, this, &GenericStatsCore::updateProcesses);
-    connect(&this->refreshTimer_, &QTimer::timeout, this, [=] {
-        this->updateSystemInfos(false);
-    });
+    connect(&this->refreshTimer_, &QTimer::timeout, this, &GenericStatsCore::updateSystemInfo);
 
     // create a in-memory sqlite database to store all information
     this->database_ = QSqlDatabase::addDatabase("QSQLITE");
@@ -36,13 +34,15 @@ GenericStatsCore::GenericStatsCore(int msec, QObject *parent)
     // create empty system info model
     this->systemModel_ = new QStringListModel(this);
     QStringList infos;
-    for(int i = 0; i < StatsCore::SystemField::TotalSystemProperties; i ++)
-        infos << QString::null;
+    for(int i = 0; i < StatsCore::DynamicSystemField::TotalDyanamicProperties; i ++)
+        infos << "No Data";
     this->systemModel_->setStringList(infos);
+    for(int i = 0; i < StatsCore::StaticSystemField::TotalStaticProperties; i ++)
+        this->staticSystemInfo_ << "No Data";
 
     // initial update
     this->updateProcesses();
-    this->updateSystemInfos(true);
+    this->updateSystemInfo();
 
     // start timer
     this->refreshTimer_.start(msec);
@@ -123,12 +123,19 @@ void GenericStatsCore::updateProcesses()
         process->start("ps axo pid,%cpu,rss,comm");
 }
 
-void GenericStatsCore::updateSystemInfos(bool updateStatic)
+QStringList GenericStatsCore::staticInformation()
 {
-    if(updateStatic)
-    {
+    return this->staticSystemInfo_;
+}
 
-    }
+void GenericStatsCore::gatherStaticInformation()
+{
+    // TODO: implement this
+}
+
+void GenericStatsCore::updateSystemInfo()
+{
+    // TODO: implement this
     qDebug() << "System information updated.";
 }
 
