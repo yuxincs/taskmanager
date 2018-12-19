@@ -41,8 +41,14 @@ GenericStatsCore::GenericStatsCore(int msec, QObject *parent)
         this->staticSystemInfo_ << "No Data";
 
     // initial update
-    this->updateProcesses();
-    this->updateSystemInfo();
+    // *trick
+    // call QTimer's singleshot to make use of QT's event loop to defer the call to
+    // update* methods. This is needed as this allows calling the methods in derived classes,
+    // if there exists, otherwise using plain method calls will end up calling the ones
+    // in this base class
+    QTimer::singleShot(0, this, &GenericStatsCore::updateProcesses);
+    QTimer::singleShot(0, this, &GenericStatsCore::updateSystemInfo);
+    QTimer::singleShot(0, this, &GenericStatsCore::gatherStaticInformation);
 
     // start timer
     this->refreshTimer_.start(msec);
