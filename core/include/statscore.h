@@ -8,7 +8,7 @@ class StatsCore : public QObject
     Q_OBJECT
 public:
     enum ProcessField { Name = 0, PID, CPU, Memory, Disk, Network };
-    enum StaticSystemField { CPUName = 0, MaxSpeed, Cores, LogicalProcessors, MemorySpeed, MemorySockets, TotalStaticProperties };
+    enum StaticSystemField { CPUName = 0, MaxSpeed, Cores, LogicalProcessors, TotalMemory, MemorySpeed, MemorySockets, TotalStaticProperties };
     enum DynamicSystemField { Utilization = 0, CPUSpeed, Processes, Temperature, UpTime, UsedMemory, AvailableMemory, CachedMemory, ReservedMemory, TotalDyanamicProperties};
     StatsCore() = delete;
     virtual ~StatsCore() { }
