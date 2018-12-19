@@ -102,14 +102,14 @@ MainWindow::MainWindow(QWidget *parent) :
         }
     });
 
-    connect(model, &QSqlTableModel::modelAboutToBeReset, this, [=] {
+    connect(model, &QAbstractItemModel::modelAboutToBeReset, this, [=] {
         // store the current selected PID
         QModelIndex index = ui->processView->selectionModel()->currentIndex();
         if (index.isValid())
             this->curSelectedPID = index.sibling(index.row(), 1).data().toULongLong();
     });
 
-    connect(model, &QSqlTableModel::modelReset, this, [=] {
+    connect(model, &QAbstractItemModel::modelReset, this, [=] {
         // restore the current selected PID
         if(this->curSelectedPID != 0)
         {
