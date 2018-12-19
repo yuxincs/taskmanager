@@ -134,17 +134,6 @@ QStringList GenericStatsCore::staticInformation()
     return this->staticSystemInfo_;
 }
 
-void GenericStatsCore::gatherStaticInformation()
-{
-    // TODO: implement this
-}
-
-void GenericStatsCore::updateSystemInfo()
-{
-    // TODO: implement this
-    qDebug() << "System information updated.";
-}
-
 void GenericStatsCore::killProcess(quint64 pid)
 {
     // a command based implementation

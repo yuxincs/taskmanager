@@ -26,6 +26,6 @@ protected:
     QStringListModel *systemModel_;
     QStringList staticSystemInfo_;
     virtual void updateProcesses();
-    virtual void gatherStaticInformation();
-    virtual void updateSystemInfo();
+    virtual void gatherStaticInformation() = 0;
+    virtual void updateSystemInfo() = 0;
 };
