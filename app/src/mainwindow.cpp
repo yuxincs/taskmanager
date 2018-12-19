@@ -89,7 +89,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->memoryUsagePlot->setMaximumTime(60);
     ui->memoryUsagePlot->setThemeColor(QColor(139,18,174));
 
-    updateUsageOptionIcon();
+    this->updateUsageOptionIcon();
 
     // setup other widgets
     connect(ui->killProcessButton, &QPushButton::clicked,
