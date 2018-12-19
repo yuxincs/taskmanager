@@ -10,6 +10,6 @@ StatsCore *StatsCore::createCore(int msec, QObject *parent)
     #elif defined(__APPLE__)
     return new MacStatsCore(msec, parent);
     #else
-    return new GenericStatsCore(msec, parent);
+    return nullptr;
     #endif
 }
