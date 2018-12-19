@@ -40,16 +40,6 @@ GenericStatsCore::GenericStatsCore(int msec, QObject *parent)
     for(int i = 0; i < StatsCore::StaticSystemField::TotalStaticProperties; i ++)
         this->staticSystemInfo_ << "No Data";
 
-    // initial update
-    // *trick
-    // call QTimer's singleshot to make use of QT's event loop to defer the call to
-    // update* methods. This is needed as this allows calling the methods in derived classes,
-    // if there exists, otherwise using plain method calls will end up calling the ones
-    // in this base class
-    QTimer::singleShot(0, this, &GenericStatsCore::updateProcesses);
-    QTimer::singleShot(0, this, &GenericStatsCore::updateSystemInfo);
-    QTimer::singleShot(0, this, &GenericStatsCore::gatherStaticInformation);
-
     // start timer
     this->refreshTimer_.start(msec);
 }
@@ -67,6 +57,7 @@ GenericStatsCore::~GenericStatsCore()
 
 QAbstractItemModel *GenericStatsCore::processModel()
 {
+    this->updateProcesses();
     return static_cast<QAbstractItemModel *>(this->processModel_);
 }
 
@@ -131,6 +122,7 @@ void GenericStatsCore::updateProcesses()
 
 QStringList GenericStatsCore::staticInformation()
 {
+    this->gatherStaticInformation();
     return this->staticSystemInfo_;
 }
 
@@ -150,5 +142,6 @@ void GenericStatsCore::killProcess(quint64 pid)
 
 QAbstractItemModel *GenericStatsCore::systemModel()
 {
+    this->updateSystemInfo();
     return static_cast<QAbstractItemModel *>(this->systemModel_);
 }
