@@ -53,6 +53,7 @@ GenericStatsCore::~GenericStatsCore()
 {
     emit this->shuttingDown();
     delete this->processModel_;
+    delete this->systemModel_;
 }
 
 QAbstractItemModel *GenericStatsCore::processModel()
