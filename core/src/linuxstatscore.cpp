@@ -12,4 +12,19 @@ LinuxStatsCore::~LinuxStatsCore()
 
 }
 
+void LinuxStatsCore::updateProcesses()
+{
+    return GenericStatsCore::updateProcesses();
+}
+
+void LinuxStatsCore::gatherStaticInformation()
+{
+    return;
+}
+
+void LinuxStatsCore::updateSystemInfo()
+{
+    return;
+}
+
 #endif
