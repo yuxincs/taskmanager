@@ -35,10 +35,10 @@ GenericStatsCore::GenericStatsCore(int msec, QObject *parent)
     this->systemModel_ = new QStringListModel(this);
     QStringList infos;
     for(int i = 0; i < StatsCore::DynamicSystemField::TotalDyanamicProperties; i ++)
-        infos << "No Data";
+        infos << QString::null;
     this->systemModel_->setStringList(infos);
     for(int i = 0; i < StatsCore::StaticSystemField::TotalStaticProperties; i ++)
-        this->staticSystemInfo_ << "No Data";
+        this->staticSystemInfo_ << QString::null;
 
     // start timer
     this->refreshTimer_.start(msec);
