@@ -63,6 +63,8 @@ MainWindow::MainWindow(QWidget *parent) :
                 ui->processes->setText(data); break;
             case StatsCore::DynamicSystemField::UsedMemory:
                 ui->usedMemory->setText(data);
+                ui->memoryUsagePlot->addData(data.toDouble() / staticInfo.at(StatsCore::StaticSystemField::TotalMemory).toDouble());
+                this->updateUsageOptionIcon();
                 break;
             case StatsCore::DynamicSystemField::AvailableMemory:
                 ui->availableMemory->setText(data); break;
