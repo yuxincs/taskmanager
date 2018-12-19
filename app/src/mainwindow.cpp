@@ -18,7 +18,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
 
     // setup process table
-    QAbstractTableModel *model = core->processModel();
+    QAbstractItemModel *model = core->processModel();
     // setup a proxy model to add color and other UI-related elements to it
     ProcessProxyModel *proxyModel = new ProcessProxyModel(model);
     proxyModel->setSourceModel(model);
@@ -35,6 +35,48 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->processView->setEditTriggers(QTableView::NoEditTriggers);
 
     // setup performance tab
+    // first setup static information
+    QStringList staticInfo = core->staticInformation();
+    ui->cpuName->setText(staticInfo.at(StatsCore::StaticSystemField::CPUName));
+    ui->maxSpeed->setText(staticInfo.at(StatsCore::StaticSystemField::MaxSpeed));
+    ui->cores->setText(staticInfo.at(StatsCore::StaticSystemField::Cores));
+    ui->memorySpeed->setText(staticInfo.at(StatsCore::StaticSystemField::MemorySpeed));
+    ui->memorySockets->setText(staticInfo.at(StatsCore::StaticSystemField::MemorySockets));
+    ui->logicalProcessors->setText(staticInfo.at(StatsCore::StaticSystemField::LogicalProcessors));
+    model = core->systemModel();
+    connect(model, &QAbstractItemModel::dataChanged, [=](const QModelIndex &topLeft, const QModelIndex &bottomRight) {
+        for(int i = topLeft.row(); i <= bottomRight.row(); i ++)
+        {
+            QString data = model->index(i, 0).data().toString();
+            switch(i)
+            {
+            case StatsCore::DynamicSystemField::UpTime:
+                ui->upTime->setText(data); break;
+            case StatsCore::DynamicSystemField::Utilization:
+                ui->utilization->setText(data + " %");
+                ui->cpuUsagePLot->addData(data.toDouble());
+                this->updateUsageOptionIcon();
+                break;
+            case StatsCore::DynamicSystemField::CPUSpeed:
+                ui->speed->setText(data); break;
+            case StatsCore::DynamicSystemField::Processes:
+                ui->processes->setText(data); break;
+            case StatsCore::DynamicSystemField::UsedMemory:
+                ui->usedMemory->setText(data);
+                ui->memoryUsagePlot->addData(data.toDouble() / staticInfo.at(StatsCore::StaticSystemField::TotalMemory).toDouble());
+                this->updateUsageOptionIcon();
+                break;
+            case StatsCore::DynamicSystemField::AvailableMemory:
+                ui->availableMemory->setText(data); break;
+            case StatsCore::DynamicSystemField::CachedMemory:
+                ui->cached->setText(data); break;
+            case StatsCore::DynamicSystemField::ReservedMemory:
+                ui->reserved->setText(data); break;
+            case StatsCore::DynamicSystemField::Temperature:
+                ui->temperature->setText(data); break;
+            }
+        }
+    });
     // setup cpu usage plot
     ui->cpuUsagePLot->setPlotName("% Utilization");
     ui->cpuUsagePLot->setMaximumTime(60);
@@ -47,7 +89,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->memoryUsagePlot->setMaximumTime(60);
     ui->memoryUsagePlot->setThemeColor(QColor(139,18,174));
 
-    updateUsageOptionIcon();
+    this->updateUsageOptionIcon();
 
     // setup other widgets
     connect(ui->killProcessButton, &QPushButton::clicked,
@@ -60,14 +102,14 @@ MainWindow::MainWindow(QWidget *parent) :
         }
     });
 
-    connect(model, &QSqlTableModel::modelAboutToBeReset, this, [=] {
+    connect(model, &QAbstractItemModel::modelAboutToBeReset, this, [=] {
         // store the current selected PID
         QModelIndex index = ui->processView->selectionModel()->currentIndex();
         if (index.isValid())
             this->curSelectedPID = index.sibling(index.row(), 1).data().toULongLong();
     });
 
-    connect(model, &QSqlTableModel::modelReset, this, [=] {
+    connect(model, &QAbstractItemModel::modelReset, this, [=] {
         // restore the current selected PID
         if(this->curSelectedPID != 0)
         {

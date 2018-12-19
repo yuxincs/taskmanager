@@ -1,6 +1,7 @@
 #include "genericstatscore.h"
 #include <QSqlQuery>
 #include <QSqlTableModel>
+#include <QStringListModel>
 #include <QProcess>
 #include <QDebug>
 
@@ -9,6 +10,7 @@ GenericStatsCore::GenericStatsCore(int msec, QObject *parent)
 {
     // connect timer to update functions
     connect(&this->refreshTimer_, &QTimer::timeout, this, &GenericStatsCore::updateProcesses);
+    connect(&this->refreshTimer_, &QTimer::timeout, this, &GenericStatsCore::updateSystemInfo);
 
     // create a in-memory sqlite database to store all information
     this->database_ = QSqlDatabase::addDatabase("QSQLITE");
@@ -29,8 +31,24 @@ GenericStatsCore::GenericStatsCore(int msec, QObject *parent)
     this->processModel_->setTable("process");
     this->processModel_->select();
 
+    // create empty system info model
+    this->systemModel_ = new QStringListModel(this);
+    QStringList infos;
+    for(int i = 0; i < StatsCore::DynamicSystemField::TotalDyanamicProperties; i ++)
+        infos << "No Data";
+    this->systemModel_->setStringList(infos);
+    for(int i = 0; i < StatsCore::StaticSystemField::TotalStaticProperties; i ++)
+        this->staticSystemInfo_ << "No Data";
+
     // initial update
-    this->updateProcesses();
+    // *trick
+    // call QTimer's singleshot to make use of QT's event loop to defer the call to
+    // update* methods. This is needed as this allows calling the methods in derived classes,
+    // if there exists, otherwise using plain method calls will end up calling the ones
+    // in this base class
+    QTimer::singleShot(0, this, &GenericStatsCore::updateProcesses);
+    QTimer::singleShot(0, this, &GenericStatsCore::updateSystemInfo);
+    QTimer::singleShot(0, this, &GenericStatsCore::gatherStaticInformation);
 
     // start timer
     this->refreshTimer_.start(msec);
@@ -47,9 +65,9 @@ GenericStatsCore::~GenericStatsCore()
     delete this->processModel_;
 }
 
-QAbstractTableModel *GenericStatsCore::processModel()
+QAbstractItemModel *GenericStatsCore::processModel()
 {
-    return static_cast<QAbstractTableModel *>(this->processModel_);
+    return static_cast<QAbstractItemModel *>(this->processModel_);
 }
 
 void GenericStatsCore::updateProcesses()
@@ -111,6 +129,11 @@ void GenericStatsCore::updateProcesses()
         process->start("ps axo pid,%cpu,rss,comm");
 }
 
+QStringList GenericStatsCore::staticInformation()
+{
+    return this->staticSystemInfo_;
+}
+
 void GenericStatsCore::killProcess(quint64 pid)
 {
     // a command based implementation
@@ -123,4 +146,9 @@ void GenericStatsCore::killProcess(quint64 pid)
     });
     process->start("kill", {"-s", "KILL", QString::number(pid)});
     qDebug() << "Killed " << pid;
+}
+
+QAbstractItemModel *GenericStatsCore::systemModel()
+{
+    return static_cast<QAbstractItemModel *>(this->systemModel_);
 }

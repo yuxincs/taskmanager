@@ -9,6 +9,10 @@ class LinuxStatsCore : public GenericStatsCore
 public:
     LinuxStatsCore(int msec, QObject *parent=nullptr);
     virtual ~LinuxStatsCore();
+protected:
+    virtual void gatherStaticInformation();
+    virtual void updateSystemInfo();
+    virtual void updateProcesses();
 };
 
 #endif

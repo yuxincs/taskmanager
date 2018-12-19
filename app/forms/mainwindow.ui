@@ -727,14 +727,14 @@ QListView::item{
                  </widget>
                 </item>
                 <item row="0" column="1">
-                 <widget class="QLabel" name="maxSpeed_2">
+                 <widget class="QLabel" name="memorySpeed">
                   <property name="text">
                    <string>TextLabel</string>
                   </property>
                  </widget>
                 </item>
                 <item row="1" column="1">
-                 <widget class="QLabel" name="cores_2">
+                 <widget class="QLabel" name="memorySockets">
                   <property name="text">
                    <string>2/2</string>
                   </property>
