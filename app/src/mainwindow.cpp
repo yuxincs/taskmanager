@@ -35,6 +35,45 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->processView->setEditTriggers(QTableView::NoEditTriggers);
 
     // setup performance tab
+    // first setup static information
+    QStringList staticInfo = core->staticInformation();
+    ui->cpuName->setText(staticInfo.at(StatsCore::StaticSystemField::CPUName));
+    ui->maxSpeed->setText(staticInfo.at(StatsCore::StaticSystemField::MaxSpeed));
+    ui->cores->setText(staticInfo.at(StatsCore::StaticSystemField::Cores));
+    ui->memorySpeed->setText(staticInfo.at(StatsCore::StaticSystemField::MemorySpeed));
+    ui->memorySockets->setText(staticInfo.at(StatsCore::StaticSystemField::MemorySockets));
+    ui->logicalProcessors->setText(staticInfo.at(StatsCore::StaticSystemField::LogicalProcessors));
+    model = core->systemModel();
+    connect(model, &QAbstractItemModel::dataChanged, [=](const QModelIndex &topLeft, const QModelIndex &bottomRight) {
+        for(int i = topLeft.row(); i <= bottomRight.row(); i ++)
+        {
+            QString data = model->index(i, 0).data().toString();
+            switch(i)
+            {
+            case StatsCore::DynamicSystemField::UpTime:
+                ui->upTime->setText(data); break;
+            case StatsCore::DynamicSystemField::Utilization:
+                ui->utilization->setText(data);
+                ui->cpuUsagePLot->addData(data.remove('%').toDouble());
+                break;
+            case StatsCore::DynamicSystemField::CPUSpeed:
+                ui->speed->setText(data); break;
+            case StatsCore::DynamicSystemField::Processes:
+                ui->processes->setText(data); break;
+            case StatsCore::DynamicSystemField::UsedMemory:
+                ui->usedMemory->setText(data);
+                break;
+            case StatsCore::DynamicSystemField::AvailableMemory:
+                ui->availableMemory->setText(data); break;
+            case StatsCore::DynamicSystemField::CachedMemory:
+                ui->cached->setText(data); break;
+            case StatsCore::DynamicSystemField::ReservedMemory:
+                ui->reserved->setText(data); break;
+            case StatsCore::DynamicSystemField::Temperature:
+                ui->temperature->setText(data); break;
+            }
+        }
+    });
     // setup cpu usage plot
     ui->cpuUsagePLot->setPlotName("% Utilization");
     ui->cpuUsagePLot->setMaximumTime(60);
