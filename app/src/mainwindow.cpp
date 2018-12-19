@@ -53,8 +53,9 @@ MainWindow::MainWindow(QWidget *parent) :
             case StatsCore::DynamicSystemField::UpTime:
                 ui->upTime->setText(data); break;
             case StatsCore::DynamicSystemField::Utilization:
-                ui->utilization->setText(data);
-                ui->cpuUsagePLot->addData(data.remove('%').toDouble());
+                ui->utilization->setText(data + " %");
+                ui->cpuUsagePLot->addData(data.toDouble());
+                this->updateUsageOptionIcon();
                 break;
             case StatsCore::DynamicSystemField::CPUSpeed:
                 ui->speed->setText(data); break;
