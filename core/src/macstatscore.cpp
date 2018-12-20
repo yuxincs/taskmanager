@@ -5,6 +5,7 @@
 #include <QDebug>
 #include <QProcess>
 #include <QRegularExpression>
+#include <QStringListModel>
 
 MacStatsCore::MacStatsCore(int msec, QObject *parent)
     :GenericStatsCore(msec, parent)
@@ -64,6 +65,7 @@ void MacStatsCore::gatherStaticInformation()
 void MacStatsCore::updateSystemInfo()
 {
     qDebug() << "Updating dynamic system information.";
+    this->systemModel_->setData(this->systemModel_->index(StatsCore::DynamicSystemField::Temperature), 0);
     return;
 }
 
