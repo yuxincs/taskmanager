@@ -429,24 +429,14 @@ QListView::item{
                </layout>
               </item>
               <item>
-               <spacer name="horizontalSpacer">
-                <property name="orientation">
-                 <enum>Qt::Horizontal</enum>
-                </property>
-                <property name="sizeHint" stdset="0">
-                 <size>
-                  <width>40</width>
-                  <height>20</height>
-                 </size>
-                </property>
-               </spacer>
-              </item>
-              <item>
                <layout class="QFormLayout" name="formLayout">
                 <property name="horizontalSpacing">
-                 <number>10</number>
+                 <number>15</number>
                 </property>
                 <property name="verticalSpacing">
+                 <number>10</number>
+                </property>
+                <property name="rightMargin">
                  <number>10</number>
                 </property>
                 <item row="0" column="0">
@@ -568,6 +558,9 @@ QListView::item{
               </property>
               <item>
                <layout class="QGridLayout" name="gridLayout_2">
+                <property name="rightMargin">
+                 <number>10</number>
+                </property>
                 <property name="bottomMargin">
                  <number>80</number>
                 </property>
@@ -682,6 +675,9 @@ QListView::item{
                  <number>10</number>
                 </property>
                 <property name="verticalSpacing">
+                 <number>10</number>
+                </property>
+                <property name="rightMargin">
                  <number>10</number>
                 </property>
                 <item row="0" column="0">
