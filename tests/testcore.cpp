@@ -27,6 +27,23 @@ private slots:
         QVERIFY(model->index(0, 0).isValid());
     }
 
+    void testSystemDyanamicInformation()
+    {
+        QAbstractItemModel *model = this->core->systemModel();
+        QVERIFY(model != nullptr);
+        // wait until the model is updated for the first time
+        QSignalSpy spy(model, &QAbstractTableModel::modelReset);
+        QVERIFY(spy.wait(1500));
+        QVERIFY(model->index(0, 0).isValid());
+        QVERIFY(!model->index(0, 0).data().toString().isNull());
+    }
+
+    void testStaticInformation()
+    {
+        for(const QString &info: this->core->staticInformation())
+            QVERIFY(!info.isNull() && info != "null");
+    }
+
     void testKillProcess()
     {
         QProcess process;

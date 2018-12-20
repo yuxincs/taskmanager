@@ -73,7 +73,14 @@ MainWindow::MainWindow(QWidget *parent) :
             case StatsCore::DynamicSystemField::ReservedMemory:
                 ui->reserved->setText(data); break;
             case StatsCore::DynamicSystemField::Temperature:
-                ui->temperature->setText(data); break;
+                double temperature = data.toDouble();
+                if(temperature > 50 && temperature <= 60)
+                    ui->temperature->setStyleSheet("color: rgb(255, 140, 102);");
+                else if(temperature > 60 && temperature <= 70)
+                    ui->temperature->setStyleSheet("color: rgb(255, 64, 0);");
+                else if(temperature > 70)
+                    ui->temperature->setStyleSheet("color: red; font: bold;");
+                ui->temperature->setText(data + " °C"); break;
             }
         }
     });
