@@ -19,7 +19,7 @@ MacStatsCore::~MacStatsCore()
 
 void MacStatsCore::updateProcesses()
 {
-    qDebug() << "mac update processes";
+    qDebug() << "Update process information";
     return GenericStatsCore::updateProcesses();
 }
 
@@ -63,7 +63,7 @@ void MacStatsCore::gatherStaticInformation()
 
 void MacStatsCore::updateSystemInfo()
 {
-    qDebug() << "mac update system info";
+    qDebug() << "Updating dynamic system information.";
     return;
 }
 
