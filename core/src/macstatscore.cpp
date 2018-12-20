@@ -3,6 +3,8 @@
 #include <sys/types.h>
 #include <sys/sysctl.h>
 #include <QDebug>
+#include <QProcess>
+#include <QRegularExpression>
 
 MacStatsCore::MacStatsCore(int msec, QObject *parent)
     :GenericStatsCore(msec, parent)
@@ -28,6 +30,8 @@ void MacStatsCore::gatherStaticInformation()
     size_t stringSize = sizeof(stringBuffer);
     int intBuffer = -1;
     size_t intSize = sizeof(intBuffer);
+    long longBuffer = -1;
+    size_t longSize = sizeof(longBuffer);
     sysctlbyname("machdep.cpu.brand_string", &stringBuffer, &stringSize, nullptr, 0);
     QStringList cpuNameList = QString::fromLocal8Bit(stringBuffer, static_cast<int>(stringSize)).split('@');
     this->staticSystemInfo_[StatsCore::StaticSystemField::CPUName] = cpuNameList[0].remove("CPU").trimmed();
@@ -36,6 +40,24 @@ void MacStatsCore::gatherStaticInformation()
     this->staticSystemInfo_[StatsCore::StaticSystemField::Cores] = QString::number(intBuffer);
     sysctlbyname("machdep.cpu.thread_count", &intBuffer, &intSize, nullptr, 0);
     this->staticSystemInfo_[StatsCore::StaticSystemField::LogicalProcessors] = QString::number(intBuffer);
+    sysctlbyname("hw.memsize", &longBuffer, &longSize, nullptr, 0);
+    this->staticSystemInfo_[StatsCore::StaticSystemField::TotalMemory] = QString::number(longBuffer);
+    QProcess process;
+    process.start("system_profiler", {"SPMemoryDataType", "-detailLevel", "mini"});
+    QRegularExpression reg("Speed:\\s+([0-9]+)\\s+MHz");
+    reg.optimize();
+    process.waitForFinished();
+    quint8 socketCount = 0;
+    quint32 memorySpeed = 0;
+    auto iterator = reg.globalMatch(process.readAllStandardOutput().simplified());
+    while(iterator.hasNext())
+    {
+        quint32 thisSpeed = iterator.next().captured(1).toUInt();
+        memorySpeed = thisSpeed > memorySpeed ? thisSpeed : memorySpeed;
+        socketCount += 1;
+    }
+    this->staticSystemInfo_[StatsCore::StaticSystemField::MemorySockets] = QString::number(socketCount);
+    this->staticSystemInfo_[StatsCore::StaticSystemField::MemorySpeed] = QString("%1 MHz").arg(memorySpeed);
     return;
 }
 
