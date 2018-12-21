@@ -3,6 +3,7 @@
 #include <QFile>
 #include <QDebug>
 #include <QStringListModel>
+#include <QRegularExpression>
 
 LinuxStatsCore::LinuxStatsCore(int msec, QObject *parent)
     :GenericStatsCore(msec, parent)
@@ -23,6 +24,15 @@ void LinuxStatsCore::updateProcesses()
 void LinuxStatsCore::gatherStaticInformation()
 {
     qDebug() << "Gathering linux static information";
+    // get total memory
+    QFile meminfo("/proc/meminfo");
+    QRegularExpression rx;
+    if(meminfo.open(QIODevice::ReadOnly))
+    {
+        QString content(meminfo.readAll());
+        rx.setPattern("MemTotal:\\s+([0-9]+) kB");
+        this->staticSystemInfo_[StatsCore::StaticSystemField::TotalMemory] = QString::number(rx.match(content).captured(1).toLongLong() * 1024);
+    }
     return;
 }
 
