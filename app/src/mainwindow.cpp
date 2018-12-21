@@ -101,8 +101,6 @@ MainWindow::MainWindow(QWidget *parent) :
                     ui->cached->setText(QString::number(cachedMemory / (1024.0 * 1024.0 * 1024.0), 'f', 2) + " GB");
                 break;
             }
-            case StatsCore::DynamicSystemField::ReservedMemory:
-                ui->reserved->setText(data); break;
             case StatsCore::DynamicSystemField::Temperature:
                 double temperature = data.toDouble();
                 if(temperature > 50 && temperature <= 60)
