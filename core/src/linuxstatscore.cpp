@@ -42,9 +42,11 @@ void LinuxStatsCore::updateSystemInfo()
     qDebug() << "Linux update system information";
     // update temperature
     QFile inputFile("/sys/class/hwmon/hwmon0/temp1_input");
-    if(!inputFile.open(QIODevice::ReadOnly))
-        return;
-    this->systemModel_->setData(this->systemModel_->index(StatsCore::DynamicSystemField::Temperature), QString(inputFile.readAll()).toInt() / 1000.0);
+    if(inputFile.open(QIODevice::ReadOnly))
+    {
+        this->systemModel_->setData(this->systemModel_->index(StatsCore::DynamicSystemField::Temperature), QString::number(QString(inputFile.readAll()).toInt() / 1000.0, 'f', 1));
+        inputFile.close();
+    }
 
     // update up time
     QFile uptime("/proc/uptime");
