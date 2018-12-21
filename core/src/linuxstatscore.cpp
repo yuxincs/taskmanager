@@ -5,30 +5,16 @@
 #include <QStringListModel>
 #include <QRegularExpression>
 #include <QTime>
-#include <QProcess>
 
 LinuxStatsCore::LinuxStatsCore(int msec, QObject *parent)
     :GenericStatsCore(msec, parent)
 {
-    this->process = new QProcess();
-    this->regexp = new QRegularExpression("%Cpu\\(s\\):\\s+([0-9]+\\.[0-9]+) us,\\s+([0-9]+\\.[0-9]+) sy");
-    connect(this->process, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished),
-            [=] {
-        qDebug() << this->process->readAllStandardOutput().mid(0, 500).simplified();
-        QRegularExpressionMatch match = this->regexp->match(this->process->readAllStandardOutput().mid(0, 500).simplified());
-        this->systemModel_->setData(this->systemModel_->index(StatsCore::DynamicSystemField::Utilization),
-                                    QString::number(match.captured(1).toDouble() + match.captured(2).toDouble(), 'f', 2));
-    });
+    this->curCpuTime = this->curCpuUseTime = this->lastCpuTime = this->lastCpuUseTime = 0;
 }
 
 LinuxStatsCore::~LinuxStatsCore()
 {
-    disconnect(this->process, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished),
-            nullptr, nullptr);
-    this->process->kill();
-    this->process->waitForFinished();
-    delete this->process;
-    delete this->regexp;
+
 }
 
 void LinuxStatsCore::updateProcesses()
@@ -64,25 +50,66 @@ void LinuxStatsCore::gatherStaticInformation()
         this->staticSystemInfo_[StatsCore::StaticSystemField::LogicalProcessors] = rx.match(content).captured(1);
         cpuinfo.close();
     }
+
+    // TODO: cannot get this information without sudo
+    // best we can do is:
+    // > sudo lshw -short -C memory
+    // > sudo dmidecode --type memory
+    this->staticSystemInfo_[StatsCore::StaticSystemField::MemorySpeed] = "No Data";
+    this->staticSystemInfo_[StatsCore::StaticSystemField::MemorySockets] = "No Data";
     return;
 }
 
 void LinuxStatsCore::updateSystemInfo()
 {
     qDebug() << "Linux update system information";
+    QRegularExpression rx;
+
     // update utilization
-    this->process->start("top", {"-n", "1", "-b"});
+    // store last cpu time
+    this->lastCpuTime = this->curCpuTime;
+    this->lastCpuUseTime = this->curCpuUseTime;
+
+    // read current total cpu time
+    QFile stat("/proc/stat");
+    if(stat.open(QIODevice::ReadOnly))
+    {
+        QStringList statContent = QString(stat.readLine()).split(' ', QString::SkipEmptyParts);
+        statContent.removeFirst();
+        this->curCpuTime = 0;
+        for(int i = 0;i < statContent.size(); i ++)
+            curCpuTime += statContent.at(i).toULongLong();
+
+        this->curCpuUseTime = this->curCpuTime - statContent.at(3).toULongLong();
+
+        // update process number
+        QString content(stat.readAll());
+        rx.setPattern("processes ([0-9]+)");
+        this->systemModel_->setData(this->systemModel_->index(StatsCore::DynamicSystemField::Processes), rx.match(content).captured(1));
+
+        stat.close();
+    }
+    quint64 totalDiff = curCpuTime - lastCpuTime;
+    quint64 totalUseDiff = curCpuUseTime - lastCpuUseTime;
+    if(totalDiff == 0)
+        this->systemModel_->setData(this->systemModel_->index(StatsCore::DynamicSystemField::Utilization), 0);
+    else
+        this->systemModel_->setData(this->systemModel_->index(StatsCore::DynamicSystemField::Utilization), 100.0 * static_cast<double>(totalUseDiff) / static_cast<double>(totalDiff));
+
+    if(this->curCpuTime == 0) // hasn't updated for the first time
+        this->systemModel_->setData(this->systemModel_->index(StatsCore::Utilization), 0);
 
     // update temperature
     QFile inputFile("/sys/class/hwmon/hwmon0/temp1_input");
     if(inputFile.open(QIODevice::ReadOnly))
     {
-        this->systemModel_->setData(this->systemModel_->index(StatsCore::DynamicSystemField::Temperature), QString::number(QString(inputFile.readAll()).toInt() / 1000.0, 'f', 1));
+        QString content(inputFile.readAll());
+        if(!content.isEmpty())
+            this->systemModel_->setData(this->systemModel_->index(StatsCore::DynamicSystemField::Temperature), QString::number(content.trimmed().toInt() / 1000.0, 'f', 1));
         inputFile.close();
     }
 
     // update memory information
-    QRegularExpression rx;
     QFile meminfo("/proc/meminfo");
     if(meminfo.open(QIODevice::ReadOnly))
     {
@@ -113,16 +140,6 @@ void LinuxStatsCore::updateSystemInfo()
         double seconds = uptimeContent.at(0).toDouble();
         this->systemModel_->setData(this->systemModel_->index(StatsCore::DynamicSystemField::UpTime), QTime::fromMSecsSinceStartOfDay(static_cast<int>(seconds * 1000)).toString());
         uptime.close();
-    }
-
-    // update process number
-    QFile stat("/proc/stat");
-    if(stat.open(QIODevice::ReadOnly))
-    {
-        QString content(stat.readAll());
-        rx.setPattern("processes ([0-9]+)");
-        this->systemModel_->setData(this->systemModel_->index(StatsCore::DynamicSystemField::Processes), rx.match(content).captured(1));
-        stat.close();
     }
     return;
 }

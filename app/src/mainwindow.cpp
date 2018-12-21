@@ -53,11 +53,14 @@ MainWindow::MainWindow(QWidget *parent) :
             case StatsCore::DynamicSystemField::UpTime:
                 ui->upTime->setText(data); break;
             case StatsCore::DynamicSystemField::Utilization:
-                ui->utilization->setText(data + " %");
-                ui->cpuUsagePLot->addData(data.toDouble());
-                proxyModel->setCPUUtilization(data.toDouble());
+            {
+                double rawData = data.toDouble();
+                ui->utilization->setText(QString::number(rawData, 'f', 1) + " %");
+                ui->cpuUsagePLot->addData(rawData);
+                proxyModel->setCPUUtilization(rawData);
                 this->updateUsageOptionIcon();
                 break;
+            }
             case StatsCore::DynamicSystemField::CPUSpeed:
                 ui->speed->setText(data); break;
             case StatsCore::DynamicSystemField::Processes:
@@ -88,9 +91,16 @@ MainWindow::MainWindow(QWidget *parent) :
                 break;
             }
             case StatsCore::DynamicSystemField::CachedMemory:
-                ui->cached->setText(data); break;
-            case StatsCore::DynamicSystemField::ReservedMemory:
-                ui->reserved->setText(data); break;
+            {
+                quint64 cachedMemory = data.toULongLong();
+                if(cachedMemory < 1024 * 1024)
+                    ui->cached->setText(QString::number(cachedMemory / 1024.0, 'f', 2) + " KB");
+                else if(cachedMemory < 1024 * 1024 * 1024)
+                    ui->cached->setText(QString::number(cachedMemory / (1024.0 * 1024.0), 'f', 2) + " MB");
+                else
+                    ui->cached->setText(QString::number(cachedMemory / (1024.0 * 1024.0 * 1024.0), 'f', 2) + " GB");
+                break;
+            }
             case StatsCore::DynamicSystemField::Temperature:
                 double temperature = data.toDouble();
                 if(temperature > 50 && temperature <= 60)
