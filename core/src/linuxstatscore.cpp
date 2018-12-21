@@ -65,6 +65,29 @@ void LinuxStatsCore::updateSystemInfo()
         inputFile.close();
     }
 
+    // update memory information
+    QRegularExpression rx;
+    QFile meminfo("/proc/meminfo");
+    if(meminfo.open(QIODevice::ReadOnly))
+    {
+        QString content(meminfo.readAll());
+        rx.setPattern("MemAvailable:\\s+([0-9]+) kB\n");
+        this->systemModel_->setData(this->systemModel_->index(StatsCore::DynamicSystemField::AvailableMemory), rx.match(content).captured(1).toULongLong() * 1024);
+
+        rx.setPattern("Buffers:\\s+([0-9]+) kB\n");
+        this->systemModel_->setData(this->systemModel_->index(StatsCore::DynamicSystemField::CachedMemory), rx.match(content).captured(1).toULongLong() * 1024);
+        meminfo.close();
+    }
+
+    QFile cpuinfo("/proc/cpuinfo");
+    if(cpuinfo.open(QIODevice::ReadOnly))
+    {
+        QString content(cpuinfo.readAll());
+        rx.setPattern("cpu MHz\\s+:\\s+([0-9]+\\.[0-9]+)");
+        this->systemModel_->setData(this->systemModel_->index(StatsCore::DynamicSystemField::CPUSpeed),  QString::number(rx.match(content).captured(1).toDouble() / 1024, 'f', 1) + " GHz");
+        cpuinfo.close();
+    }
+
     // update up time
     QFile uptime("/proc/uptime");
     if(uptime.open(QIODevice::ReadOnly))
