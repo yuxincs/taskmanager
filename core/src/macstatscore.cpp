@@ -73,7 +73,12 @@ void MacStatsCore::updateSystemInfo()
     quint64 timeDiff = QDateTime::currentMSecsSinceEpoch() - (boottime.tv_sec * 1000 + static_cast<int>(boottime.tv_usec / 1000.0));
     QTime time = QTime::fromMSecsSinceStartOfDay(timeDiff);
     this->systemModel_->setData(this->systemModel_->index(StatsCore::DynamicSystemField::UpTime), time.toString());
+    // TODO: implement temperature retrieval
     this->systemModel_->setData(this->systemModel_->index(StatsCore::DynamicSystemField::Temperature), 0);
+    if(process->state() == QProcess::NotRunning)
+        process->start("top -l 1");
+    // TODO: find a way to detect CPU Speed
+    this->systemModel_->setData(this->systemModel_->index(StatsCore::DynamicSystemField::CPUSpeed), "No Data");
     return;
 }
 
