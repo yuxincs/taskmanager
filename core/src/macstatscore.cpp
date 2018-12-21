@@ -110,6 +110,9 @@ void MacStatsCore::updateSystemInfo()
     quint64 availableCount = static_cast<quint64>(vmstat.free_count) + static_cast<quint64>(vmstat.inactive_count);
     this->systemModel_->setData(this->systemModel_->index(StatsCore::DynamicSystemField::UsedMemory), usedCount * static_cast<quint64>(pagesize));
     this->systemModel_->setData(this->systemModel_->index(StatsCore::DynamicSystemField::AvailableMemory), availableCount * static_cast<quint64>(pagesize));
+    // TODO: find cached and reserved memory
+    this->systemModel_->setData(this->systemModel_->index(StatsCore::DynamicSystemField::CachedMemory), "No Data");
+    this->systemModel_->setData(this->systemModel_->index(StatsCore::DynamicSystemField::ReservedMemory), "No Data");
     return;
 }
 
