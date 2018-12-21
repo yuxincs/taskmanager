@@ -85,8 +85,9 @@ void MacStatsCore::updateSystemInfo()
     struct timeval boottime = { 0, 0 };
     size_t timeSize = sizeof(boottime);
     sysctlbyname("kern.boottime", &boottime, &timeSize, nullptr, 0);
-    quint64 timeDiff = QDateTime::currentMSecsSinceEpoch() - (boottime.tv_sec * 1000 + static_cast<int>(boottime.tv_usec / 1000.0));
-    QTime time = QTime::fromMSecsSinceStartOfDay(timeDiff);
+    qint64 timeDiff = QDateTime::currentMSecsSinceEpoch() - (boottime.tv_sec * 1000 + static_cast<int>(boottime.tv_usec / 1000.0));
+    QTime time = QTime::fromMSecsSinceStartOfDay(static_cast<int>(timeDiff));
+
     this->systemModel_->setData(this->systemModel_->index(StatsCore::DynamicSystemField::UpTime), time.toString());
     // TODO: implement temperature retrieval
     this->systemModel_->setData(this->systemModel_->index(StatsCore::DynamicSystemField::Temperature), 0);
