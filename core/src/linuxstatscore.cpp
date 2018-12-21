@@ -69,7 +69,6 @@ void LinuxStatsCore::updateSystemInfo()
     {
         QStringList statContent = QString(stat.readLine()).split(' ', QString::SkipEmptyParts);
         statContent.removeFirst();
-        qDebug() << statContent;
         this->curCpuTime = 0;
         for(int i = 0;i < statContent.size(); i ++)
             curCpuTime += statContent.at(i).toULongLong();
