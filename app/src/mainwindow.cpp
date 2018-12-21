@@ -53,11 +53,14 @@ MainWindow::MainWindow(QWidget *parent) :
             case StatsCore::DynamicSystemField::UpTime:
                 ui->upTime->setText(data); break;
             case StatsCore::DynamicSystemField::Utilization:
-                ui->utilization->setText(data + " %");
-                ui->cpuUsagePLot->addData(data.toDouble());
-                proxyModel->setCPUUtilization(data.toDouble());
+            {
+                double rawData = data.toDouble();
+                ui->utilization->setText(QString::number(rawData, 'f', 1) + " %");
+                ui->cpuUsagePLot->addData(rawData);
+                proxyModel->setCPUUtilization(rawData);
                 this->updateUsageOptionIcon();
                 break;
+            }
             case StatsCore::DynamicSystemField::CPUSpeed:
                 ui->speed->setText(data); break;
             case StatsCore::DynamicSystemField::Processes:
