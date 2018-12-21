@@ -4,6 +4,7 @@
 #include <QDebug>
 #include <QStringListModel>
 #include <QRegularExpression>
+#include <QTime>
 
 LinuxStatsCore::LinuxStatsCore(int msec, QObject *parent)
     :GenericStatsCore(msec, parent)
@@ -45,6 +46,15 @@ void LinuxStatsCore::updateSystemInfo()
         return;
     this->systemModel_->setData(this->systemModel_->index(StatsCore::DynamicSystemField::Temperature), QString(inputFile.readAll()).toInt() / 1000.0);
 
+    // update up time
+    QFile uptime("/proc/uptime");
+    if(uptime.open(QIODevice::ReadOnly))
+    {
+        QStringList uptimeContent = QString(uptime.readAll()).split(" ");
+        double seconds = uptimeContent.at(0).toDouble();
+        this->systemModel_->setData(this->systemModel_->index(StatsCore::DynamicSystemField::UpTime), QTime::fromMSecsSinceStartOfDay(static_cast<int>(seconds * 1000)).toString());
+        uptime.close();
+    }
     return;
 }
 
