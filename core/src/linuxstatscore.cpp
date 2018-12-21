@@ -97,7 +97,9 @@ void LinuxStatsCore::updateSystemInfo()
     QFile inputFile("/sys/class/hwmon/hwmon0/temp1_input");
     if(inputFile.open(QIODevice::ReadOnly))
     {
-        this->systemModel_->setData(this->systemModel_->index(StatsCore::DynamicSystemField::Temperature), QString::number(QString(inputFile.readAll()).toInt() / 1000.0, 'f', 1));
+        QString content(inputFile.readAll());
+        if(!content.isEmpty())
+            this->systemModel_->setData(this->systemModel_->index(StatsCore::DynamicSystemField::Temperature), QString::number(content.trimmed().toInt() / 1000.0, 'f', 1));
         inputFile.close();
     }
 
