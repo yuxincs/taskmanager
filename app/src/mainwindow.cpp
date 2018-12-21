@@ -88,7 +88,16 @@ MainWindow::MainWindow(QWidget *parent) :
                 break;
             }
             case StatsCore::DynamicSystemField::CachedMemory:
-                ui->cached->setText(data); break;
+            {
+                quint64 cachedMemory = data.toULongLong();
+                if(cachedMemory < 1024 * 1024)
+                    ui->cached->setText(QString::number(cachedMemory / 1024.0, 'f', 2) + " KB");
+                else if(cachedMemory < 1024 * 1024 * 1024)
+                    ui->cached->setText(QString::number(cachedMemory / (1024.0 * 1024.0), 'f', 2) + " MB");
+                else
+                    ui->cached->setText(QString::number(cachedMemory / (1024.0 * 1024.0 * 1024.0), 'f', 2) + " GB");
+                break;
+            }
             case StatsCore::DynamicSystemField::ReservedMemory:
                 ui->reserved->setText(data); break;
             case StatsCore::DynamicSystemField::Temperature:
