@@ -50,6 +50,13 @@ void LinuxStatsCore::gatherStaticInformation()
         this->staticSystemInfo_[StatsCore::StaticSystemField::LogicalProcessors] = rx.match(content).captured(1);
         cpuinfo.close();
     }
+
+    // TODO: cannot get this information without sudo
+    // best we can do is:
+    // > sudo lshw -short -C memory
+    // > sudo dmidecode --type memory
+    this->staticSystemInfo_[StatsCore::StaticSystemField::MemorySpeed] = "No Data";
+    this->staticSystemInfo_[StatsCore::StaticSystemField::MemorySockets] = "No Data";
     return;
 }
 
