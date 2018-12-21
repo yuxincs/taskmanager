@@ -55,6 +55,7 @@ MainWindow::MainWindow(QWidget *parent) :
             case StatsCore::DynamicSystemField::Utilization:
                 ui->utilization->setText(data + " %");
                 ui->cpuUsagePLot->addData(data.toDouble());
+                proxyModel->setCPUUtilization(data.toDouble());
                 this->updateUsageOptionIcon();
                 break;
             case StatsCore::DynamicSystemField::CPUSpeed:
@@ -71,6 +72,7 @@ MainWindow::MainWindow(QWidget *parent) :
                 else
                     ui->usedMemory->setText(QString::number(usedMemory / (1024.0 * 1024.0 * 1024.0), 'f', 2) + " GB");
                 ui->memoryUsagePlot->addData(data.toDouble() / (1024 * 1024 * 1024));
+                proxyModel->setMemoryUtilization(data.toDouble() * 100 / staticInfo.at(StatsCore::StaticSystemField::TotalMemory).toDouble());
                 this->updateUsageOptionIcon();
                 break;
             }

@@ -4,7 +4,18 @@
 ProcessProxyModel::ProcessProxyModel(QObject *parent)
     : QIdentityProxyModel(parent)
 {
+    this->cpuUtilization__ = 0;
+    this->memoryUtilization__ = 0;
+}
 
+void ProcessProxyModel::setCPUUtilization(double utilization)
+{
+    this->cpuUtilization__ = utilization;
+}
+
+void ProcessProxyModel::setMemoryUtilization(double utilization)
+{
+    this->memoryUtilization__ = utilization;
 }
 
 QVariant ProcessProxyModel::data(const QModelIndex &index, int role) const
@@ -71,9 +82,9 @@ QVariant ProcessProxyModel::headerData(int section, Qt::Orientation orientation,
             case StatsCore::ProcessField::PID:
                 return QString("PID");
             case StatsCore::ProcessField::CPU:
-                return QString("CPU");
+                return QString::number(this->cpuUtilization__, 'f', 1) + " %\n\nCPU";
             case StatsCore::ProcessField::Memory:
-                return QString("Memory");
+                return QString::number(this->memoryUtilization__, 'f', 1) + " %\n\nMemory";
             case StatsCore::ProcessField::Disk:
                 return QString("Disk");
             case StatsCore::ProcessField::Network:
