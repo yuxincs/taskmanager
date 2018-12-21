@@ -2,6 +2,8 @@
 #include "macstatscore.h"
 #include <sys/types.h>
 #include <sys/sysctl.h>
+#include <mach/host_info.h>
+#include <mach/mach_host.h>
 #include <QDebug>
 #include <QProcess>
 #include <QRegularExpression>
@@ -92,6 +94,21 @@ void MacStatsCore::updateSystemInfo()
         process->start("top -l 1");
     // TODO: find a way to detect CPU Speed
     this->systemModel_->setData(this->systemModel_->index(StatsCore::DynamicSystemField::CPUSpeed), "No Data");
+
+    // update memory usage
+    // get pagesize
+    int pagesize = -1;
+    size_t intSize = sizeof(pagesize);
+    sysctlbyname("vm.pagesize", &pagesize, &intSize, nullptr, 0);
+    mach_msg_type_number_t count = HOST_VM_INFO_COUNT;
+    vm_statistics_data_t vmstat;
+    memset(&vmstat, 0, sizeof(vmstat));
+    if (host_statistics (mach_host_self (), HOST_VM_INFO, (host_info_t) &vmstat, &count) != KERN_SUCCESS)
+        qWarning("Failed to get VM statistics.");
+    quint64 usedCount = static_cast<quint64>(vmstat.active_count) + static_cast<quint64>(vmstat.wire_count);
+    quint64 availableCount = static_cast<quint64>(vmstat.free_count) + static_cast<quint64>(vmstat.inactive_count);
+    this->systemModel_->setData(this->systemModel_->index(StatsCore::DynamicSystemField::UsedMemory), usedCount * static_cast<quint64>(pagesize));
+    this->systemModel_->setData(this->systemModel_->index(StatsCore::DynamicSystemField::AvailableMemory), availableCount * static_cast<quint64>(pagesize));
     return;
 }
 
