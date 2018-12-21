@@ -22,7 +22,7 @@ private slots:
         QAbstractItemModel *model = this->core->processModel();
         QVERIFY(model != nullptr);
         // wait until the model is updated for the first time
-        QSignalSpy spy(model, &QAbstractTableModel::modelReset);
+        QSignalSpy spy(model, &QAbstractItemModel::modelReset);
         QVERIFY(spy.wait(1500));
         QVERIFY(model->index(0, 0).isValid());
     }
@@ -32,10 +32,11 @@ private slots:
         QAbstractItemModel *model = this->core->systemModel();
         QVERIFY(model != nullptr);
         // wait until the model is updated for the first time
-        QSignalSpy spy(model, &QAbstractTableModel::modelReset);
+        QSignalSpy spy(model, &QAbstractItemModel::dataChanged);
         QVERIFY(spy.wait(1500));
         QVERIFY(model->index(0, 0).isValid());
-        QVERIFY(!model->index(0, 0).data().toString().isNull());
+        for(int i = 0; i < model->rowCount(); i ++)
+            QVERIFY(!model->index(i, 0).data().toString().isNull());
     }
 
     void testStaticInformation()

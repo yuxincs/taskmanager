@@ -62,12 +62,29 @@ MainWindow::MainWindow(QWidget *parent) :
             case StatsCore::DynamicSystemField::Processes:
                 ui->processes->setText(data); break;
             case StatsCore::DynamicSystemField::UsedMemory:
-                ui->usedMemory->setText(data);
-                ui->memoryUsagePlot->addData(data.toDouble() / staticInfo.at(StatsCore::StaticSystemField::TotalMemory).toDouble());
+            {
+                quint64 usedMemory = data.toULongLong();
+                if(usedMemory < 1024 * 1024)
+                    ui->usedMemory->setText(QString::number(usedMemory / 1024.0, 'f', 2) + " KB");
+                else if(usedMemory < 1024 * 1024 * 1024)
+                    ui->usedMemory->setText(QString::number(usedMemory / (1024.0 * 1024.0), 'f', 2) + " MB");
+                else
+                    ui->usedMemory->setText(QString::number(usedMemory / (1024.0 * 1024.0 * 1024.0), 'f', 2) + " GB");
+                ui->memoryUsagePlot->addData(data.toDouble() / (1024 * 1024 * 1024));
                 this->updateUsageOptionIcon();
                 break;
+            }
             case StatsCore::DynamicSystemField::AvailableMemory:
-                ui->availableMemory->setText(data); break;
+            {
+                quint64 availableMemory = data.toULongLong();
+                if(availableMemory < 1024 * 1024)
+                    ui->availableMemory->setText(QString::number(availableMemory / 1024.0, 'f', 2) + " KB");
+                else if(availableMemory < 1024 * 1024 * 1024)
+                    ui->availableMemory->setText(QString::number(availableMemory / (1024.0 * 1024.0), 'f', 2) + " MB");
+                else
+                    ui->availableMemory->setText(QString::number(availableMemory / (1024.0 * 1024.0 * 1024.0), 'f', 2) + " GB");
+                break;
+            }
             case StatsCore::DynamicSystemField::CachedMemory:
                 ui->cached->setText(data); break;
             case StatsCore::DynamicSystemField::ReservedMemory:
@@ -94,6 +111,8 @@ MainWindow::MainWindow(QWidget *parent) :
     // setup memory usage plot
     ui->memoryUsagePlot->setPlotName("Memory Usage");
     ui->memoryUsagePlot->setMaximumTime(60);
+    ui->memoryUsagePlot->setMaximumUsage(staticInfo.at(StatsCore::StaticSystemField::TotalMemory).toDouble() / (1024 * 1024 * 1024));
+    ui->memoryUsagePlot->setUsageUnit("GB");
     ui->memoryUsagePlot->setThemeColor(QColor(139,18,174));
 
     this->updateUsageOptionIcon();
