@@ -48,6 +48,22 @@ void LinuxStatsCore::gatherStaticInformation()
         rx.setPattern("MemTotal:\\s+([0-9]+) kB");
         this->staticSystemInfo_[StatsCore::StaticSystemField::TotalMemory] = QString::number(rx.match(content).captured(1).toLongLong() * 1024);
     }
+
+    // update cpu info
+    QFile cpuinfo("/proc/cpuinfo");
+    if(cpuinfo.open(QIODevice::ReadOnly))
+    {
+        QString content(cpuinfo.readAll());
+        rx.setPattern("model name\\s+:\\s+(.*)");
+        QStringList cpuNameList = rx.match(content).captured(1).split('@');
+        this->staticSystemInfo_[StatsCore::StaticSystemField::CPUName] = cpuNameList[0].remove("CPU").trimmed();
+        this->staticSystemInfo_[StatsCore::StaticSystemField::MaxSpeed] = cpuNameList[1].trimmed();
+        rx.setPattern("cpu cores\\s+:\\s+([0-9]+)");
+        this->staticSystemInfo_[StatsCore::StaticSystemField::Cores] = rx.match(content).captured(1);
+        rx.setPattern("siblings\\s+:\\s+([0-9]+)");
+        this->staticSystemInfo_[StatsCore::StaticSystemField::LogicalProcessors] = rx.match(content).captured(1);
+        cpuinfo.close();
+    }
     return;
 }
 
