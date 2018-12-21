@@ -11,12 +11,25 @@
 MacStatsCore::MacStatsCore(int msec, QObject *parent)
     :GenericStatsCore(msec, parent)
 {
-
+    this->regexp = new QRegularExpression("Processes: ([0-9]+).*CPU usage: ([0-9]+\\.[0-9]*)% user, ([0-9]+\\.[0-9]*)% sys, [0-9]+\\.[0-9]*% idle");
+    this->process = new QProcess(this);
+    connect(this->process, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished),
+            [=] {
+        QRegularExpressionMatch match = this->regexp->match(this->process->readAllStandardOutput().mid(0, 500).simplified());
+        this->systemModel_->setData(this->systemModel_->index(StatsCore::DynamicSystemField::Processes), match.captured(1));
+        this->systemModel_->setData(this->systemModel_->index(StatsCore::DynamicSystemField::Utilization),
+                                    QString::number(match.captured(2).toDouble() + match.captured(3).toDouble(), 'f', 2));
+    });
 }
 
 MacStatsCore::~MacStatsCore()
 {
-
+    disconnect(this->process, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished),
+            nullptr, nullptr);
+    this->process->kill();
+    this->process->waitForFinished();
+    delete this->process;
+    delete this->regexp;
 }
 
 void MacStatsCore::updateProcesses()
