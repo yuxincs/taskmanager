@@ -34,6 +34,8 @@ void LinuxStatsCore::gatherStaticInformation()
         rx.setPattern("MemTotal:\\s+([0-9]+) kB");
         this->staticSystemInfo_[StatsCore::StaticSystemField::TotalMemory] = QString::number(rx.match(content).captured(1).toLongLong() * 1024);
     }
+    else
+        qWarning("Cannot open /proc/meminfo for statistics");
 
     // update cpu info
     QFile cpuinfo("/proc/cpuinfo");
@@ -50,6 +52,8 @@ void LinuxStatsCore::gatherStaticInformation()
         this->staticSystemInfo_[StatsCore::StaticSystemField::LogicalProcessors] = rx.match(content).captured(1);
         cpuinfo.close();
     }
+    else
+        qWarning("Cannot open /proc/cpuinfo for statistics");
 
     // TODO: cannot get this information without sudo
     // best we can do is:
@@ -89,6 +93,9 @@ void LinuxStatsCore::updateSystemInfo()
 
         stat.close();
     }
+    else
+        qWarning("Cannot open /proc/stat for statistics");
+
     quint64 totalDiff = curCpuTime - lastCpuTime;
     quint64 totalUseDiff = curCpuUseTime - lastCpuUseTime;
     if(totalDiff == 0)
@@ -108,6 +115,8 @@ void LinuxStatsCore::updateSystemInfo()
             this->systemModel_->setData(this->systemModel_->index(StatsCore::DynamicSystemField::Temperature), QString::number(content.trimmed().toInt() / 1000.0, 'f', 1));
         inputFile.close();
     }
+    else
+        qWarning("Cannot open /sys/class/hwmon/hwmon0/temp1_input for statistics");
 
     // update memory information
     QFile meminfo("/proc/meminfo");
@@ -122,6 +131,8 @@ void LinuxStatsCore::updateSystemInfo()
         this->systemModel_->setData(this->systemModel_->index(StatsCore::DynamicSystemField::CachedMemory), rx.match(content).captured(1).toULongLong() * 1024);
         meminfo.close();
     }
+    else
+        qWarning("Cannot open /proc/meminfo for statistics");
 
     QFile cpuinfo("/proc/cpuinfo");
     if(cpuinfo.open(QIODevice::ReadOnly))
@@ -131,6 +142,8 @@ void LinuxStatsCore::updateSystemInfo()
         this->systemModel_->setData(this->systemModel_->index(StatsCore::DynamicSystemField::CPUSpeed),  QString::number(rx.match(content).captured(1).toDouble() / 1024, 'f', 1) + " GHz");
         cpuinfo.close();
     }
+    else
+        qWarning("Cannot open /proc/cpuinfo for statistics");
 
     // update up time
     QFile uptime("/proc/uptime");
@@ -141,6 +154,8 @@ void LinuxStatsCore::updateSystemInfo()
         this->systemModel_->setData(this->systemModel_->index(StatsCore::DynamicSystemField::UpTime), QTime::fromMSecsSinceStartOfDay(static_cast<int>(seconds * 1000)).toString());
         uptime.close();
     }
+    else
+        qWarning("Cannot open /proc/uptime for statistics");
     return;
 }
 
