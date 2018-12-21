@@ -87,10 +87,11 @@ void LinuxStatsCore::updateSystemInfo()
     if(meminfo.open(QIODevice::ReadOnly))
     {
         QString content(meminfo.readAll());
-        rx.setPattern("MemAvailable:\\s+([0-9]+) kB\n");
+        rx.setPattern("MemAvailable:\\s+([0-9]+) kB");
         this->systemModel_->setData(this->systemModel_->index(StatsCore::DynamicSystemField::AvailableMemory), rx.match(content).captured(1).toULongLong() * 1024);
-
-        rx.setPattern("Buffers:\\s+([0-9]+) kB\n");
+        rx.setPattern("Active:\\s+([0-9]+) kB");
+        this->systemModel_->setData(this->systemModel_->index(StatsCore::DynamicSystemField::UsedMemory), rx.match(content).captured(1).toULongLong() * 1024);
+        rx.setPattern("Buffers:\\s+([0-9]+) kB");
         this->systemModel_->setData(this->systemModel_->index(StatsCore::DynamicSystemField::CachedMemory), rx.match(content).captured(1).toULongLong() * 1024);
         meminfo.close();
     }
