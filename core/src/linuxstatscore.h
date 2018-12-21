@@ -3,6 +3,9 @@
 #include "genericstatscore.h"
 #include <unistd.h>
 
+class QProcess;
+class QRegularExpression;
+
 class LinuxStatsCore : public GenericStatsCore
 {
     Q_OBJECT
@@ -13,6 +16,9 @@ protected:
     virtual void gatherStaticInformation();
     virtual void updateSystemInfo();
     virtual void updateProcesses();
+private:
+    QProcess *process;
+    QRegularExpression *regexp;
 };
 
 #endif
