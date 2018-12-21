@@ -57,6 +57,16 @@ void LinuxStatsCore::updateSystemInfo()
         this->systemModel_->setData(this->systemModel_->index(StatsCore::DynamicSystemField::UpTime), QTime::fromMSecsSinceStartOfDay(static_cast<int>(seconds * 1000)).toString());
         uptime.close();
     }
+
+    // update process number
+    QFile stat("/proc/stat");
+    if(stat.open(QIODevice::ReadOnly))
+    {
+        QString content(stat.readAll());
+        rx.setPattern("processes ([0-9]+)");
+        this->systemModel_->setData(this->systemModel_->index(StatsCore::DynamicSystemField::Processes), rx.match(content).captured(1));
+        stat.close();
+    }
     return;
 }
 
