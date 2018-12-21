@@ -5,6 +5,7 @@
 #include <QStringListModel>
 #include <QRegularExpression>
 #include <QTime>
+#include <QDir>
 
 LinuxStatsCore::LinuxStatsCore(int msec, QObject *parent)
     :GenericStatsCore(msec, parent)
@@ -117,6 +118,7 @@ void LinuxStatsCore::updateSystemInfo()
     }
     else
         qWarning("Cannot open /sys/class/hwmon/hwmon0/temp1_input for statistics");
+    qDebug() << QDir("/sys/class/hwmon/hwmon0").entryList(QDir::NoDotAndDotDot);
 
     // update memory information
     QFile meminfo("/proc/meminfo");
