@@ -117,8 +117,11 @@ void LinuxStatsCore::updateSystemInfo()
         inputFile.close();
     }
     else
+    {
+        // TODO: some system doesn't have this file, consider alternative solution
+        this->systemModel_->setData(this->systemModel_->index(StatsCore::DynamicSystemField::Temperature), "No Data");
         qWarning("Cannot open /sys/class/hwmon/hwmon0/temp1_input for statistics");
-    qDebug() << QDir("/sys/class/hwmon").entryList(QDir::NoDotAndDotDot);
+    }
 
     // update memory information
     QFile meminfo("/proc/meminfo");
