@@ -118,7 +118,7 @@ void LinuxStatsCore::updateSystemInfo()
     }
     else
         qWarning("Cannot open /sys/class/hwmon/hwmon0/temp1_input for statistics");
-    qDebug() << QDir("/sys/class/hwmon/hwmon0").entryList(QDir::NoDotAndDotDot);
+    qDebug() << QDir("/sys/class/hwmon").entryList(QDir::NoDotAndDotDot);
 
     // update memory information
     QFile meminfo("/proc/meminfo");
