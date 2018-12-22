@@ -1,11 +1,12 @@
 #include "processproxymodel.h"
 #include "statscore.h"
 
-ProcessProxyModel::ProcessProxyModel(QObject *parent)
+ProcessProxyModel::ProcessProxyModel(quint64 totalMemory, QObject *parent)
     : QIdentityProxyModel(parent)
 {
     this->cpuUtilization__ = 0;
     this->memoryUtilization__ = 0;
+    this->totalMemory__ = totalMemory;
 }
 
 void ProcessProxyModel::setCPUUtilization(double utilization)
@@ -45,14 +46,26 @@ QVariant ProcessProxyModel::data(const QModelIndex &index, int role) const
     }
     else if (role == Qt::BackgroundRole)
     {
+        QVariant displayData = QIdentityProxyModel::data(index, Qt::DisplayRole);
         if(index.column() > 1)
         {
-            // TODO: determine the percentage
-            // default color
-            return QBrush(QColor(255, 198, 61, 70));
+            double level = 0;
+            if(index.column() == StatsCore::ProcessField::CPU) // CPU Utilization, data ranges from 0 - 100
+            {
+                level = displayData.toDouble() * 4.0 / 100;
+            }
+            else if(index.column() == StatsCore::ProcessField::Memory) // memory usage, data ranges from 0 - TotalMemory
+            {
+                //qDebug() << displayData << this->totalMemory__ << (displayData.toDouble() / this->totalMemory__);
+                level = (displayData.toDouble() * 10 / this->totalMemory__);
+            }
+            level = level <= 1.0 ? level : 1.0;
+            //qDebug() << level;
+            //if(level > 0.25)
+                //qDebug() << static_cast<int>(80 + 100 * level) << level << displayData << this->totalMemory__;
+            return QBrush(QColor(255, 198, 61, static_cast<int>(80 + 100 * level)));
         }
-
-        return QVariant();
+        // fall through, return the default unmodified data
     }
     else if (role == Qt::TextAlignmentRole)
     {

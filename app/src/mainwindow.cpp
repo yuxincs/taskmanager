@@ -17,10 +17,12 @@ MainWindow::MainWindow(QWidget *parent) :
 
     ui->setupUi(this);
 
+    QStringList staticInfo = core->staticInformation();
+
     // setup process table
     QAbstractItemModel *model = core->processModel();
     // setup a proxy model to add color and other UI-related elements to it
-    ProcessProxyModel *proxyModel = new ProcessProxyModel(model);
+    ProcessProxyModel *proxyModel = new ProcessProxyModel(staticInfo.at(StatsCore::StaticSystemField::TotalMemory).toULongLong(), model);
     proxyModel->setSourceModel(model);
     ui->processView->setModel(proxyModel);
     ui->processView->setSelectionBehavior(QTableView::SelectRows);
@@ -36,7 +38,6 @@ MainWindow::MainWindow(QWidget *parent) :
 
     // setup performance tab
     // first setup static information
-    QStringList staticInfo = core->staticInformation();
     ui->cpuName->setText(staticInfo.at(StatsCore::StaticSystemField::CPUName));
     ui->maxSpeed->setText(staticInfo.at(StatsCore::StaticSystemField::MaxSpeed));
     ui->cores->setText(staticInfo.at(StatsCore::StaticSystemField::Cores));
