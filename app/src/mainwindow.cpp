@@ -20,10 +20,10 @@ MainWindow::MainWindow(QWidget *parent) :
     QStringList staticInfo = core->staticInformation();
 
     // setup process table
-    QAbstractItemModel *model = core->processModel();
+    QAbstractItemModel *processModel = core->processModel();
     // setup a proxy model to add color and other UI-related elements to it
-    ProcessProxyModel *proxyModel = new ProcessProxyModel(staticInfo.at(StatsCore::StaticSystemField::TotalMemory).toULongLong(), model);
-    proxyModel->setSourceModel(model);
+    ProcessProxyModel *proxyModel = new ProcessProxyModel(staticInfo.at(StatsCore::StaticSystemField::TotalMemory).toULongLong(), processModel);
+    proxyModel->setSourceModel(processModel);
     ui->processView->setModel(proxyModel);
     ui->processView->setSelectionBehavior(QTableView::SelectRows);
     ui->processView->setSelectionMode(QTableView::SingleSelection);
@@ -44,11 +44,11 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->memorySpeed->setText(staticInfo.at(StatsCore::StaticSystemField::MemorySpeed));
     ui->memorySockets->setText(staticInfo.at(StatsCore::StaticSystemField::MemorySockets));
     ui->logicalProcessors->setText(staticInfo.at(StatsCore::StaticSystemField::LogicalProcessors));
-    model = core->systemModel();
-    connect(model, &QAbstractItemModel::dataChanged, [=](const QModelIndex &topLeft, const QModelIndex &bottomRight) {
+    QAbstractItemModel *systemModel = core->systemModel();
+    connect(systemModel, &QAbstractItemModel::dataChanged, [=](const QModelIndex &topLeft, const QModelIndex &bottomRight) {
         for(int i = topLeft.row(); i <= bottomRight.row(); i ++)
         {
-            QString data = model->index(i, 0).data().toString();
+            QString data = systemModel->index(i, 0).data().toString();
             switch(i)
             {
             case StatsCore::DynamicSystemField::UpTime:
@@ -141,14 +141,14 @@ MainWindow::MainWindow(QWidget *parent) :
         }
     });
 
-    connect(model, &QAbstractItemModel::modelAboutToBeReset, this, [=] {
+    connect(processModel, &QAbstractItemModel::modelAboutToBeReset, this, [=] {
         // store the current selected PID
         QModelIndex index = ui->processView->selectionModel()->currentIndex();
         if (index.isValid())
             this->curSelectedPID = index.sibling(index.row(), 1).data().toULongLong();
     });
 
-    connect(model, &QAbstractItemModel::modelReset, this, [=] {
+    connect(processModel, &QAbstractItemModel::modelReset, this, [=] {
         // restore the current selected PID
         if(this->curSelectedPID != 0)
         {
