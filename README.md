@@ -3,12 +3,12 @@
 A Windows-Like Task Manager Built for Linux and MacOS Based on Qt. Tested on `QT 5.8 - 5.11 Linux` and `QT latest MacOS`(via Homebrew).
 
 <p float="left" align="center">
-  <img src="https://github.com/RyanWangGit/TaskManager/raw/master/Screenshots/1.png" width="40%" />
-  &emsp;&emsp;&emsp;&emsp;
-  <img src="https://github.com/RyanWangGit/TaskManager/raw/master/Screenshots/2.png" width="40%" /> 
+  <img src="https://github.com/RyanWangGit/TaskManager/raw/master/screenshots/1.png" width="45%" />
+  &emsp;
+  <img src="https://github.com/RyanWangGit/TaskManager/raw/master/screenshots/2.png" width="45%" /> 
 </p>
 
-Some features are hard to implement on some specific platforms (such as memory speed under Linux, which all methods require `sudo` to the best of my knowledge), if a feature is not implemented yet it will simply display "No Data".
+Note: Some features are hard to implement on some specific platforms (such as memory speed under Linux, which all methods require `sudo` to the best of my knowledge), if a feature is not implemented yet it will simply display "No Data".
 
 ## Code Structure
 Overall project structure:
