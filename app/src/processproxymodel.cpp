@@ -29,13 +29,13 @@ QVariant ProcessProxyModel::data(const QModelIndex &index, int role) const
             return QString("%1 %").arg(unmodifiedData.toString());
         case StatsCore::ProcessField::Memory:
         {
-            quint64 memoryInKiB = unmodifiedData.toULongLong();
-            if(memoryInKiB < 1024)
-                return QString("%1 KB").arg(memoryInKiB);
-            else if(memoryInKiB < 1024 * 1024)
-                return QString("%1 MB").arg(QString::number(memoryInKiB / 1024.0, 'f', 1));
+            quint64 memory = unmodifiedData.toULongLong();
+            if(memory < 1024 * 1024)
+                return QString("%1 KB").arg(QString::number(memory / 1024.0, 'f', 1));
+            else if(memory < 1024 * 1024 * 1024)
+                return QString("%1 MB").arg(QString::number(memory / (1024.0 * 1024.0), 'f', 1));
             else
-                return QString("%1 GB").arg(QString::number(memoryInKiB / (1024.0 * 1024.0), 'f', 1));
+                return QString("%1 GB").arg(QString::number(memory / (1024.0 * 1024.0 * 1024.0), 'f', 1));
         }
         case StatsCore::Disk:
             return QString("%1 MB/s").arg(unmodifiedData.toULongLong());

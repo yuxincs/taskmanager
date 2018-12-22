@@ -88,7 +88,7 @@ void GenericStatsCore::updateProcesses()
             {
                 quint64 pid = process.section(' ', 0, 0, QString::SectionSkipEmpty).toULongLong();
                 double cpuPercent = process.section(' ', 1, 1, QString::SectionSkipEmpty).toDouble();
-                double memory = process.section(' ', 2, 2, QString::SectionSkipEmpty).toDouble();
+                quint64 memory = process.section(' ', 2, 2, QString::SectionSkipEmpty).toULongLong();
                 QString name = process.section(' ', 3, -1, QString::SectionSkipEmpty);
                 name = name.mid(name.lastIndexOf('/') + 1);
                 query.prepare("INSERT INTO process (pid, name, cpu, memory, disk, network)"
@@ -96,7 +96,7 @@ void GenericStatsCore::updateProcesses()
                 query.bindValue(":pid", pid);
                 query.bindValue(":name", name);
                 query.bindValue(":cpu", cpuPercent);
-                query.bindValue(":memory", memory);
+                query.bindValue(":memory", memory * 1024);
                 query.bindValue(":disk", 0);
                 query.bindValue(":network", 0);
                 query.exec();
