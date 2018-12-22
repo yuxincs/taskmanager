@@ -231,7 +231,7 @@ QListView::item{
         <item>
          <widget class="QStackedWidget" name="stackedWidget">
           <property name="currentIndex">
-           <number>1</number>
+           <number>0</number>
           </property>
           <widget class="QWidget" name="cpuPage">
            <layout class="QVBoxLayout" name="verticalLayout_4" stretch="1,6,6">
