@@ -1,5 +1,5 @@
 #pragma once
-#include "stable.h"
+#include "qcustomplot.h"
 
 class UsagePlot : public QCustomPlot
 {
@@ -9,6 +9,9 @@ private:
     bool isReplotBlocked;
     QVector<double> time, usage;
     QList<QLabel *> cornorLabel;
+    unsigned int maxTime;
+    double maxUsage;
+    QString unit;
 protected:
     virtual void resizeEvent(QResizeEvent *event);
 public:

@@ -1,10 +1,11 @@
-#include "stable.h"
+#include "qcustomplot.h"
 #include "usageplot.h"
 
 void UsagePlot::resizeEvent(QResizeEvent *event)
 {
     QCustomPlot::resizeEvent(event);
     const int DEFAULT_MINIMUM_MARGIN = 5;
+    this->maxTime = this->maxUsage = 0;
     cornorLabel[TopLeft]->move(DEFAULT_MINIMUM_MARGIN, 0);
     cornorLabel[TopRight]->move(event->size().width() - cornorLabel[TopRight]->width() - DEFAULT_MINIMUM_MARGIN, 0);
     cornorLabel[BottomLeft]->move(DEFAULT_MINIMUM_MARGIN, event->size().height() - cornorLabel[BottomLeft]->height());
@@ -72,6 +73,7 @@ UsagePlot::UsagePlot(QWidget *parent)
 
 void UsagePlot::setMaximumTime(unsigned int max)
 {
+    this->maxTime = max;
     // set time vector
     time.clear();
     for (unsigned int i = 0; i <= max; i++)
@@ -95,9 +97,11 @@ void UsagePlot::setPlotName(const QString & name)
 
 void UsagePlot::setMaximumUsage(double max)
 {
+    this->maxUsage = max;
     // set axis range
     yAxis->setRange(0, max);
     yAxis2->setRange(0, max);
+    cornorLabel[TopRight]->setText(QString("%1 %2").arg(max).arg(this->unit));
 }
 
 void UsagePlot::setThemeColor(const QColor &themeColor, unsigned int scale)
@@ -125,7 +129,8 @@ void UsagePlot::setThemeColor(const QColor &themeColor, unsigned int scale)
 
 void UsagePlot::setUsageUnit(const QString &unit)
 {
-    cornorLabel[TopRight]->setText(QString("%1 %2").arg(yAxis2->range().upper).arg(unit));
+    this->unit = unit;
+    cornorLabel[TopRight]->setText(QString("%1 %2").arg(this->maxUsage).arg(unit));
 }
 
 void UsagePlot::setLabelFont(const QFont &font)
