@@ -53,7 +53,7 @@ install:
   - if [ "$QT_BASE" = "59" ]; then sudo apt-get install -qq qt59base; source /opt/qt59/bin/qt59-env.sh; fi
   - if [ "$QT_BASE" = "510" ]; then sudo apt-get install -qq qt510base; source /opt/qt510/bin/qt510-env.sh; fi
   - if [ "$QT_BASE" = "511" ]; then sudo apt-get install -qq qt511base; source /opt/qt511/bin/qt511-env.sh; fi
-  - if [ "$QT_BASE" = "512" ]; then sudo apt-get install -qq qt511base; source /opt/qt512/bin/qt512-env.sh; fi
+  - if [ "$QT_BASE" = "512" ]; then sudo apt-get install -qq qt512base; source /opt/qt512/bin/qt512-env.sh; fi
   - if [ "$QT_BASE" = "latest" ]; then
       brew install qt5;
       brew link --force qt5;
