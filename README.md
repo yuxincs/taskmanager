@@ -1,11 +1,11 @@
-# TaskManager [![Build Status](https://travis-ci.com/RyanWangGit/task-manager.svg?branch=master)](https://travis-ci.com/RyanWangGit/task-manager) [![codecov](https://codecov.io/gh/RyanWangGit/task-manager/branch/master/graph/badge.svg)](https://codecov.io/gh/RyanWangGit/task-manager)
+# TaskManager [![Build Status](https://travis-ci.com/yxwangcs/taskmanager.svg?branch=master)](https://travis-ci.com/yxwangcs/taskmanager) [![codecov](https://codecov.io/gh/yxwangcs/taskmanager/branch/master/graph/badge.svg)](https://codecov.io/gh/yxwangcs/taskmanager)
 
 A Windows-Like Task Manager Built for Linux and MacOS Based on Qt. Tested on `QT 5.8 - 5.11 Linux` and `QT latest MacOS`(via Homebrew).
 
 <p float="left" align="center">
-  <img src="https://github.com/RyanWangGit/TaskManager/raw/master/screenshots/1.png" width="45%" />
+  <img src="https://github.com/yxwangcs/taskmanager/raw/master/screenshots/1.png" width="45%" />
   &emsp;
-  <img src="https://github.com/RyanWangGit/TaskManager/raw/master/screenshots/2.png" width="45%" /> 
+  <img src="https://github.com/yxwangcs/taskmanager/raw/master/screenshots/2.png" width="45%" /> 
 </p>
 
 Note: Some features are hard to implement on some specific platforms (such as memory speed under Linux, which all methods require `sudo` to the best of my knowledge), if a feature is not implemented yet it will simply display "No Data".
@@ -38,4 +38,4 @@ Overall project structure:
 This project uses [`QCustomPlot 2.0.1`](https://www.qcustomplot.com/index.php/introduction) for plotting the usage of CPU and memory. It is released as source code and is integrated directly into the project(see `qcustomplot.h` and `qcustomplot.cpp` files in this repository), so nothing should be installed or downloaded.
 
 ## License
-[GPLv3](https://github.com/RyanWangGit/TaskManager/blob/master/LICENSE).
+[GPLv3](https://github.com/yxwangcs/taskmanager/blob/master/LICENSE).
