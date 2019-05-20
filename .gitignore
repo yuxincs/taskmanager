@@ -1,0 +1,8 @@
+# ignore build directory
+build/
+
+# ignore node files
+node_modules/
+
+# idea files
+.idea/

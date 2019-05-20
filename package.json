@@ -1,0 +1,41 @@
+{
+  "name": "transmission-antd",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "add": "^2.0.6",
+    "antd": "^3.17.0",
+    "babel-plugin-import": "^1.11.0",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6",
+    "react-redux": "^7.0.3",
+    "react-scripts": "3.0.1",
+    "redux": "^4.0.1",
+    "yarn": "^1.15.2"
+  },
+  "scripts": {
+    "start": "react-app-rewired start",
+    "build": "react-app-rewired build",
+    "test": "react-app-rewired test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "customize-cra": "^0.2.12",
+    "react-app-rewired": "^2.1.3"
+  }
+}
