@@ -11,6 +11,10 @@ os:
   - linux
   - osx
 
+script:
+  - yarn test
+  - yarn build
+  - yarn electron-pack
 
 notifications:
   email: false
