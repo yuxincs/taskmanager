@@ -2,9 +2,13 @@ const { override, fixBabelImports } = require('customize-cra');
 
 
 module.exports = override(
-    fixBabelImports('import', {
-        libraryName: 'antd',
-            libraryDirectory: 'es',
-            style: 'css',
-    }),
+  fixBabelImports('import', {
+      libraryName: 'antd',
+      libraryDirectory: 'es',
+      style: 'css',
+  }),
+  config => {
+    config.target = 'electron-renderer';
+    return config;
+  }
 );
