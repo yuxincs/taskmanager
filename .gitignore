@@ -6,3 +6,6 @@ node_modules/
 
 # idea files
 .idea/
+
+# dist files
+dist/
