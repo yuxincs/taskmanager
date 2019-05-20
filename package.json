@@ -15,12 +15,16 @@
     "yarn": "^1.15.2"
   },
   "main": "public/electron.js",
+  "homepage": "./",
   "scripts": {
     "start": "react-app-rewired start",
     "build": "react-app-rewired build",
     "test": "react-app-rewired test",
     "eject": "react-scripts eject",
-    "electron-dev": "concurrently \"BROWSER=none yarn start\" \"wait-on http://localhost:3000 && electron .\""
+    "electron-dev": "concurrently \"BROWSER=none yarn start\" \"wait-on http://localhost:3000 && electron .\"",
+    "postinstall": "electron-builder install-app-deps",
+    "preelectron-pack": "yarn build",
+    "electron-pack": "build -ml"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -31,6 +35,7 @@
     "electron": "^5.0.1",
     "electron-builder": "^20.40.2",
     "react-app-rewired": "^2.1.3",
+    "typescript": "^3.4.5",
     "wait-on": "^3.2.0"
   },
   "browserslist": {
@@ -44,5 +49,23 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "author": {
+    "name": "Yuxin (Ryan) Wang"
+  },
+  "build": {
+    "appId": "me.yuxinwang.taskmanager",
+    "productName": "TaskManager",
+    "copyright": "Copyright © 2019 ${author}",
+    "mac": {
+      "category": "public.app-category.utilities"
+    },
+    "files": [
+      "build/**/*",
+      "node_modules/**/*"
+    ],
+    "directories": {
+      "buildResources": "assets"
+    }
   }
 }
