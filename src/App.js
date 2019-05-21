@@ -86,6 +86,8 @@ class App extends Component{
 
   render() {
     console.log(this.state.option);
+    let cpuChart = <ReactEcharts ref='echarts_react' option={this.state.option} />;
+    let memoryChart = <ReactEcharts ref='echarts_react' option={this.state.option} />;
     return (
       <Tabs defaultActiveKey="1" size="small">
         <Tabs.TabPane
@@ -107,19 +109,8 @@ class App extends Component{
           }
           key="2">
           <Tabs defaultActiveKey="1" tabPosition="left" size="large">
-            <Tabs.TabPane tab="CPU" key="1">
-              <span>
-               <ReactEcharts
-                 ref='echarts_react'
-                 option={this.state.option} />
-              </span>
-            </Tabs.TabPane>
-            <Tabs.TabPane tab="Memory" key="2">
-              <ReactEcharts
-                ref="echartsInstance"
-                option={this.state.option}>
-              </ReactEcharts>
-            </Tabs.TabPane>
+            <Tabs.TabPane tab="CPU" key="1"> {cpuChart} </Tabs.TabPane>
+            <Tabs.TabPane tab="Memory" key="2"> {memoryChart}</Tabs.TabPane>
           </Tabs>
         </Tabs.TabPane>
       </Tabs>
