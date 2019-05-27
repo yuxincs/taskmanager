@@ -28,7 +28,7 @@ jobs:
     - stage: "Build Package"
       skip_cleanup: true
       os: osx
-      script: yarn electron-pack
+      script: yarn electron-pack -ml
 
 notifications:
   email: false
