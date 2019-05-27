@@ -25,6 +25,7 @@ cache:
 jobs:
   include:
     - stage: "Build Package"
+      node_js: "10"
       skip_cleanup: true
       os: osx
       script: yarn electron-pack -ml
