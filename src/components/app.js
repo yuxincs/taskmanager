@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { Tabs, Icon, Table } from 'antd/lib/index';
-import ReactEcharts from 'echarts-for-react/lib/index';
+import { Tabs, Icon, Table } from 'antd';
+import ReactEcharts from 'echarts-for-react';
 import './app.css';
 
 function copy(o) {
