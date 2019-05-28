@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import { Tabs, Icon, Table } from 'antd';
+import { Tabs, Icon } from 'antd';
 import ReactEcharts from 'echarts-for-react';
+import ProcessTabContainer from '../containers/processes';
 import './app.css';
 
 function copy(o) {
@@ -12,34 +13,6 @@ function copy(o) {
   }
   return output;
 }
-
-const columns = [
-  {
-    title: 'Process',
-    dataIndex: 'name',
-    key: 'name',
-  },
-  {
-    title: 'PID',
-    dataIndex: 'age',
-    key: 'age',
-  },
-  {
-    title: 'CPU',
-    dataIndex: 'address',
-    key: 'address',
-  },
-  {
-    title: 'Memory',
-    dataIndex: 'memory',
-    key: 'memory',
-  },
-  {
-    title: 'Disk',
-    dataIndex: 'disk',
-    key: 'disk',
-  },
-];
 
 
 class App extends Component{
@@ -74,7 +47,6 @@ class App extends Component{
 
   componentDidMount() {
     setInterval(() => {
-      console.log('updating');
       var option = copy(this.state.option);
       option.series[0].data.shift();
       option.series[0].data.push(Math.floor(Math.random() * 100));
@@ -85,7 +57,6 @@ class App extends Component{
   }
 
   render() {
-    console.log(this.state.option);
     let cpuChart = <ReactEcharts ref='echarts_react' option={this.state.option} />;
     let memoryChart = <ReactEcharts ref='echarts_react' option={this.state.option} />;
     return (
@@ -98,7 +69,7 @@ class App extends Component{
             </span>
           }
           key="1">
-          <Table dataSource={[]} columns={columns} />
+          <ProcessTabContainer />
         </Tabs.TabPane>
         <Tabs.TabPane
           tab={
