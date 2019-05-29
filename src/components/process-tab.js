@@ -46,7 +46,7 @@ export default class ProcessTab extends React.Component {
       {
         title: <div>
           <span>{'Memory'}</span><br />
-          <span>{Math.round( this.props.cpuLoad * 10) / 10 + ' %'}</span>
+          <span>{Math.round( this.props.memLoad * 10) / 10 + ' %'}</span>
         </div>,
         dataIndex: 'pmem',
         sorter: (a, b) => a.pmem - b.pmem,
