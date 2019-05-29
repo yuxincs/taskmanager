@@ -28,7 +28,10 @@ export default class ProcessTab extends React.Component {
         sorter: (a, b) => a.pid - b.pid,
       },
       {
-        title: 'CPU',
+        title: <div>
+          <span>{'CPU'}</span><br />
+          <span>{Math.round( this.props.cpuLoad * 10) / 10 + ' %'}</span>
+        </div>,
         dataIndex: 'pcpu',
         sorter: (a, b) => a.pcpu - b.pcpu,
         render: (text) => {
@@ -41,7 +44,10 @@ export default class ProcessTab extends React.Component {
         }
       },
       {
-        title: 'Memory',
+        title: <div>
+          <span>{'Memory'}</span><br />
+          <span>{Math.round( this.props.cpuLoad * 10) / 10 + ' %'}</span>
+        </div>,
         dataIndex: 'pmem',
         sorter: (a, b) => a.pmem - b.pmem,
         render: (text) => {
