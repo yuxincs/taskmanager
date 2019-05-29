@@ -20,20 +20,23 @@ export default class ProcessTab extends React.Component {
       {
         title: 'Processes',
         dataIndex: 'command',
+        width: '60%',
         sorter: (a, b) => a.command.localeCompare(b.command)
       },
       {
         title: 'PID',
         dataIndex: 'pid',
         sorter: (a, b) => a.pid - b.pid,
+        width: '10%'
       },
       {
         title: <div>
-          <span>{'CPU'}</span><br />
-          <span>{Math.round( this.props.cpuLoad * 10) / 10 + ' %'}</span>
+          <span>{Math.round( this.props.cpuLoad * 10) / 10 + ' %'}</span><br />
+          <span>{'CPU'}</span>
         </div>,
         dataIndex: 'pcpu',
         sorter: (a, b) => a.pcpu - b.pcpu,
+        width: '15%',
         render: (text) => {
           return {
             props: {
@@ -45,10 +48,11 @@ export default class ProcessTab extends React.Component {
       },
       {
         title: <div>
-          <span>{'Memory'}</span><br />
-          <span>{Math.round( this.props.memLoad * 10) / 10 + ' %'}</span>
+          <span>{Math.round( this.props.memLoad * 10) / 10 + ' %'}</span><br />
+          <span>{'Memory'}</span>
         </div>,
         dataIndex: 'pmem',
+        width: '15%',
         sorter: (a, b) => a.pmem - b.pmem,
         render: (text) => {
           return {
@@ -65,6 +69,9 @@ export default class ProcessTab extends React.Component {
       dataSource={this.props.processes.list}
       columns={columns}
       rowKey="pid"
+      rowClassName={() => 'row'}
+      pagination={false}
+      size="small"
     />
   }
 }
