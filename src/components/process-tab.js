@@ -18,16 +18,19 @@ export default class ProcessTab extends React.Component {
   render() {
     const columns = [
       {
-        title: 'Process',
-        dataIndex: 'command'
+        title: 'Processes',
+        dataIndex: 'command',
+        sorter: (a, b) => a.command.localeCompare(b.command)
       },
       {
         title: 'PID',
-        dataIndex: 'pid'
+        dataIndex: 'pid',
+        sorter: (a, b) => a.pid - b.pid,
       },
       {
         title: 'CPU',
         dataIndex: 'pcpu',
+        sorter: (a, b) => a.pcpu - b.pcpu,
         render: (text) => {
           return {
             props: {
@@ -40,6 +43,7 @@ export default class ProcessTab extends React.Component {
       {
         title: 'Memory',
         dataIndex: 'pmem',
+        sorter: (a, b) => a.pmem - b.pmem,
         render: (text) => {
           return {
             props: {
