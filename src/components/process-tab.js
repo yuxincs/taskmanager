@@ -61,6 +61,7 @@ export default class ProcessTab extends React.Component {
       }
     ];
     return <Table
+      loading={this.props.processes.list.length === 0}
       dataSource={this.props.processes.list}
       columns={columns}
       rowKey="pid"
