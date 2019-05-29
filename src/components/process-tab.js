@@ -25,14 +25,14 @@ export default class ProcessTab extends React.Component {
       {
         title: 'CPU',
         dataIndex: 'pcpu',
-        render: (text, record) => {
+        render: (text) => {
           return text + ' %';
         }
       },
       {
         title: 'Memory',
         dataIndex: 'pmem',
-        render: (text, record) => {
+        render: (text) => {
           return text + ' %';
         }
       }
