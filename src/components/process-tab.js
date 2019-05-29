@@ -27,17 +27,31 @@ export default class ProcessTab extends React.Component {
         title: 'CPU',
         dataIndex: 'pcpu',
         render: (text) => {
-          return text + ' %';
+          return {
+            props: {
+              className: "cell level-" + Math.ceil((parseFloat(text) + 0.001) / 20)
+            },
+            children: text + ' %'
+          };
         }
       },
       {
         title: 'Memory',
         dataIndex: 'pmem',
         render: (text) => {
-          return text + ' %';
+          return {
+            props: {
+              className: "cell level-" + Math.ceil((parseFloat(text) + 0.001) / 20)
+            },
+            children: text + ' %'
+          };
         }
       }
     ];
-    return <Table dataSource={this.props.processes.list} columns={columns} rowKey="pid" />
+    return <Table
+      dataSource={this.props.processes.list}
+      columns={columns}
+      rowKey="pid"
+    />
   }
 }
