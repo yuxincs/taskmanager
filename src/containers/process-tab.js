@@ -6,7 +6,7 @@ const mapStateToProps = (state, ownProps) => {
     className: ownProps.className,
     processes: state.processTab.processes,
     cpuLoad: state.processTab.cpuLoad.currentload,
-    memLoad: ((state.processTab.memLoad.total - state.processTab.memLoad.free) / state.processTab.memLoad.total) * 100
+    memLoad: (state.processTab.memLoad.active / state.processTab.memLoad.total) * 100
   };
 };
 
