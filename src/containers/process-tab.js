@@ -1,10 +1,10 @@
 import { connect } from "react-redux";
-import ProcessTab from '../../components/processes';
+import ProcessTab from '../components/process-tab';
 
 const mapStateToProps = (state, ownProps) => {
   return {
     className: ownProps.className,
-    processes: state.processes.data
+    processes: state.processTab.data
   };
 };
 

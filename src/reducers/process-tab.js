@@ -11,7 +11,7 @@ let initialState = {
   }
 };
 
-export default function processes(state = initialState, action) {
+export default function processTab(state = initialState, action) {
   switch(action.type) {
     case UPDATE_PROCESS_INFO: {
       return Object.assign({}, state, {

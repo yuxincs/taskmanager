@@ -1,8 +1,8 @@
-import processes from './reducers/processes';
+import processTab from './reducers/process-tab';
 import { combineReducers } from "redux";
 
 const reducer = combineReducers({
-  processes
+  processTab
 });
 
 export default reducer;
