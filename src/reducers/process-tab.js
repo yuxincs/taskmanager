@@ -8,6 +8,13 @@ let initialState = {
     sleeping: 0,
     unknown: 0,
     list: []
+  },
+  cpuLoad: {
+    currentload: 0
+  },
+  memLoad: {
+    total: 1,
+    free: 1
   }
 };
 

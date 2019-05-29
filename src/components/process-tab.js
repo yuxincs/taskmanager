@@ -6,7 +6,9 @@ import './process-tab.css';
 export default class ProcessTab extends React.Component {
   static propTypes = {
     className: PropTypes.string,
-    processes: PropTypes.object
+    processes: PropTypes.object,
+    cpuLoad: PropTypes.number,
+    memLoad: PropTypes.number
   };
 
   static defaultProps = {

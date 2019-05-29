@@ -4,7 +4,9 @@ import ProcessTab from '../components/process-tab';
 const mapStateToProps = (state, ownProps) => {
   return {
     className: ownProps.className,
-    processes: state.processTab.processes
+    processes: state.processTab.processes,
+    cpuLoad: state.processTab.cpuLoad.currentload,
+    memLoad: ((state.processTab.memLoad.total - state.processTab.memLoad.free) / state.processTab.memLoad.total) * 100
   };
 };
 
