@@ -4,7 +4,7 @@ import ProcessTab from '../components/process-tab';
 const mapStateToProps = (state, ownProps) => {
   return {
     className: ownProps.className,
-    processes: state.processTab.data
+    processes: state.processTab.processes
   };
 };
 

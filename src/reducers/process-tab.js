@@ -1,7 +1,7 @@
 import { UPDATE_PROCESS_INFO } from "../constants/action-types";
 
 let initialState = {
-  data: {
+  processes: {
     all: 0,
     blocked: 0,
     running: 0,
@@ -15,7 +15,9 @@ export default function processTab(state = initialState, action) {
   switch(action.type) {
     case UPDATE_PROCESS_INFO: {
       return Object.assign({}, state, {
-        data: action.processes
+        processes: action.processes,
+        cpuLoad: action.cpuLoad,
+        memLoad: action.memLoad
       });
     }
     default:
