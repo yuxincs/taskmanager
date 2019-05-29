@@ -4,6 +4,11 @@
   text-align: right;
 }
 
+.row {
+  border: none;
+  font-family: Roboto, sans-serif;
+  font-weight: bold;
+}
 
 .level-1 {
   background-color: rgba(255, 198, 61, 0.3);
