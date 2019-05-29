@@ -1,0 +1,20 @@
+
+.level-1 {
+  background-color: rgba(255, 198, 61, 51);
+}
+
+.level-2 {
+  background-color: rgba(255, 198, 61, 102);
+}
+
+.level-3 {
+    background-color: rgba(255, 198, 61, 153);
+}
+
+.level-4 {
+    background-color: rgba(255, 198, 61, 204);
+}
+
+.level-5 {
+    background-color: rgba(255, 198, 61, 255);
+}

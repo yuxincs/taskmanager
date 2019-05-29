@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Table } from "antd";
+import './process-tab.css';
 
 export default class ProcessTab extends React.Component {
   static propTypes = {
