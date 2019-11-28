@@ -62,6 +62,7 @@ class TaskManager extends React.Component{
           areaStyle: {},
           showSymbol: false,
           hoverAnimation: false,
+          animation: false
         }]
       }
     };
