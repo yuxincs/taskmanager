@@ -9,7 +9,6 @@
     "echarts": "^4.2.1",
     "echarts-for-react": "^2.0.15-beta.0",
     "electron-is-dev": "^1.1.0",
-    "osx-temperature-sensor": "^1.0.4",
     "prop-types": "^15.7.2",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
