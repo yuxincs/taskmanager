@@ -6,7 +6,7 @@ jobs:
   build:
     strategy:
       matrix:
-        os: [ubuntu-latest, macOS-latest, windows-latest]
+        os: [ubuntu-latest, macOS-latest]
         node-version: [8, 10, 12]
     runs-on: ${{ matrix.os }}
     steps:
@@ -22,6 +22,3 @@ jobs:
       - name: Pack on macOS
         if: startsWith(matrix.os, 'macOS')
         run: yarn electron-pack -m
-      - name: Pack on Windows
-        if: startsWith(matrix.os, 'windows')
-        run: yarn electron-pack -w
