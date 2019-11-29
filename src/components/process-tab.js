@@ -77,11 +77,7 @@ export default class ProcessTab extends React.Component {
           size="small"
         />
         <div className="footer">
-          <Button
-            className="endtask"
-            type="primary"
-          >End Task
-          </Button>
+          <Button className="endtask" type="primary" >End Task</Button>
         </div>
       </div>
   }
