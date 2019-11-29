@@ -23,25 +23,26 @@ export default class ProcessTab extends React.Component {
     };
   }
 
-  onSelectRow(record)  {
+  onSelectRow = record =>  {
     this.setState({'selectedPID': record.pid});
   };
-  render() {
-    let percentageCellRenderer = (text, record) => {
-      let className = 'right';
 
-      if(this.state.selectedPID !== record.pid) {
-        className += ' cell';
-        className += ' level-' + Math.min(Math.ceil((parseFloat(text) + 0.001) / 20), 5);
-      }
-      return {
-        props: {
-          className: className
-        },
-        children: text + ' %'
-      };
+  percentageCellRenderer = (text, record) => {
+    let className = 'right';
+
+    if(this.state.selectedPID !== record.pid) {
+      className += ' cell';
+      className += ' level-' + Math.min(Math.ceil((parseFloat(text) + 0.001) / 20), 5);
+    }
+    return {
+      props: {
+        className: className
+      },
+      children: text + ' %'
     };
+  };
 
+  render() {
     const columns = [
       {
         title: 'Processes',
@@ -71,7 +72,7 @@ export default class ProcessTab extends React.Component {
         dataIndex: 'pcpu',
         sorter: (a, b) => a.pcpu - b.pcpu,
         width: '18%',
-        render: percentageCellRenderer
+        render: this.percentageCellRenderer
       },
       {
         title: <div>
@@ -81,7 +82,7 @@ export default class ProcessTab extends React.Component {
         dataIndex: 'pmem',
         width: '18%',
         sorter: (a, b) => a.pmem - b.pmem,
-        render: percentageCellRenderer
+        render: this.percentageCellRenderer
       }
     ];
 
