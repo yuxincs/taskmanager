@@ -11,3 +11,17 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+
+#root {
+  position: absolute;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.tabs {
+  height: 100%;
+}
+
+.tab-panes {
+  height: calc(100vh - 36px);
+}

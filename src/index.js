@@ -83,8 +83,8 @@ class TaskManager extends React.Component{
     let cpuChart = <ReactEcharts ref='echarts_react' option={this.state.option} />;
     let memoryChart = <ReactEcharts ref='echarts_react' option={this.state.option} />;
     return (
-      <Tabs defaultActiveKey="1" size="small">
-        <Tabs.TabPane
+      <Tabs defaultActiveKey="1" size="small" className="tabs">
+        <Tabs.TabPane className="tab-panes"
           tab={
             <span>
               <Icon type="switcher" />
