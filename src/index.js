@@ -24,7 +24,7 @@ const store = createStore(
 
 setInterval(() => {
   store.dispatch(requestProcessInfo());
-}, 1000);
+}, 1500);
 
 
 function copy(o) {
