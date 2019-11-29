@@ -69,6 +69,7 @@ export default class ProcessTab extends React.Component {
       dataSource={this.props.processes.list}
       columns={columns}
       bordered={false}
+      scroll={{ y: "calc(100vh - 200px)" }}
       rowKey="pid"
       rowClassName={() => 'row'}
       pagination={false}
