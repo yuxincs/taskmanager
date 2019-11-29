@@ -23,5 +23,5 @@ code {
 }
 
 .tab-panes {
-  height: calc(100vh - 36px);
+  height: calc(100vh - 20px); /* remove  tab header size*/
 }
