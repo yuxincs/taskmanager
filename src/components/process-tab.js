@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Table } from "antd";
+import { Table, Button } from "antd";
 import './process-tab.css';
 
 export default class ProcessTab extends React.Component {
@@ -64,16 +64,25 @@ export default class ProcessTab extends React.Component {
         }
       }
     ];
-    return <Table
-      loading={this.props.processes.list.length === 0}
-      dataSource={this.props.processes.list}
-      columns={columns}
-      bordered={false}
-      scroll={{ y: "calc(100vh - 200px)" }}
-      rowKey="pid"
-      rowClassName={() => 'row'}
-      pagination={false}
-      size="small"
-    />
+    return <div>
+        <Table
+          loading={this.props.processes.list.length === 0}
+          dataSource={this.props.processes.list}
+          columns={columns}
+          bordered={false}
+          scroll={{ y: "calc(100vh - 200px)" }}
+          rowKey="pid"
+          rowClassName={() => 'row'}
+          pagination={false}
+          size="small"
+        />
+        <div className="footer">
+          <Button
+            className="endtask"
+            type="primary"
+          >End Task
+          </Button>
+        </div>
+      </div>
   }
 }

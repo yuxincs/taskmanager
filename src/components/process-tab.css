@@ -9,6 +9,16 @@
   font-weight: bold;
 }
 
+.endtask {
+  float: right;
+}
+
+.footer {
+  margin-top: 15px;
+  margin-right: 20px;
+  background: transparent;
+}
+
 .level-1 {
   background-color: rgba(255, 198, 61, 0.3);
 }
