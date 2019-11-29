@@ -27,13 +27,10 @@ export function killProcess(pid) {
 
 
 export function requestProcessInfo() {
-  return (dispatch) => {
-    processes(processData => {
-      currentLoad(cpuLoad => {
-        mem(memLoad => {
-          dispatch(updateProcessInfo(processData, cpuLoad, memLoad));
-        })
-      })
-    })
+  return async (dispatch) => {
+    const procs = await processes();
+    const curLoad = await currentLoad();
+    const memory = await mem();
+    dispatch(updateProcessInfo(procs, curLoad, memory));
   }
 }
