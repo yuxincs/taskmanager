@@ -28,9 +28,7 @@ export function killProcess(pid) {
 
 export function requestProcessInfo() {
   return async (dispatch) => {
-    const procs = await processes();
-    const curLoad = await currentLoad();
-    const memory = await mem();
+    const [procs, curLoad, memory] = await Promise.all([processes(), currentLoad(), mem()]);
     dispatch(updateProcessInfo(procs, curLoad, memory));
   }
 }
