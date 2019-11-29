@@ -17,7 +17,7 @@ jobs:
       - run: npm install yarn
       - run: yarn install
       - name: Pack on Linux
-        if: startsWith(matrix.os, 'linux')
+        if: startsWith(matrix.os, 'ubuntu')
         run: yarn electron-pack -l
       - name: Pack on macOS
         if: startsWith(matrix.os, 'macOS')
