@@ -1,0 +1,27 @@
+name: build
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macOS-latest, windows-latest]
+        node-version: [8, 10, 12]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - run: npm install yarn
+      - run: yarn install
+      - name: Pack on Linux
+        if: startsWith(matrix.os, 'linux')
+        run: yarn electron-pack -l
+      - name: Pack on macOS
+        if: startsWith(matrix.os, 'macOS')
+        run: yarn electron-pack -m
+      - name: Pack on Windows
+        if: startsWith(matrix.os, 'windows')
+        run: yarn electron-pack -w
