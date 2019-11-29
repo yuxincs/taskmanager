@@ -15,7 +15,32 @@ export default class ProcessTab extends React.Component {
     processes: []
   };
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      'selectedPID': ''
+    };
+  }
+
+  onSelectRow(record)  {
+    this.setState({'selectedPID': record.pid});
+  };
   render() {
+    let percentageCellRenderer = (text, record) => {
+      let className = 'right';
+
+      if(this.state.selectedPID !== record.pid) {
+        className += ' cell';
+        className += ' level-' + Math.min(Math.ceil((parseFloat(text) + 0.001) / 20), 5);
+      }
+      return {
+        props: {
+          className: className
+        },
+        children: text + ' %'
+      };
+    };
+
     const columns = [
       {
         title: 'Processes',
@@ -45,14 +70,7 @@ export default class ProcessTab extends React.Component {
         dataIndex: 'pcpu',
         sorter: (a, b) => a.pcpu - b.pcpu,
         width: '18%',
-        render: text => {
-          return {
-            props: {
-              className: "cell level-" + Math.ceil((parseFloat(text) + 0.001) / 20)
-            },
-            children: text + ' %'
-          };
-        }
+        render: percentageCellRenderer
       },
       {
         title: <div>
@@ -62,16 +80,10 @@ export default class ProcessTab extends React.Component {
         dataIndex: 'pmem',
         width: '18%',
         sorter: (a, b) => a.pmem - b.pmem,
-        render: text => {
-          return {
-            props: {
-              className: "cell level-" + Math.ceil((parseFloat(text) + 0.001) / 20)
-            },
-            children: text + ' %'
-          };
-        }
+        render: percentageCellRenderer
       }
     ];
+
     return <div>
         <Table
           loading={this.props.processes.list.length === 0}
@@ -80,9 +92,14 @@ export default class ProcessTab extends React.Component {
           bordered={false}
           scroll={{ y: "calc(100vh - 200px)" }}
           rowKey="pid"
-          rowClassName={() => 'row'}
+          rowClassName={record => 'row' + (this.state.selectedPID === record.pid ? ' selected' : '')}
           pagination={false}
           size="small"
+          onRow={(record, rowIndex) => {
+            return {
+              onClick: event => this.onSelectRow(record)
+            };
+          }}
         />
         <div className="footer">
           <Button className="endtask" type="primary" >End Task</Button>

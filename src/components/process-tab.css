@@ -1,6 +1,13 @@
+.center {
+  text-align: center;
+}
+
+.right {
+  text-align: right;
+}
+
 .cell {
   border-left: solid 1px rgba(255, 198, 61, 0.7);
-  text-align: right;
 }
 
 .row {
@@ -17,6 +24,10 @@
   margin-top: 15px;
   margin-right: 20px;
   background: transparent;
+}
+
+.selected {
+  background-color: rgba(36, 169, 225, 0.3);
 }
 
 .level-1 {
