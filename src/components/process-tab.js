@@ -8,7 +8,8 @@ export default class ProcessTab extends React.Component {
     className: PropTypes.string,
     processes: PropTypes.object,
     cpuLoad: PropTypes.number,
-    memLoad: PropTypes.number
+    memLoad: PropTypes.number,
+    killProcess: PropTypes.func
   };
 
   static defaultProps = {
@@ -102,7 +103,13 @@ export default class ProcessTab extends React.Component {
           }}
         />
         <div className="footer">
-          <Button className="endtask" type="primary" >End Task</Button>
+          <Button className="endtask" type="primary" disabled={this.state.selectedPID === ''}
+                  onClick={() => {
+                    this.setState({selectedPID: ''});
+                    this.props.killProcess(this.state.selectedPID);
+                  }}>
+            End Task
+          </Button>
         </div>
       </div>
   }

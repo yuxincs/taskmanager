@@ -1,5 +1,6 @@
 import { connect } from "react-redux";
 import ProcessTab from '../components/process-tab';
+import { killProcess } from "../actions/process-tab";
 
 const mapStateToProps = (state, ownProps) => {
   return {
@@ -11,7 +12,9 @@ const mapStateToProps = (state, ownProps) => {
 };
 
 const mapDispatchToProps = (dispatch) => {
-  return {}
+  return {
+    killProcess: (pid) => { dispatch(killProcess(pid)); }
+  }
 };
 
 const ProcessTabContainer = connect(
