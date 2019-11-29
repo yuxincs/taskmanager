@@ -24,20 +24,28 @@ export default class ProcessTab extends React.Component {
         sorter: (a, b) => a.command.localeCompare(b.command)
       },
       {
-        title: 'PID',
+        title: <span className="center">PID</span>,
         dataIndex: 'pid',
         sorter: (a, b) => a.pid - b.pid,
-        width: '10%'
+        render: text => {
+          return {
+            props: {
+              className: "center"
+            },
+            children: text
+          };
+        },
+        width: '15%'
       },
       {
         title: <div>
           <span>{Math.round( this.props.cpuLoad * 10) / 10 + ' %'}</span><br />
-          <span>{'CPU'}</span>
+          <span>CPU</span>
         </div>,
         dataIndex: 'pcpu',
         sorter: (a, b) => a.pcpu - b.pcpu,
-        width: '15%',
-        render: (text) => {
+        width: '18%',
+        render: text => {
           return {
             props: {
               className: "cell level-" + Math.ceil((parseFloat(text) + 0.001) / 20)
@@ -49,12 +57,12 @@ export default class ProcessTab extends React.Component {
       {
         title: <div>
           <span>{Math.round( this.props.memLoad * 10) / 10 + ' %'}</span><br />
-          <span>{'Memory'}</span>
+          <span>Memory</span>
         </div>,
         dataIndex: 'pmem',
-        width: '15%',
+        width: '18%',
         sorter: (a, b) => a.pmem - b.pmem,
-        render: (text) => {
+        render: text => {
           return {
             props: {
               className: "cell level-" + Math.ceil((parseFloat(text) + 0.001) / 20)
