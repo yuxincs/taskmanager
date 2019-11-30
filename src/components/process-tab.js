@@ -50,7 +50,7 @@ export default class ProcessTab extends React.Component {
           <span className={styles.subtitle}>Processes</span>
         </div>,
         dataIndex: 'command',
-        width: '60%',
+        width: '350px',
         sorter: (a, b) => a.command.localeCompare(b.command),
         render: text => {
           return {
@@ -60,6 +60,26 @@ export default class ProcessTab extends React.Component {
             children: text
           }
         }
+      },
+      {
+        title: <div>
+          <span className={styles.title}>{Math.round( this.props.cpuLoad * 10) / 10 + ' %'}</span><br />
+          <span className={styles.subtitle}>CPU</span>
+        </div>,
+        dataIndex: 'pcpu',
+        sorter: (a, b) => a.pcpu - b.pcpu,
+        width: '100px',
+        render: this.percentageCellRenderer
+      },
+      {
+        title: <div>
+          <span className={styles.title}>{Math.round( this.props.memLoad * 10) / 10 + ' %'}</span><br />
+          <span className={styles.subtitle}>Memory</span>
+        </div>,
+        dataIndex: 'pmem',
+        width: '100px',
+        sorter: (a, b) => a.pmem - b.pmem,
+        render: this.percentageCellRenderer
       },
       {
         title: <div>
@@ -76,28 +96,8 @@ export default class ProcessTab extends React.Component {
             children: text
           };
         },
-        width: '15%'
+        width: '80px'
       },
-      {
-        title: <div>
-          <span className={styles.title}>{Math.round( this.props.cpuLoad * 10) / 10 + ' %'}</span><br />
-          <span className={styles.subtitle}>CPU</span>
-        </div>,
-        dataIndex: 'pcpu',
-        sorter: (a, b) => a.pcpu - b.pcpu,
-        width: '18%',
-        render: this.percentageCellRenderer
-      },
-      {
-        title: <div>
-          <span className={styles.title}>{Math.round( this.props.memLoad * 10) / 10 + ' %'}</span><br />
-          <span className={styles.subtitle}>Memory</span>
-        </div>,
-        dataIndex: 'pmem',
-        width: '18%',
-        sorter: (a, b) => a.pmem - b.pmem,
-        render: this.percentageCellRenderer
-      }
     ];
 
     return <div className={styles.processTab}>
@@ -107,7 +107,7 @@ export default class ProcessTab extends React.Component {
           dataSource={this.props.processes.list}
           columns={columns}
           bordered={false}
-          scroll={{ y: 'calc(100vh - 80px - 20px - 61px)' }} // minus footer(80px) / tablist(20px) / table header(61px)
+          scroll={{ x: true, y: 'calc(100vh - 80px - 20px - 61px)' }} // minus footer(80px) / tablist(20px) / table header(61px)
           rowKey="pid"
           rowClassName={record => styles.row + (this.state.selectedPID === record.pid ? ' ' + styles.selected : '')}
           pagination={false}
