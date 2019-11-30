@@ -5,7 +5,7 @@ import { createStore, applyMiddleware } from 'redux';
 import thunkMiddleware from 'redux-thunk';
 import { createLogger } from 'redux-logger';
 import { Icon, Tabs } from 'antd';
-import './index.css';
+import styles from './index.module.css';
 import { requestProcessInfo } from "./actions/process-tab";
 import ProcessTabContainer from './containers/process-tab';
 import PerformanceTabContainer from "./containers/performance-tab";
@@ -31,12 +31,12 @@ class TaskManager extends React.Component{
   render() {
     return (
       <Tabs
-        className="tabs"
+        className={styles.tabs}
         tabBarStyle={{margin: 0}}
         defaultActiveKey="1"
         size="small" 
         >
-        <Tabs.TabPane className="tab-panes"
+        <Tabs.TabPane className={styles.tabPanes}
           tab={
             <span>
               <Icon type="switcher" />
@@ -46,7 +46,7 @@ class TaskManager extends React.Component{
           key="1">
           <ProcessTabContainer />
         </Tabs.TabPane>
-        <Tabs.TabPane className="tab-panes"
+        <Tabs.TabPane className={styles.tabPanes}
           tab={
             <span>
               <Icon type="rocket" />

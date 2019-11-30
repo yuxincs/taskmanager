@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Table, Button } from "antd";
-import './process-tab.css';
+import styles from './process-tab.module.css';
 
 export default class ProcessTab extends React.Component {
   static propTypes = {
@@ -28,11 +28,11 @@ export default class ProcessTab extends React.Component {
   };
 
   percentageCellRenderer = (text, record) => {
-    let className = 'right';
+    let className = styles.cell;
 
     if(this.state.selectedPID !== record.pid) {
-      className += ' cell';
-      className += ' level-' + Math.min(Math.ceil((parseFloat(text) + 0.001) / 20), 5);
+      className += ' ' + styles.numCell;
+      className += ' ' + styles['level' + Math.min(Math.ceil((parseFloat(text) + 0.001) / 20), 5)];
     }
     return {
       props: {
@@ -45,19 +45,27 @@ export default class ProcessTab extends React.Component {
   render() {
     const columns = [
       {
-        title: 'Processes',
+        title: <span className={styles.title}>Processes</span>,
         dataIndex: 'command',
         width: '60%',
-        sorter: (a, b) => a.command.localeCompare(b.command)
+        sorter: (a, b) => a.command.localeCompare(b.command),
+        render: text => {
+          return {
+            props: {
+              className: styles.cell
+            },
+            children: text
+          }
+        }
       },
       {
-        title: <span className="center">PID</span>,
+        title: <span className={styles.center + ' ' + styles.title}>PID</span>,
         dataIndex: 'pid',
         sorter: (a, b) => a.pid - b.pid,
         render: text => {
           return {
             props: {
-              className: "center"
+              className: styles.cell + ' ' + styles.center
             },
             children: text
           };
@@ -66,8 +74,8 @@ export default class ProcessTab extends React.Component {
       },
       {
         title: <div>
-          <span>{Math.round( this.props.cpuLoad * 10) / 10 + ' %'}</span><br />
-          <span>CPU</span>
+          <span className={styles.title}>{Math.round( this.props.cpuLoad * 10) / 10 + ' %'}</span><br />
+          <span className={styles.subtitle}>CPU</span>
         </div>,
         dataIndex: 'pcpu',
         sorter: (a, b) => a.pcpu - b.pcpu,
@@ -76,8 +84,8 @@ export default class ProcessTab extends React.Component {
       },
       {
         title: <div>
-          <span>{Math.round( this.props.memLoad * 10) / 10 + ' %'}</span><br />
-          <span>Memory</span>
+          <span className={styles.title}>{Math.round( this.props.memLoad * 10) / 10 + ' %'}</span><br />
+          <span className={styles.subtitle}>Memory</span>
         </div>,
         dataIndex: 'pmem',
         width: '18%',
@@ -86,16 +94,16 @@ export default class ProcessTab extends React.Component {
       }
     ];
 
-    return <div className="process-tab">
+    return <div className={styles.processTab}>
         <Table
-          className="table"
+          className={styles.table}
           loading={this.props.processes.list.length === 0}
           dataSource={this.props.processes.list}
           columns={columns}
           bordered={false}
           scroll={{ y: 'calc(100vh - 80px - 20px - 61px)' }} // minus footer(80px) / tablist(20px) / table header(61px)
           rowKey="pid"
-          rowClassName={record => 'row' + (this.state.selectedPID === record.pid ? ' selected' : '')}
+          rowClassName={record => 'row' + (this.state.selectedPID === record.pid ? ' ' + styles.selected : '')}
           pagination={false}
           size="small"
           onRow={(record, rowIndex) => {
@@ -104,8 +112,8 @@ export default class ProcessTab extends React.Component {
             };
           }}
         />
-        <div className="footer">
-          <Button className="endtask" type="primary" disabled={this.state.selectedPID === ''}
+        <div className={styles.footer}>
+          <Button className={styles.endtask} type="primary" disabled={this.state.selectedPID === ''}
                   onClick={() => {
                     this.setState({selectedPID: ''});
                     this.props.killProcess(this.state.selectedPID);

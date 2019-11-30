@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Tabs } from "antd";
 import ReactEcharts from "echarts-for-react";
-import './performance-tab.css';
+import styles from './performance-tab.module.css';
 
 
 export default class PerformanceTab extends React.Component {
@@ -50,7 +50,7 @@ export default class PerformanceTab extends React.Component {
       }]
     };
     return <ReactEcharts
-      className="chart"
+      className={styles.chart}
       ref="echarts_react"
       key={key}
       option={option}
@@ -59,7 +59,7 @@ export default class PerformanceTab extends React.Component {
 
   render() {
     return <Tabs
-      className="performance-tab"
+      className={styles.performanceTab}
       defaultActiveKey="1"
       tabPosition="left"
       size="large"
@@ -68,8 +68,8 @@ export default class PerformanceTab extends React.Component {
       <Tabs.TabPane
         tab={
           <div>
-            <span className="title">CPU</span><br />
-            <span className="subtitle">{parseInt(this.props.cpuLoadHistory[this.props.cpuLoadHistory.length - 1]) + '%'}</span>
+            <span className={styles.title}>CPU</span><br />
+            <span className={styles.subtitle}>{parseInt(this.props.cpuLoadHistory[this.props.cpuLoadHistory.length - 1]) + '%'}</span>
           </div>
         }
         key="1">
@@ -81,8 +81,8 @@ export default class PerformanceTab extends React.Component {
       <Tabs.TabPane
         tab={
           <div>
-            <span className="title">Memory</span><br />
-            <span className="subtitle">{parseInt(this.props.memLoadHistory[this.props.memLoadHistory.length - 1]) + '%'}</span>
+            <span className={styles.title}>Memory</span><br />
+            <span className={styles.subtitle}>{parseInt(this.props.memLoadHistory[this.props.memLoadHistory.length - 1]) + '%'}</span>
           </div>
         }
         key="2">
