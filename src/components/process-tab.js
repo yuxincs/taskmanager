@@ -36,16 +36,21 @@ export default class ProcessTab extends React.Component {
     }
   };
 
-  processCellRenderer = (text, record) => {
+  headerRenderer = (title, subtitle) => {
+    return <div>
+      <span className={styles.title}>{title}</span>
+      <br />
+      <span className={styles.subtitle}>{subtitle}</span>
+    </div>;
+  };
+
+  stateCellRenderer = (text, record) => {
     const stateBadge = {
       'running': <Badge status="success" />,
       'sleeping': <Badge status="warning" />,
       'blocked': <Badge status="error" />
     };
-    const badge = stateBadge[record.state];
-    let normal = this.normalCellRenderer(text);
-    normal.children = <div>{badge} <span>{text}</span></div>;
-    return normal;
+    return stateBadge[record.state];
   };
 
   percentageCellRenderer = (text, record) => {
@@ -62,50 +67,35 @@ export default class ProcessTab extends React.Component {
   render() {
     const columns = [
       {
-        title: <div>
-          <br />
-          <span className={styles.subtitle}>Processes</span>
-        </div>,
+        title: this.headerRenderer('', 'Processes'),
         dataIndex: 'command',
         width: '200px',
         sorter: (a, b) => a.command.localeCompare(b.command),
         render: this.normalCellRenderer
       },
       {
-        title: <div>
-          <br />
-          <span className={styles.subtitle}>PID</span>
-        </div>,
+        title: this.headerRenderer('', 'PID'),
         dataIndex: 'pid',
         sorter: (a, b) => a.pid - b.pid,
         render: this.normalCellRenderer,
         width: '80px'
       },
       {
-        title: <div>
-          <br />
-          <span className={styles.subtitle}>User</span>
-        </div>,
+        title: this.headerRenderer('', 'User'),
         dataIndex: 'user',
         sorter: (a, b) => a.user.localeCompare(b.user),
         render: this.normalCellRenderer,
         width: '120px'
       },
       {
-        title: <div>
-          <span className={styles.title}>{Math.round( this.props.cpuLoad * 10) / 10 + ' %'}</span><br />
-          <span className={styles.subtitle}>CPU</span>
-        </div>,
+        title: this.headerRenderer(Math.round( this.props.cpuLoad * 10) / 10 + ' %', 'CPU'),
         dataIndex: 'pcpu',
         sorter: (a, b) => a.pcpu - b.pcpu,
         width: '100px',
         render: this.percentageCellRenderer
       },
       {
-        title: <div>
-          <span className={styles.title}>{Math.round( this.props.memLoad * 10) / 10 + ' %'}</span><br />
-          <span className={styles.subtitle}>Memory</span>
-        </div>,
+        title: this.headerRenderer(Math.round( this.props.memLoad * 10) / 10 + ' %', 'Memory'),
         dataIndex: 'pmem',
         width: '100px',
         sorter: (a, b) => a.pmem - b.pmem,
