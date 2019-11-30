@@ -31,6 +31,7 @@ export default class PerformanceTab extends React.Component {
         boundaryGap: [0, '100%'],
         splitLine: {
           show: false
+        }
         max: 100,
         axisLabel: {
           show: false
