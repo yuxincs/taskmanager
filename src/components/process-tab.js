@@ -37,18 +37,14 @@ export default class ProcessTab extends React.Component {
   };
 
   percentageCellRenderer = (text, record) => {
-    let className = styles['num-cell'];
+    let normal = this.normalCellRenderer(text);
+    normal.props.className = styles['num-cell'];
 
     if(this.state.selectedPID !== record.pid) {
-      className += ' ' + styles['level-' + Math.min(Math.ceil((parseFloat(text) + 0.001) / 20), 5)];
+      normal.props.className += ' ' + styles['level-' + Math.min(Math.ceil((parseFloat(text) + 0.001) / 20), 5)];
     }
-    return {
-      props: {
-        className: className,
-        style: { borderBottom: 'none' }
-      },
-      children: text + ' %'
-    };
+    normal.children = text + ' %';
+    return normal;
   };
 
   render() {
@@ -101,7 +97,7 @@ export default class ProcessTab extends React.Component {
         dataIndex: 'user',
         sorter: (a, b) => a.user.localeCompare(b.user),
         render: this.normalCellRenderer,
-        width: '80px'
+        width: '120px'
       },
     ];
 
