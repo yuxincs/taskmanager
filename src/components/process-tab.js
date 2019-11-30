@@ -27,7 +27,7 @@ export default class ProcessTab extends React.Component {
     this.setState({'selectedPID': record.pid});
   };
 
-  normalRenderer = text => {
+  normalCellRenderer = text => {
     return {
       props: {
         style: { borderBottom: 'none' }
@@ -61,7 +61,7 @@ export default class ProcessTab extends React.Component {
         dataIndex: 'command',
         width: '350px',
         sorter: (a, b) => a.command.localeCompare(b.command),
-        render: this.normalRenderer
+        render: this.normalCellRenderer
       },
       {
         title: <div>
@@ -90,7 +90,7 @@ export default class ProcessTab extends React.Component {
         </div>,
         dataIndex: 'pid',
         sorter: (a, b) => a.pid - b.pid,
-        render: this.normalRenderer,
+        render: this.normalCellRenderer,
         width: '80px'
       },
       {
@@ -100,7 +100,7 @@ export default class ProcessTab extends React.Component {
         </div>,
         dataIndex: 'user',
         sorter: (a, b) => a.user.localeCompare(b.user),
-        render: this.normalRenderer,
+        render: this.normalCellRenderer,
         width: '80px'
       },
     ];
