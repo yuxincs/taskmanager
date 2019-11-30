@@ -1,0 +1,8 @@
+.performance-tab {
+    height: 100%;
+}
+
+
+.chart {
+    width: 99%; /* weird bugs happen when set to 100% */
+}
