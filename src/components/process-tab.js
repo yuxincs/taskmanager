@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Table, Button } from "antd";
+import { Table, Button, Badge } from "antd";
 import styles from './process-tab.module.css';
 
 export default class ProcessTab extends React.Component {
@@ -36,6 +36,17 @@ export default class ProcessTab extends React.Component {
     }
   };
 
+  processCellRenderer = (text, record) => {
+    const stateBadge = {
+      'running': <Badge status="success" />,
+      'sleeping': <Badge status="warning" />
+    };
+    const badge = stateBadge[record.state];
+    let normal = this.normalCellRenderer(text);
+    normal.children = <div>{badge} <span>{text}</span></div>;
+    return normal;
+  };
+
   percentageCellRenderer = (text, record) => {
     let normal = this.normalCellRenderer(text);
     normal.props.className = styles['num-cell'];
@@ -57,7 +68,7 @@ export default class ProcessTab extends React.Component {
         dataIndex: 'command',
         width: '350px',
         sorter: (a, b) => a.command.localeCompare(b.command),
-        render: this.normalCellRenderer
+        render: this.processCellRenderer
       },
       {
         title: <div>
