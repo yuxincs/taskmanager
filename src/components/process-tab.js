@@ -28,10 +28,9 @@ export default class ProcessTab extends React.Component {
   };
 
   percentageCellRenderer = (text, record) => {
-    let className = styles.cell;
+    let className = styles['num-cell'];
 
     if(this.state.selectedPID !== record.pid) {
-      className += ' ' + styles['num-cell'];
       className += ' ' + styles['level-' + Math.min(Math.ceil((parseFloat(text) + 0.001) / 20), 5)];
     }
     return {
@@ -45,27 +44,25 @@ export default class ProcessTab extends React.Component {
   render() {
     const columns = [
       {
-        title: <span className={styles.title}>Processes</span>,
+        title: <div>
+          <br />
+          <span className={styles.subtitle}>Processes</span>
+        </div>,
         dataIndex: 'command',
         width: '60%',
         sorter: (a, b) => a.command.localeCompare(b.command),
-        render: text => {
-          return {
-            props: {
-              className: styles.cell
-            },
-            children: text
-          }
-        }
       },
       {
-        title: <span className={styles.center + ' ' + styles.title}>PID</span>,
+        title: <div>
+          <br />
+          <span className={styles.subtitle}>PID</span>
+        </div>,
         dataIndex: 'pid',
         sorter: (a, b) => a.pid - b.pid,
         render: text => {
           return {
             props: {
-              className: styles.cell + ' ' + styles.center
+              className: styles.center
             },
             children: text
           };
@@ -103,7 +100,7 @@ export default class ProcessTab extends React.Component {
           bordered={false}
           scroll={{ y: 'calc(100vh - 80px - 20px - 61px)' }} // minus footer(80px) / tablist(20px) / table header(61px)
           rowKey="pid"
-          rowClassName={record => 'row' + (this.state.selectedPID === record.pid ? ' ' + styles.selected : '')}
+          rowClassName={record => styles.row + (this.state.selectedPID === record.pid ? ' ' + styles.selected : '')}
           pagination={false}
           size="small"
           onRow={(record, rowIndex) => {
