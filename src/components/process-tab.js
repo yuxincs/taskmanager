@@ -98,6 +98,23 @@ export default class ProcessTab extends React.Component {
         },
         width: '80px'
       },
+      {
+        title: <div>
+          <br />
+          <span className={styles.subtitle}>User</span>
+        </div>,
+        dataIndex: 'user',
+        sorter: (a, b) => a.user.localeCompare(b.user),
+        render: text => {
+          return {
+            props: {
+              style: { borderBottom: 'none' }
+            },
+            children: text
+          };
+        },
+        width: '80px'
+      },
     ];
 
     return <div className={styles.processTab}>
