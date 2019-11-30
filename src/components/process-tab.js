@@ -67,29 +67,9 @@ export default class ProcessTab extends React.Component {
           <span className={styles.subtitle}>Processes</span>
         </div>,
         dataIndex: 'command',
-        width: '350px',
+        width: '200px',
         sorter: (a, b) => a.command.localeCompare(b.command),
-        render: this.processCellRenderer
-      },
-      {
-        title: <div>
-          <span className={styles.title}>{Math.round( this.props.cpuLoad * 10) / 10 + ' %'}</span><br />
-          <span className={styles.subtitle}>CPU</span>
-        </div>,
-        dataIndex: 'pcpu',
-        sorter: (a, b) => a.pcpu - b.pcpu,
-        width: '100px',
-        render: this.percentageCellRenderer
-      },
-      {
-        title: <div>
-          <span className={styles.title}>{Math.round( this.props.memLoad * 10) / 10 + ' %'}</span><br />
-          <span className={styles.subtitle}>Memory</span>
-        </div>,
-        dataIndex: 'pmem',
-        width: '100px',
-        sorter: (a, b) => a.pmem - b.pmem,
-        render: this.percentageCellRenderer
+        render: this.normalCellRenderer
       },
       {
         title: <div>
@@ -111,6 +91,26 @@ export default class ProcessTab extends React.Component {
         render: this.normalCellRenderer,
         width: '120px'
       },
+      {
+        title: <div>
+          <span className={styles.title}>{Math.round( this.props.cpuLoad * 10) / 10 + ' %'}</span><br />
+          <span className={styles.subtitle}>CPU</span>
+        </div>,
+        dataIndex: 'pcpu',
+        sorter: (a, b) => a.pcpu - b.pcpu,
+        width: '100px',
+        render: this.percentageCellRenderer
+      },
+      {
+        title: <div>
+          <span className={styles.title}>{Math.round( this.props.memLoad * 10) / 10 + ' %'}</span><br />
+          <span className={styles.subtitle}>Memory</span>
+        </div>,
+        dataIndex: 'pmem',
+        width: '100px',
+        sorter: (a, b) => a.pmem - b.pmem,
+        render: this.percentageCellRenderer
+      }
     ];
 
     return <div className={styles.processTab}>
