@@ -39,7 +39,8 @@ export default class ProcessTab extends React.Component {
   processCellRenderer = (text, record) => {
     const stateBadge = {
       'running': <Badge status="success" />,
-      'sleeping': <Badge status="warning" />
+      'sleeping': <Badge status="warning" />,
+      'blocked': <Badge status="error" />
     };
     const badge = stateBadge[record.state];
     let normal = this.normalCellRenderer(text);
