@@ -35,7 +35,8 @@ export default class ProcessTab extends React.Component {
     }
     return {
       props: {
-        className: className
+        className: className,
+        style: { borderBottom: 'none' }
       },
       children: text + ' %'
     };
@@ -51,6 +52,14 @@ export default class ProcessTab extends React.Component {
         dataIndex: 'command',
         width: '60%',
         sorter: (a, b) => a.command.localeCompare(b.command),
+        render: text => {
+          return {
+            props: {
+              style: { borderBottom: 'none' }
+            },
+            children: text
+          }
+        }
       },
       {
         title: <div>
@@ -62,7 +71,7 @@ export default class ProcessTab extends React.Component {
         render: text => {
           return {
             props: {
-              className: styles.center
+              style: { borderBottom: 'none' }
             },
             children: text
           };
