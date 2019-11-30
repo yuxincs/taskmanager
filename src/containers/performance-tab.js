@@ -4,8 +4,8 @@ import PerformanceTab from '../components/performance-tab';
 const mapStateToProps = (state, ownProps) => {
   return {
     className: ownProps.className,
-    cpuLoad: state.processTab.cpuLoad.currentload,
-    memLoad: (state.processTab.memLoad.active / state.processTab.memLoad.total) * 100
+    cpuLoadHistory: state.performanceTab.cpuLoadHistory,
+    memLoadHistory: state.performanceTab.memLoadHistory
   };
 };
 

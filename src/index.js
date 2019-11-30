@@ -46,7 +46,7 @@ class TaskManager extends React.Component{
           key="1">
           <ProcessTabContainer />
         </Tabs.TabPane>
-        <Tabs.TabPane
+        <Tabs.TabPane className="tab-panes"
           tab={
             <span>
               <Icon type="rocket" />
