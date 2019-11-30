@@ -17,65 +17,73 @@ export default class PerformanceTab extends React.Component {
     memLoadHistory: Array.from({length: 60}, () => 0)
   };
 
+  generateChart(key, data, color, cornerTexts) {
+    let option =  {
+      xAxis: {
+        type: 'category',
+        boundaryGap: false,
+        splitLine: {
+          show: false
+        },
+      },
+      yAxis: {
+        type: 'value',
+        boundaryGap: [0, '100%'],
+        splitLine: {
+          show: false
+        }
+      },
+      series: [{
+        data: data,
+        type: 'line',
+        areaStyle: {},
+        showSymbol: false,
+        hoverAnimation: false,
+        animation: false
+      }]
+    };
+    return <ReactEcharts
+      className="chart"
+      ref="echarts_react"
+      key={key}
+      option={option}
+    />
+  }
+
   render() {
-    let option1 = {
-      xAxis: {
-        type: 'category',
-        boundaryGap: false,
-        splitLine: {
-          show: false
-        },
-      },
-      yAxis: {
-        type: 'value',
-        boundaryGap: [0, '100%'],
-        splitLine: {
-          show: false
-        }
-      },
-      series: [{
-        data: this.props.cpuLoadHistory,
-        type: 'line',
-        areaStyle: {},
-        showSymbol: false,
-        hoverAnimation: false,
-        animation: false
-      }]
-    };
-    let option2 = {
-      xAxis: {
-        type: 'category',
-        boundaryGap: false,
-        splitLine: {
-          show: false
-        },
-      },
-      yAxis: {
-        type: 'value',
-        boundaryGap: [0, '100%'],
-        splitLine: {
-          show: false
-        }
-      },
-      series: [{
-        data: this.props.memLoadHistory,
-        type: 'line',
-        areaStyle: {},
-        showSymbol: false,
-        hoverAnimation: false,
-        animation: false
-      }]
-    };
-    let cpuChart = <ReactEcharts className="chart" ref='echarts_react' option={option1} key="1" />;
-    let memoryChart = <ReactEcharts className="chart" ref='echarts_react' option={option2} key="2"/>;
     return <Tabs
       className="performance-tab"
       defaultActiveKey="1"
       tabPosition="left"
       size="large"
+      tabBarStyle={{width: '30%'}}
     >
-      <Tabs.TabPane tab="CPU" key="1"> {cpuChart} </Tabs.TabPane>
-      <Tabs.TabPane tab="Memory" key="2"> {memoryChart} </Tabs.TabPane>
+      <Tabs.TabPane
+        tab={
+          <div>
+            <span className="title">CPU</span><br />
+            <span className="subtitle">{parseInt(this.props.cpuLoadHistory[this.props.cpuLoadHistory.length - 1]) + '%'}</span>
+          </div>
+        }
+        key="1">
+        {
+          this.generateChart('1', this.props.cpuLoadHistory, null,
+          ['% Utilization', '100 %', '0', '60 Seconds'])
+        }
+      </Tabs.TabPane>
+      <Tabs.TabPane
+        tab={
+          <div>
+            <span className="title">Memory</span><br />
+            <span className="subtitle">{parseInt(this.props.memLoadHistory[this.props.memLoadHistory.length - 1]) + '%'}</span>
+          </div>
+        }
+        key="2">
+        {
+          this.generateChart('2', this.props.memLoadHistory, null,
+            ['Memory Usage', 'X GB', '0', '60 Seconds'])
+        }
+      </Tabs.TabPane>
     </Tabs>
   }
 }

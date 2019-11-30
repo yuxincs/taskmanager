@@ -6,3 +6,14 @@
 .chart {
     width: 99%; /* weird bugs happen when set to 100% */
 }
+
+.title {
+    color: black;
+    font-size: large;
+}
+
+.subtitle {
+    color: dimgray;
+    font-size: small;
+    font-weight: normal;
+}
