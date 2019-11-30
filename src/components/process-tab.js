@@ -16,6 +16,12 @@ export default class ProcessTab extends React.Component {
     processes: []
   };
 
+  static statePriority = {
+    'running': 3,
+    'sleeping': 2,
+    'blocked': 1
+  };
+
   constructor(props) {
     super(props);
     this.state = {
@@ -45,12 +51,14 @@ export default class ProcessTab extends React.Component {
   };
 
   stateCellRenderer = (text, record) => {
+    let normal = this.normalCellRenderer(text);
     const stateBadge = {
       'running': <Badge status="success" />,
       'sleeping': <Badge status="warning" />,
       'blocked': <Badge status="error" />
     };
-    return stateBadge[record.state];
+    normal.children = stateBadge[record.state];
+    return normal;
   };
 
   percentageCellRenderer = (text, record) => {
@@ -66,6 +74,13 @@ export default class ProcessTab extends React.Component {
 
   render() {
     const columns = [
+      {
+        title: this.headerRenderer('', 'S'),
+        dataIndex: 'state',
+        width: '35px',
+        sorter: (a, b) => ProcessTab.statePriority[a.state] > ProcessTab.statePriority[b.state],
+        render: this.stateCellRenderer
+      },
       {
         title: this.headerRenderer('', 'Processes'),
         dataIndex: 'command',
