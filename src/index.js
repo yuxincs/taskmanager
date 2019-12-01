@@ -61,6 +61,8 @@ class TaskManager extends React.Component{
   }
 }
 
+document.getElementById('root').className += ' ' + styles.root;
+
 ReactDOM.render(
   <Provider store={store}>
     <TaskManager />
