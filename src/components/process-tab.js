@@ -61,6 +61,19 @@ export default class ProcessTab extends React.Component {
     return normal;
   };
 
+  memoryCellRenderer = (text, record) => {
+    let base = this.percentageCellRenderer(record.pmem, record);
+    const units = ['B', 'KB', 'MB', 'GB'];
+    let unitIndex = 0;
+    let value = parseInt(text);
+    // iteratively divide 1024 to find the best suitable memory unit
+    while(value > 1024 && unitIndex < units.length) {
+      value /= 1024;
+    }
+    base.children = value.toFixed(1) + ' ' + units[unitIndex];
+    return base;
+  };
+
   percentageCellRenderer = (text, record) => {
     let normal = this.normalCellRenderer(text);
     normal.props.className = styles['num-cell'];
@@ -111,10 +124,10 @@ export default class ProcessTab extends React.Component {
       },
       {
         title: this.headerRenderer(Math.round( this.props.memLoad * 10) / 10 + ' %', 'Memory'),
-        dataIndex: 'pmem',
+        dataIndex: 'mem_rss',
         width: '100px',
-        sorter: (a, b) => a.pmem - b.pmem,
-        render: this.percentageCellRenderer
+        sorter: (a, b) => a.mem_rss - b.mem_rss,
+        render: this.memoryCellRenderer
       }
     ];
 
