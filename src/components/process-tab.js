@@ -125,7 +125,7 @@ export default class ProcessTab extends React.Component {
           dataSource={this.props.processes.list}
           columns={columns}
           bordered={false}
-          scroll={{ x: true, y: 'calc(100vh - 80px - 20px - 61px)' }} // minus footer(80px) / tablist(20px) / table header(61px)
+          scroll={{ y: 'calc(100vh - 80px - 20px - 61px)' }} // minus footer(80px) / tablist(20px) / table header(61px)
           rowKey="pid"
           rowClassName={record => styles.row + (this.state.selectedPID === record.pid ? ' ' + styles.selected : '')}
           pagination={false}
