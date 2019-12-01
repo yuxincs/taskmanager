@@ -69,6 +69,7 @@ export default class ProcessTab extends React.Component {
     // iteratively divide 1024 to find the best suitable memory unit
     while(value > 1024 && unitIndex < units.length) {
       value /= 1024;
+      unitIndex ++;
     }
     base.children = value.toFixed(1) + ' ' + units[unitIndex];
     return base;
