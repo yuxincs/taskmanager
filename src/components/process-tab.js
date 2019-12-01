@@ -69,7 +69,7 @@ export default class ProcessTab extends React.Component {
 
   memoryCellRenderer = (text, record) => {
     let base = this.percentageCellRenderer(record.pmem, record);
-    const units = ['B', 'KB', 'MB', 'GB'];
+    const units = ['KB', 'MB', 'GB'];
     let unitIndex = 0;
     let value = parseInt(text);
     // iteratively divide 1024 to find the best suitable memory unit
