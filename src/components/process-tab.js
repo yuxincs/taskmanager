@@ -147,6 +147,7 @@ export default class ProcessTab extends React.Component {
           rowClassName={record => styles.row + (this.state.selectedPID === record.pid ? ' ' + styles.selected : '')}
           pagination={false}
           size="small"
+          indentSize={20}
           onRow={(record, rowIndex) => {
             return {
               onClick: event => this.onSelectRow(record)
