@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Table, Button, Badge } from "antd";
+import { Table, Button, Badge, Icon } from "antd";
 import styles from './process-tab.module.css';
 
 export default class ProcessTab extends React.Component {
@@ -97,7 +97,7 @@ export default class ProcessTab extends React.Component {
         ellipsis: true
       },
       {
-        title: this.headerRenderer('', 'S'),
+        title: this.headerRenderer('', <Icon type="check-circle" />),
         dataIndex: 'state',
         width: '35px',
         sorter: (a, b) => ProcessTab.statePriority[a.state] - ProcessTab.statePriority[b.state],
