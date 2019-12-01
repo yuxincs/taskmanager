@@ -82,7 +82,7 @@ export default class ProcessTab extends React.Component {
         render: this.stateCellRenderer
       },
       {
-        title: this.headerRenderer('', 'Processes'),
+        title: this.headerRenderer('', 'Name'),
         dataIndex: 'command',
         width: '200px',
         sorter: (a, b) => a.command.localeCompare(b.command),
