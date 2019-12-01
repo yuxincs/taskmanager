@@ -92,7 +92,7 @@ export default class ProcessTab extends React.Component {
         title: this.headerRenderer('', 'S'),
         dataIndex: 'state',
         width: '35px',
-        sorter: (a, b) => ProcessTab.statePriority[a.state] > ProcessTab.statePriority[b.state],
+        sorter: (a, b) => ProcessTab.statePriority[a.state] - ProcessTab.statePriority[b.state],
         render: this.stateCellRenderer
       },
       {
