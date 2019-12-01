@@ -89,19 +89,19 @@ export default class ProcessTab extends React.Component {
   render() {
     const columns = [
       {
-        title: this.headerRenderer('', 'S'),
-        dataIndex: 'state',
-        width: '35px',
-        sorter: (a, b) => ProcessTab.statePriority[a.state] - ProcessTab.statePriority[b.state],
-        render: this.stateCellRenderer
-      },
-      {
         title: this.headerRenderer('', 'Name'),
         dataIndex: 'command',
         width: '200px',
         sorter: (a, b) => a.command.localeCompare(b.command),
         render: this.normalCellRenderer,
         ellipsis: true
+      },
+      {
+        title: this.headerRenderer('', 'S'),
+        dataIndex: 'state',
+        width: '35px',
+        sorter: (a, b) => ProcessTab.statePriority[a.state] - ProcessTab.statePriority[b.state],
+        render: this.stateCellRenderer
       },
       {
         title: this.headerRenderer('', 'PID'),
