@@ -50,6 +50,12 @@ export default class ProcessTab extends React.Component {
     </div>;
   };
 
+  processCellRenderer = (text, record) => {
+    let normal = this.normalCellRenderer(text);
+    normal.children = <span><Icon type="profile" theme="twoTone" />&emsp;{text}</span>;
+    return normal;
+  };
+
   stateCellRenderer = (text, record) => {
     let normal = this.normalCellRenderer(text);
     const stateBadge = {
@@ -58,12 +64,6 @@ export default class ProcessTab extends React.Component {
       'blocked': <Badge status="error" />
     };
     normal.children = stateBadge[record.state];
-    return normal;
-  };
-
-  processCellRenderer = (text, record) => {
-    let normal = this.normalCellRenderer(text);
-    normal.children = <span><Icon type="profile" theme="twoTone" />&emsp;{text}</span>;
     return normal;
   };
 
