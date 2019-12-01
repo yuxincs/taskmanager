@@ -10,5 +10,10 @@ A Windows-Like Task Manager built for Linux and macOS, based on Electron, Ant De
 
 Previously there is a C++ version based on QT, at [v1.0-qt-based](https://github.com/yxwangcs/taskmanager/tree/v1.0-qt-based) branch.
 
+## TODO
+* Performance tab with charts.
+
+* Per-process network / diskIO statistics display.
+
 ## License
 [GPLv3](https://github.com/yxwangcs/taskmanager/blob/master/LICENSE).
