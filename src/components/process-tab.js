@@ -61,6 +61,12 @@ export default class ProcessTab extends React.Component {
     return normal;
   };
 
+  processCellRenderer = (text, record) => {
+    let normal = this.normalCellRenderer(text);
+    normal.children = <span><Icon type="profile" theme="twoTone" />&emsp;{text}</span>;
+    return normal;
+  };
+
   memoryCellRenderer = (text, record) => {
     let base = this.percentageCellRenderer(record.pmem, record);
     const units = ['B', 'KB', 'MB', 'GB'];
@@ -93,7 +99,7 @@ export default class ProcessTab extends React.Component {
         dataIndex: 'command',
         width: '200px',
         sorter: (a, b) => a.command.localeCompare(b.command),
-        render: this.normalCellRenderer,
+        render: this.processCellRenderer,
         ellipsis: true
       },
       {
