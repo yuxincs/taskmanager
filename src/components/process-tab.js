@@ -130,7 +130,8 @@ export default class ProcessTab extends React.Component {
         dataIndex: 'pcpu',
         sorter: (a, b) => a.pcpu - b.pcpu,
         width: '100px',
-        render: this.percentageCellRenderer
+        render: this.percentageCellRenderer,
+        defaultSortOrder: 'descend'
       },
       {
         title: this.headerRenderer(Math.round( this.props.memLoad * 10) / 10 + ' %', 'Memory'),
