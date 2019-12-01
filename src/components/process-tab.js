@@ -86,7 +86,7 @@ export default class ProcessTab extends React.Component {
     normal.props.className = styles['num-cell'];
 
     if(this.state.selectedPID !== record.pid) {
-      normal.props.className += ' ' + styles['level-' + Math.min(Math.ceil((parseFloat(text) + 0.001) / 20), 5)];
+      normal.props.className += ' ' + styles['level-' + Math.min(Math.ceil((parseFloat(text) + 0.001) / 12.5), 8)];
     }
     normal.children = text + ' %';
     return normal;
