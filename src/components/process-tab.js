@@ -100,21 +100,24 @@ export default class ProcessTab extends React.Component {
         dataIndex: 'command',
         width: '200px',
         sorter: (a, b) => a.command.localeCompare(b.command),
-        render: this.normalCellRenderer
+        render: this.normalCellRenderer,
+        ellipsis: true
       },
       {
         title: this.headerRenderer('', 'PID'),
         dataIndex: 'pid',
         sorter: (a, b) => a.pid - b.pid,
         render: this.normalCellRenderer,
-        width: '80px'
+        width: '80px',
+        ellipsis: true
       },
       {
         title: this.headerRenderer('', 'User'),
         dataIndex: 'user',
         sorter: (a, b) => a.user.localeCompare(b.user),
         render: this.normalCellRenderer,
-        width: '120px'
+        width: '120px',
+        ellipsis: true
       },
       {
         title: this.headerRenderer(Math.round( this.props.cpuLoad * 10) / 10 + ' %', 'CPU'),
