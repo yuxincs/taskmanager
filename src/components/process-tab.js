@@ -122,7 +122,7 @@ export default class ProcessTab extends React.Component {
         dataIndex: 'user',
         sorter: (a, b) => a.user.localeCompare(b.user),
         render: this.normalCellRenderer,
-        width: '120px',
+        width: '80px',
         ellipsis: true
       },
       {
