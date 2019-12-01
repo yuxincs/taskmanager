@@ -36,7 +36,7 @@ export default class ProcessTab extends React.Component {
   normalCellRenderer = text => {
     return {
       props: {
-        style: { borderBottom: 'none' }
+        style: { borderBottom: 'none', transition: 'none'}
       },
       children: text
     }
