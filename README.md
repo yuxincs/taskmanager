@@ -1,6 +1,6 @@
 # TaskManager [![Build Status](https://travis-ci.com/yxwangcs/taskmanager.svg?branch=master)](https://travis-ci.com/yxwangcs/taskmanager) [![codecov](https://codecov.io/gh/yxwangcs/taskmanager/branch/master/graph/badge.svg)](https://codecov.io/gh/yxwangcs/taskmanager)
 
-A Windows-Like Task Manager built for Linux and macOS, based on Electron and Ant Design.
+A Windows-Like Task Manager built for Linux and macOS, based on Electron, Ant Design, systeminformation and ECharts.
 
 <p float="left" align="center">
   <img src="https://github.com/yxwangcs/taskmanager/raw/master/screenshots/1.png" width="45%" />
