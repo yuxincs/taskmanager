@@ -1,11 +1,11 @@
-# TaskManager [![Build Status](https://travis-ci.com/yxwangcs/taskmanager.svg?branch=master)](https://travis-ci.com/yxwangcs/taskmanager) [![codecov](https://codecov.io/gh/yxwangcs/taskmanager/branch/master/graph/badge.svg)](https://codecov.io/gh/yxwangcs/taskmanager)
+# TaskManager
 
 A Windows-Like Task Manager Built for Linux and MacOS Based on Qt. Tested on `QT 5.8 - 5.11 Linux` and `QT latest MacOS`(via Homebrew).
 
 <p float="left" align="center">
-  <img src="https://github.com/yxwangcs/taskmanager/raw/master/screenshots/1.png" width="45%" />
+  <img src="https://github.com/yxwangcs/taskmanager/raw/v1.0-qt-based/screenshots/1.png" width="45%" />
   &emsp;
-  <img src="https://github.com/yxwangcs/taskmanager/raw/master/screenshots/2.png" width="45%" /> 
+  <img src="https://github.com/yxwangcs/taskmanager/raw/v1.0-qt-based/screenshots/2.png" width="45%" /> 
 </p>
 
 Note: Some features are hard to implement on some specific platforms (such as memory speed under Linux, which all methods require `sudo` to the best of my knowledge), if a feature is not implemented yet it will simply display "No Data".
