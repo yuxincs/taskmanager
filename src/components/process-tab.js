@@ -1,7 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Table, Button, Badge, Icon } from "antd";
+import { VTComponents } from 'virtualizedtableforantd';
 import styles from './process-tab.module.css';
+
 
 export default class ProcessTab extends React.Component {
   static propTypes = {
@@ -36,7 +38,7 @@ export default class ProcessTab extends React.Component {
   normalCellRenderer = text => {
     return {
       props: {
-        style: { borderBottom: 'none', transition: 'none'}
+        style: { borderBottom: 'none', transition: 'none', padding: '8px 8px'} // TODO: padding fix is for VTComponent
       },
       children: text
     }
@@ -147,6 +149,13 @@ export default class ProcessTab extends React.Component {
           className={styles.table}
           loading={this.props.processes.list.length === 0}
           dataSource={this.props.processes.list}
+          /* use VTComponents for virtualized lists for now */
+          /* TODO: replace this with cleaner methods when antd 4.0 is released which has built-in support for
+          *   virtualized tables */
+          components={VTComponents({
+            id: 1,
+            destroy: true
+          })}
           columns={columns}
           bordered={false}
           scroll={{ y: 'calc(100vh - 80px - 20px - 61px)' }} // minus footer(80px) / tablist(20px) / table header(61px)
@@ -154,7 +163,6 @@ export default class ProcessTab extends React.Component {
           rowClassName={record => styles.row + (this.state.selectedPID === record.pid ? ' ' + styles.selected : '')}
           pagination={false}
           size="small"
-          indentSize={20}
           onRow={(record, rowIndex) => {
             return {
               onClick: event => this.onSelectRow(record)
