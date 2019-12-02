@@ -1,0 +1,42 @@
+name: build
+
+on: [push]
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macOS-latest]
+        # ubuntu uses g++ / macos uses clang ++
+        qt: [5.9.8, 5.12.5, 5.13.2]
+        exclude: 
+          # exclude old qt version of macOS
+          - {os: 'macOS-latest', qt: '5.9.8'}
+          - {os: 'macOS-latest', qt: '5.12.5'}
+    runs-on: ${{ matrix.os }}
+    steps:
+    - uses: actions/checkout@master
+      with:
+        submodules: true
+    # TODO: remove this when Github Actions has Qt built-in in the future
+    - name: Install Qt ${{ matrix.qt }}
+      uses: jurplel/install-qt-action@v1
+      with:
+        version: ${{ matrix.qt }}
+    - name: Install OpenGL support for QT (Ubuntu)
+      if: startsWith(matrix.os, 'ubuntu')
+      run: |
+        sudo apt-get update -y
+        sudo apt-get install -y libgl1-mesa-dev
+        
+    - name: Build and test
+      run: |
+        qmake -v
+        mkdir build && cd build
+        qmake -r ../
+        make
+        make check
+        
+    - name: Upload to codecov
+      if: success()
+      run: bash <(curl -s https://codecov.io/bash) -t ${{ secrets.CODECOV_TOKEN }}
