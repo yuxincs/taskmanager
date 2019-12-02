@@ -2,7 +2,7 @@
 
 [![Github Actions](https://github.com/yxwangcs/taskmanager/workflows/build/badge.svg)](https://github.com/yxwangcs/taskmanager/actions?query=branch%3Amaster) [![codecov](https://codecov.io/gh/yxwangcs/taskmanager/branch/master/graph/badge.svg)](https://codecov.io/gh/yxwangcs/taskmanager/branch/master)
 
-A Windows-Like Task Manager built for Linux and macOS, based on Electron, Ant Design, systeminformation and ECharts.
+A Windows-Like Task Manager built for Linux and macOS, based on [Electron](https://electronjs.org/), [Ant Design](https://ant.design/), [systeminformation](https://www.npmjs.com/package/systeminformation) and [ECharts](https://www.echartsjs.com/en/index.html).
 
 <p float="left" align="center">
   <img src="https://github.com/yxwangcs/taskmanager/raw/master/screenshots/1.png" width="45%" />
