@@ -17,3 +17,6 @@ build/
 
 # release file for macOS
 TaskManager.app/
+
+# ignore macOS related files
+.DS_Store
