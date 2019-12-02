@@ -18,4 +18,4 @@ Previously there is a C++ version based on QT, at [v1.0-qt-based](https://github
 * Per-process network / diskIO statistics display.
 
 ## License
-[GPLv3](https://github.com/yxwangcs/taskmanager/blob/master/LICENSE).
+[MIT](https://github.com/yxwangcs/taskmanager/blob/master/LICENSE).
