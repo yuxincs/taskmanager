@@ -1,4 +1,6 @@
-# TaskManager
+# TaskManager 
+
+[![Github Actions](https://github.com/yxwangcs/taskmanager/workflows/build/badge.svg?branch=v1.0-qt-based)](https://github.com/yxwangcs/taskmanager/actions?query=branch%3Av1.0-qt-based) [![codecov](https://codecov.io/gh/yxwangcs/taskmanager/branch/v1.0-qt-based/graph/badge.svg)](https://codecov.io/gh/yxwangcs/taskmanager/branch/v1.0-qt-based)
 
 A Windows-Like Task Manager Built for Linux and MacOS Based on Qt. Tested on `QT 5.8 - 5.11 Linux` and `QT latest MacOS`(via Homebrew).
 
