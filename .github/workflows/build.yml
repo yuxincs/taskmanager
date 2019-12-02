@@ -20,7 +20,7 @@ jobs:
         submodules: true
     # TODO: remove this when Github Actions has Qt built-in in the future
     - name: Install Qt ${{ matrix.qt }}
-      uses: jurplel/install-qt-action@v1
+      uses: jurplel/install-qt-action@v2
       with:
         version: ${{ matrix.qt }}
     - name: Install OpenGL support for QT (Ubuntu)
