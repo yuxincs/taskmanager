@@ -126,7 +126,7 @@ export default class PerformanceTab extends React.Component {
       defaultActiveKey="1"
       tabPosition="left"
       size="large"
-      tabBarStyle={{width: '30%'}}
+      tabBarStyle={{width: '30%', height: '100vh'}}
     >
       <Tabs.TabPane
         tab={this.generateTab(smallCharts[0],
