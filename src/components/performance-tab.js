@@ -129,14 +129,17 @@ export default class PerformanceTab extends React.Component {
       tabBarStyle={{width: '30%', height: '100vh'}}
     >
       <Tabs.TabPane
+        className={styles['pane']}
         tab={this.generateTab(smallCharts[0],
           'CPU', this.props.cpuLoadHistory[this.props.cpuLoadHistory.length - 1].toFixed(0) + '%')}
         key="1">
+        {this.generateOneLineText('CPU', 'TODO', styles['big-title'], styles['big-title'])}
         <div className={styles['chart']} >
           {charts[0]}
         </div>
       </Tabs.TabPane>
       <Tabs.TabPane
+        className={styles['pane']}
         tab={this.generateTab(smallCharts[1],
           'Memory', this.props.memLoadHistory[this.props.memLoadHistory.length - 1].toFixed(0) + '%')
         }

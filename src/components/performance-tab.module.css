@@ -2,9 +2,13 @@
     height: 100%;
 }
 
-.chart {
+.pane {
     padding-top: 10px;
     padding-right: 24px;
+}
+
+.chart {
+    padding-top: 10px;
 }
 
 .chart-text {
