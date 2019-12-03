@@ -201,6 +201,34 @@ export default class PerformanceTab extends React.Component {
         <div className={styles['chart']} >
           {charts[1]}
         </div>
+        <Row type="flex" justify="space-between" gutter={10}>
+          <Col span={12}>
+            <Row type="flex" justify="space-between">
+              <Col><Statistic title="In Use" value={'TODO'} /></Col>
+              <Col><Statistic title="Avaliable" value={'TODO'}/></Col>
+            </Row>
+            <Row type="flex" justify="space-between">
+              <Col span={5}><Statistic title="Committed" value={'TODO'} /></Col>
+              <Col span={7}><Statistic title="Cached" value={'TODO'} /></Col>
+            </Row>
+            <Row type="flex" justify="space-between">
+              <Col><Statistic title="Page pool" value={'TODO'} /></Col>
+              <Col><Statistic title="Non-paged pool" value={'TODO'} /></Col>
+            </Row>
+          </Col>
+          <Col className={styles['static-title']} span={6}>
+            <div>Speed:</div>
+            <div>Slots used:</div>
+            <div>Form factor:</div>
+            <div>Hardware reserved</div>
+          </Col>
+          <Col className={styles['static-value']} span={4}>
+            <div>TODO</div>
+            <div>TODO</div>
+            <div>TODO</div>
+            <div>TODO</div>
+          </Col>
+        </Row>
       </Tabs.TabPane>
     </Tabs>
   }
