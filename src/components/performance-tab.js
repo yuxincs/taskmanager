@@ -144,6 +144,7 @@ export default class PerformanceTab extends React.Component {
           'Memory', this.props.memLoadHistory[this.props.memLoadHistory.length - 1].toFixed(0) + '%')
         }
         key="2">
+        {this.generateOneLineText('Memory', 'TODO GB DRAM', styles['big-title'], styles['big-title'])}
         <div className={styles['chart']} >
           {charts[1]}
         </div>
