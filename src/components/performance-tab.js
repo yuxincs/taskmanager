@@ -204,20 +204,16 @@ export default class PerformanceTab extends React.Component {
         <div className={styles['chart']} >
           {charts[1]}
         </div>
-        <Row type="flex" justify="space-between" gutter={10}>
-          <Col span={12}>
-            <Row type="flex" justify="space-between">
-              <Col><Statistic title="In Use" value={'TODO'} /></Col>
-              <Col><Statistic title="Avaliable" value={'TODO'}/></Col>
-            </Row>
-            <Row type="flex" justify="space-between">
-              <Col span={5}><Statistic title="Committed" value={'TODO'} /></Col>
-              <Col span={7}><Statistic title="Cached" value={'TODO'} /></Col>
-            </Row>
-            <Row type="flex" justify="space-between">
-              <Col><Statistic title="Page pool" value={'TODO'} /></Col>
-              <Col><Statistic title="Non-paged pool" value={'TODO'} /></Col>
-            </Row>
+        <Row type="flex" justify="space-between" gutter={20}>
+          <Col span={6}>
+            <Row><Statistic title="In Use" value={this.memorySizeToString(this.props.memoryDynamic.used)} /></Row>
+            <Row><Statistic title="Buffers" value={this.memorySizeToString(this.props.memoryDynamic.buffers)} /></Row>
+            <Row><Statistic title="Swap Used" value={this.memorySizeToString(this.props.memoryDynamic.swapused)} /></Row>
+          </Col>
+          <Col span={6}>
+            <Row><Statistic title="Avaliable" value={this.memorySizeToString(this.props.memoryDynamic.free)}/></Row>
+            <Row><Statistic title="Cached" value={this.memorySizeToString(this.props.memoryDynamic.cached)} /></Row>
+              <Row><Statistic title="Swap Available" value={this.memorySizeToString(this.props.memoryDynamic.swapfree)} /></Row>
           </Col>
           <Col className={styles['static-title']} span={6}>
             <div>Speed:</div>
