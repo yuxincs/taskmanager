@@ -23,6 +23,13 @@ export default class PerformanceTab extends React.Component {
     return <div><span className={leftName}>{left}<span className={rightName}>{right}</span></span></div>;
   }
 
+  generateTab(chart, title, subtitle) {
+    return <div>
+      <span className={styles.title}>{title}</span><br />
+      <span className={styles.subtitle}>{subtitle}</span>
+    </div>
+  }
+
   generateChart(key, data, rgb, cornerTexts, showGrid=true) {
     // colors for border/line, area, grid
     let colors = [1, 0.4, 0.1].map((alpha) => 'rgba(' + rgb.join(', ') + ', ' + alpha + ')');
@@ -87,6 +94,21 @@ export default class PerformanceTab extends React.Component {
   }
 
   render() {
+    let [charts, smallCharts] = [true, false].map((showGrid) => {
+      return [
+        this.generateChart(
+          '1',
+          this.props.cpuLoadHistory,
+          [17, 125, 187],
+          ['% Utilization', '100 %', '0', '60 Seconds'], showGrid),
+        this.generateChart(
+          '2',
+          this.props.memLoadHistory,
+          [139, 18, 174],
+          ['Memory Usage', 'X GB', '0', '60 Seconds'], showGrid)
+      ];
+    });
+
     return <Tabs
       className={styles['performance-tab']}
       defaultActiveKey="1"
@@ -95,30 +117,17 @@ export default class PerformanceTab extends React.Component {
       tabBarStyle={{width: '30%'}}
     >
       <Tabs.TabPane
-        tab={
-          <div>
-            <span className={styles.title}>CPU</span><br />
-            <span className={styles.subtitle}>{parseInt(this.props.cpuLoadHistory[this.props.cpuLoadHistory.length - 1]) + '%'}</span>
-          </div>
-        }
+        tab={this.generateTab(smallCharts[0],
+          'CPU', this.props.cpuLoadHistory[this.props.cpuLoadHistory.length - 1].toFixed(0) + '%')}
         key="1">
-        {
-          this.generateChart('1', this.props.cpuLoadHistory, [17, 125, 187],
-          ['% Utilization', '100 %', '0', '60 Seconds'])
-        }
+        {charts[0]}
       </Tabs.TabPane>
       <Tabs.TabPane
-        tab={
-          <div>
-            <span className={styles.title}>Memory</span><br />
-            <span className={styles.subtitle}>{parseInt(this.props.memLoadHistory[this.props.memLoadHistory.length - 1]) + '%'}</span>
-          </div>
+        tab={this.generateTab(smallCharts[0],
+          'Memory', this.props.memLoadHistory[this.props.memLoadHistory.length - 1].toFixed(0) + '%')
         }
         key="2">
-        {
-          this.generateChart('2', this.props.memLoadHistory, [139, 18, 174],
-            ['Memory Usage', 'X GB', '0', '60 Seconds'])
-        }
+        {charts[1]}
       </Tabs.TabPane>
     </Tabs>
   }
