@@ -22,6 +22,18 @@ export default class PerformanceTab extends React.Component {
     this.chartNum = 0;
   }
 
+  memorySizeToString(size) {
+    const units = ['B', 'KB', 'MB', 'GB'];
+    let unitIndex = 0;
+    let value = parseInt(size);
+    // iteratively divide 1024 to find the best suitable memory unit
+    while(value > 1024 && unitIndex < units.length) {
+      value /= 1024;
+      unitIndex ++;
+    }
+    return value + ' ' + units[unitIndex];
+  }
+
   generateOneLineText(left, right, leftClassName=styles['chart-text'], rightClassName=styles['chart-text']) {
     let leftName = leftClassName + ' ' + styles['align-left'];
     let rightName = rightClassName + ' ' + styles['align-right'];
@@ -117,7 +129,7 @@ export default class PerformanceTab extends React.Component {
         this.generateChart(
           this.props.memLoadHistory,
           [139, 18, 174],
-          ['Memory Usage', 'X GB', '0', '60 Seconds'], ...extraArgs)
+          ['Memory Usage', this.memorySizeToString(this.props.memoryDynamic.total), '0', '60 Seconds'], ...extraArgs)
       ];
     });
 
@@ -133,7 +145,11 @@ export default class PerformanceTab extends React.Component {
         tab={this.generateTab(smallCharts[0],
           'CPU', this.props.cpuLoadHistory[this.props.cpuLoadHistory.length - 1].toFixed(0) + '%')}
         key="1">
-        {this.generateOneLineText('CPU', 'TODO', styles['big-title'], styles['big-title'])}
+        {this.generateOneLineText('CPU',
+          this.props.cpuStatic.manufacturer + ' ' +
+          this.props.cpuStatic.brand + ' CPU @ ' +
+          this.props.cpuStatic.speed + ' GHz',
+          styles['big-title'], styles['title'])}
         <div className={styles['chart']} >
           {charts[0]}
         </div>
@@ -144,7 +160,7 @@ export default class PerformanceTab extends React.Component {
           'Memory', this.props.memLoadHistory[this.props.memLoadHistory.length - 1].toFixed(0) + '%')
         }
         key="2">
-        {this.generateOneLineText('Memory', 'TODO GB DRAM', styles['big-title'], styles['big-title'])}
+        {this.generateOneLineText('Memory', this.memorySizeToString(this.props.memoryDynamic.total) + ' DRAM', styles['big-title'], styles['big-title'])}
         <div className={styles['chart']} >
           {charts[1]}
         </div>

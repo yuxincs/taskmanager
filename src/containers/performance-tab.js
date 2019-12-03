@@ -6,7 +6,10 @@ const mapStateToProps = (state, ownProps) => {
     className: ownProps.className,
     cpuLoadHistory: state.performanceTab.cpuLoadHistory,
     memLoadHistory: state.performanceTab.memLoadHistory,
-    staticInfo: state.performanceTab.staticInfo
+    cpuStatic: state.performanceTab.cpuStatic,
+    memoryStatic: state.performanceTab.memoryStatic,
+    cpuDynamic: state.performanceTab.cpuDynamic,
+    memoryDynamic: state.performanceTab.memoryDynamic
   };
 };
 

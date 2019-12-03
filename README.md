@@ -13,7 +13,7 @@ A Windows-Like Task Manager built for Linux and macOS, based on [Electron](https
 Previously there is a C++ version based on QT, at [v1.0-qt-based](https://github.com/yxwangcs/taskmanager/tree/v1.0-qt-based) branch.
 
 ## TODO
-* Performance tab with charts.
+* Rework the state tree (some states are shared and should be extracted to a common state).
 
 * Per-process network / diskIO statistics display.
 

@@ -10,6 +10,7 @@ export function requestProcessInfo() {
   }
 }
 
+
 export function requestStaticInfo() {
   return async (dispatch) => {
     const [cpuInfo, memInfo] = await Promise.all([cpu(), memLayout()]);
