@@ -179,15 +179,15 @@ export default class PerformanceTab extends React.Component {
             <div>L2 Cache:</div>
             <div>L3 Cache:</div>
           </Col>
-          <Col className={styles['static-value']} span={4}>
-            <div>TODO</div>
-            <div>TODO</div>
-            <div>TODO</div>
-            <div>TODO</div>
-            <div>TODO</div>
-            <div>TODO</div>
-            <div>TODO</div>
-            <div>TODO</div>
+          <Col className={styles['static-value']} span={5}>
+            <div>{this.props.cpuStatic.speed + ' GHz'}</div>
+            <div>{this.props.cpuStatic.socket === '' ? 'Not Available' : this.props.cpuStatic.socket}</div>
+            <div>{this.props.cpuStatic.physicalCores}</div>
+            <div>{this.props.cpuStatic.cores}</div>
+            <div>Not Available</div>
+            <div>{this.memorySizeToString(this.props.cpuStatic.cache.l1d + this.props.cpuStatic.cache.l1i)}</div>
+            <div>{this.memorySizeToString(this.props.cpuStatic.cache.l2)}</div>
+            <div>{this.memorySizeToString(this.props.cpuStatic.cache.l3)}</div>
           </Col>
         </Row>
       </Tabs.TabPane>
