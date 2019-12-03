@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Tabs } from "antd";
+import { Tabs, Row, Col } from "antd";
 import ReactEcharts from "echarts-for-react";
 import styles from './performance-tab.module.css';
 
@@ -35,9 +35,10 @@ export default class PerformanceTab extends React.Component {
   }
 
   generateOneLineText(left, right, leftClassName=styles['chart-text'], rightClassName=styles['chart-text']) {
-    let leftName = leftClassName + ' ' + styles['align-left'];
-    let rightName = rightClassName + ' ' + styles['align-right'];
-    return <div><span className={leftName}>{left}<span className={rightName}>{right}</span></span></div>;
+    return <Row type="flex" justify="space-between">
+      <Col className={leftClassName}>{left}</Col>
+      <Col className={rightClassName}>{right}</Col>
+    </Row>;
   }
 
   generateTab(chart, title, subtitle) {
