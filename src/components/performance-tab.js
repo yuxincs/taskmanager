@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Tabs, Row, Col } from "antd";
+import { Tabs, Row, Col, Statistic } from "antd";
 import ReactEcharts from "echarts-for-react";
 import styles from './performance-tab.module.css';
 
@@ -154,6 +154,42 @@ export default class PerformanceTab extends React.Component {
         <div className={styles['chart']} >
           {charts[0]}
         </div>
+        <Row type="flex" justify="space-between" gutter={10}>
+          <Col span={12}>
+            <Row type="flex" justify="space-between">
+              <Col><Statistic title="Utilization" value={'TODO'} /></Col>
+              <Col><Statistic title="Speed" value={'TODO'} suffix="GHz"/></Col>
+            </Row>
+            <Row type="flex" justify="space-between">
+              <Col><Statistic title="Processes" value={'TODO'} /></Col>
+              <Col><Statistic title="Threads" value={'TODO'} /></Col>
+              <Col><Statistic title="Handles" value={'TODO'} /></Col>
+            </Row>
+            <Row type="flex" justify="space-between">
+              <Col><Statistic title="Up Time" value={'TODO'} /></Col>
+            </Row>
+          </Col>
+          <Col className={styles['static-title']} span={6}>
+            <div>Base speed:</div>
+            <div>Sockets:</div>
+            <div>Cores:</div>
+            <div>Logical processors:</div>
+            <div>Virtualization:</div>
+            <div>L1 Cache:</div>
+            <div>L2 Cache:</div>
+            <div>L3 Cache:</div>
+          </Col>
+          <Col className={styles['static-value']} span={4}>
+            <div>TODO</div>
+            <div>TODO</div>
+            <div>TODO</div>
+            <div>TODO</div>
+            <div>TODO</div>
+            <div>TODO</div>
+            <div>TODO</div>
+            <div>TODO</div>
+          </Col>
+        </Row>
       </Tabs.TabPane>
       <Tabs.TabPane
         className={styles['pane']}

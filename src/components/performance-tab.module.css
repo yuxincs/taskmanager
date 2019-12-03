@@ -9,11 +9,23 @@
 
 .chart {
     padding-top: 6px;
+    padding-bottom: 6px;
 }
 
 .chart-text {
     color: dimgrey;
     font-size: x-small;
+}
+
+.static-title {
+    font-size: small;
+    color: dimgrey;
+}
+
+.static-value {
+    font-size: small;
+    color: black;
+    text-align: right;
 }
 
 .tab {
