@@ -139,7 +139,7 @@ export default class PerformanceTab extends React.Component {
       defaultActiveKey="1"
       tabPosition="left"
       size="large"
-      tabBarStyle={{width: '30%', height: '100vh'}}
+      tabBarStyle={{width: '25%', height: '100vh'}}
     >
       <Tabs.TabPane
         className={styles['pane']}
@@ -154,7 +154,7 @@ export default class PerformanceTab extends React.Component {
         <div className={styles['chart']} >
           {charts[0]}
         </div>
-        <Row type="flex" justify="space-between" gutter={10}>
+        <Row type="flex" justify="space-between" gutter={20}>
           <Col span={12}>
             <Row type="flex" justify="space-between">
               <Col><Statistic title="Utilization" value={'TODO'} /></Col>
@@ -169,7 +169,7 @@ export default class PerformanceTab extends React.Component {
               <Col><Statistic title="Up Time" value={'TODO'} /></Col>
             </Row>
           </Col>
-          <Col className={styles['static-title']} span={6}>
+          <Col className={styles['static-title']} span={7}>
             <div>Base speed:</div>
             <div>Sockets:</div>
             <div>Cores:</div>
