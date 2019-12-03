@@ -23,7 +23,7 @@ export default class PerformanceTab extends React.Component {
     return <div><span className={leftName}>{left}<span className={rightName}>{right}</span></span></div>;
   }
 
-  generateChart(key, data, rgb, cornerTexts) {
+  generateChart(key, data, rgb, cornerTexts, showGrid=true) {
     // colors for border/line, area, grid
     let colors = [1, 0.4, 0.1].map((alpha) => 'rgba(' + rgb.join(', ') + ', ' + alpha + ')');
     let xdata = Array.from(Array(data.length).keys());
@@ -33,7 +33,7 @@ export default class PerformanceTab extends React.Component {
         boundaryGap: false,
         data: xdata,
         splitLine: {
-          show: true,
+          show: showGrid,
           lineStyle: { color: colors[2] }
         },
         axisLabel: { show: false },
@@ -44,7 +44,7 @@ export default class PerformanceTab extends React.Component {
         type: 'value',
         boundaryGap: [0, '100%'],
         splitLine: {
-          show: true,
+          show: showGrid,
           lineStyle: { color: colors[2] },
         },
         max: 100,
