@@ -223,10 +223,11 @@ export default class PerformanceTab extends React.Component {
             <div>Hardware reserved</div>
           </Col>
           <Col className={styles['static-value']} span={4}>
-            <div>TODO</div>
-            <div>TODO</div>
-            <div>TODO</div>
-            <div>TODO</div>
+            {/* TODO: check what information systeminformation gives when there is an empty slot */}
+            <div>{this.props.memoryStatic[0].clockSpeed + ' MHz'}</div>
+            <div>{this.props.memoryStatic.filter((value) => value.size !== 0).length + ' of ' + this.props.memoryStatic.length}</div>
+            <div>{this.props.memoryStatic[0].formFactor === '' ? 'Not Available' : this.props.memoryStatic[0].formFactor}</div>
+            <div>Not Available</div>
           </Col>
         </Row>
       </Tabs.TabPane>
