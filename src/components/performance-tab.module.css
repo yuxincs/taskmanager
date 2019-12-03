@@ -3,7 +3,6 @@
 }
 
 .chart {
-    width: 99%; /* weird bugs happen when set to 100% */
     padding-top: 10px;
     padding-right: 24px;
 }
@@ -11,6 +10,22 @@
 .chart-text {
     color: dimgrey;;
     font-size: x-small;
+}
+
+.tab {
+    height: 100%;
+    width: 100%;
+    display: flex;
+}
+
+.tab-chart {
+    width: 50%;
+}
+
+.tab-text {
+    text-align: left;
+    padding-left: 10px;
+    width: 50%;
 }
 
 .align-left {
@@ -25,7 +40,6 @@
     color: black;
     font-size: x-large;
 }
-
 
 .title {
     color: black;

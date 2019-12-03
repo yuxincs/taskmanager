@@ -17,6 +17,11 @@ export default class PerformanceTab extends React.Component {
     memLoadHistory: Array.from({length: 60}, () => 0)
   };
 
+  constructor(props) {
+    super(props);
+    this.chartNum = 0;
+  }
+
   generateOneLineText(left, right, leftClassName=styles['chart-text'], rightClassName=styles['chart-text']) {
     let leftName = leftClassName + ' ' + styles['align-left'];
     let rightName = rightClassName + ' ' + styles['align-right'];
@@ -24,13 +29,16 @@ export default class PerformanceTab extends React.Component {
   }
 
   generateTab(chart, title, subtitle) {
-    return <div>
-      <span className={styles.title}>{title}</span><br />
-      <span className={styles.subtitle}>{subtitle}</span>
+    return <div className={styles['tab']}>
+      <div className={styles['tab-chart']}>{chart}</div>
+      <div className={styles['tab-text']}>
+        <span className={styles.title}>{title}</span><br />
+        <span className={styles.subtitle}>{subtitle}</span>
+      </div>
     </div>
   }
 
-  generateChart(key, data, rgb, cornerTexts, showGrid=true) {
+  generateChart(data, rgb, cornerTexts, showExtras, height) {
     // colors for border/line, area, grid
     let colors = [1, 0.4, 0.1].map((alpha) => 'rgba(' + rgb.join(', ') + ', ' + alpha + ')');
     let xdata = Array.from(Array(data.length).keys());
@@ -40,7 +48,7 @@ export default class PerformanceTab extends React.Component {
         boundaryGap: false,
         data: xdata,
         splitLine: {
-          show: showGrid,
+          show: showExtras,
           lineStyle: { color: colors[2] }
         },
         axisLabel: { show: false },
@@ -51,7 +59,7 @@ export default class PerformanceTab extends React.Component {
         type: 'value',
         boundaryGap: [0, '100%'],
         splitLine: {
-          show: showGrid,
+          show: showExtras,
           lineStyle: { color: colors[2] },
         },
         max: 100,
@@ -80,32 +88,36 @@ export default class PerformanceTab extends React.Component {
         animation: false
       }]
     };
-    return <div className={styles.chart}>
-      {this.generateOneLineText(cornerTexts[0], cornerTexts[1])}
+
+    let topLine = showExtras ? this.generateOneLineText(cornerTexts[0], cornerTexts[1]) : null;
+    let bottomLine = showExtras ? this.generateOneLineText(cornerTexts[3], cornerTexts[2]) : null;
+
+    this.chartNum ++;
+    return <div>
+      {topLine}
       <div style={{border: '1px solid ' + colors[0]}}>
         <ReactEcharts
-          ref={'echarts_react' + key}
-          key={key}
+          style={{height: height}}
+          ref={'echarts_react' + this.chartNum}
+          key={this.chartNum}
           option={option}
         />
       </div>
-      {this.generateOneLineText(cornerTexts[3], cornerTexts[2])}
+      {bottomLine}
     </div>
   }
 
   render() {
-    let [charts, smallCharts] = [true, false].map((showGrid) => {
+    let [charts, smallCharts] = [[true, '250px'], [false, '45px']].map((extraArgs) => {
       return [
         this.generateChart(
-          '1',
           this.props.cpuLoadHistory,
           [17, 125, 187],
-          ['% Utilization', '100 %', '0', '60 Seconds'], showGrid),
+          ['% Utilization', '100 %', '0', '60 Seconds'], ...extraArgs),
         this.generateChart(
-          '2',
           this.props.memLoadHistory,
           [139, 18, 174],
-          ['Memory Usage', 'X GB', '0', '60 Seconds'], showGrid)
+          ['Memory Usage', 'X GB', '0', '60 Seconds'], ...extraArgs)
       ];
     });
 
@@ -120,14 +132,18 @@ export default class PerformanceTab extends React.Component {
         tab={this.generateTab(smallCharts[0],
           'CPU', this.props.cpuLoadHistory[this.props.cpuLoadHistory.length - 1].toFixed(0) + '%')}
         key="1">
-        {charts[0]}
+        <div className={styles['chart']} >
+          {charts[0]}
+        </div>
       </Tabs.TabPane>
       <Tabs.TabPane
-        tab={this.generateTab(smallCharts[0],
+        tab={this.generateTab(smallCharts[1],
           'Memory', this.props.memLoadHistory[this.props.memLoadHistory.length - 1].toFixed(0) + '%')
         }
         key="2">
-        {charts[1]}
+        <div className={styles['chart']} >
+          {charts[1]}
+        </div>
       </Tabs.TabPane>
     </Tabs>
   }
