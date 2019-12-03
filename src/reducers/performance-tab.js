@@ -1,8 +1,9 @@
-import { UPDATE_PROCESS_INFO } from "../constants/action-types";
+import {UPDATE_PROCESS_INFO, UPDATE_STATIC_INFO} from "../constants/action-types";
 
 let initialState = {
   cpuLoadHistory: Array.from({length: 60}, () => 0),
-  memLoadHistory: Array.from({length: 60}, () => 0)
+  memLoadHistory: Array.from({length: 60}, () => 0),
+  staticInfo: {}
 };
 
 export default function performanceTab(state = initialState, action) {
@@ -12,6 +13,11 @@ export default function performanceTab(state = initialState, action) {
         cpuLoadHistory: state.cpuLoadHistory.slice(1, state.cpuLoadHistory.length).concat([action.cpuLoad.currentload]),
         memLoadHistory: state.memLoadHistory.slice(1, state.memLoadHistory.length)
           .concat([(action.memLoad.active / action.memLoad.total) * 100])
+      });
+    }
+    case UPDATE_STATIC_INFO: {
+      return Object.assign(state, {
+        staticInfo: action.staticInfo
       });
     }
     default:

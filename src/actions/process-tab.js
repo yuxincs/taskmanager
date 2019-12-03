@@ -24,11 +24,3 @@ export function killProcess(pid) {
     dispatch(processKilled(pid));
   };
 }
-
-
-export function requestProcessInfo() {
-  return async (dispatch) => {
-    const [procs, curLoad, memory] = await Promise.all([processes(), currentLoad(), mem()]);
-    dispatch(updateProcessInfo(procs, curLoad, memory));
-  }
-}

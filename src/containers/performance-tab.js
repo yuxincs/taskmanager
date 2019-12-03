@@ -5,7 +5,8 @@ const mapStateToProps = (state, ownProps) => {
   return {
     className: ownProps.className,
     cpuLoadHistory: state.performanceTab.cpuLoadHistory,
-    memLoadHistory: state.performanceTab.memLoadHistory
+    memLoadHistory: state.performanceTab.memLoadHistory,
+    staticInfo: state.performanceTab.staticInfo
   };
 };
 

@@ -6,7 +6,7 @@ import thunkMiddleware from 'redux-thunk';
 import { createLogger } from 'redux-logger';
 import { Icon, Tabs } from 'antd';
 import styles from './index.module.css';
-import { requestProcessInfo } from "./actions/process-tab";
+import {requestProcessInfo, requestStaticInfo} from "./actions/common";
 import ProcessTabContainer from './containers/process-tab';
 import PerformanceTabContainer from "./containers/performance-tab";
 import reducer from './reducers';
@@ -21,6 +21,8 @@ const store = createStore(
     loggerMiddleware
   )
 );
+
+store.dispatch(requestStaticInfo());
 
 setInterval(() => {
   store.dispatch(requestProcessInfo());
