@@ -221,7 +221,7 @@ export default class PerformanceTab extends React.Component {
             <div>Form factor:</div>
             <div>Hardware reserved</div>
           </Col>
-          <Col className={styles['static-value']} span={4}>
+          <Col className={styles['static-value']} span={5}>
             {/* TODO: check what information systeminformation gives when there is an empty slot */}
             <div>{this.props.memoryStatic[0].clockSpeed + ' MHz'}</div>
             <div>{this.props.memoryStatic.filter((value) => value.size !== 0).length + ' of ' + this.props.memoryStatic.length}</div>
