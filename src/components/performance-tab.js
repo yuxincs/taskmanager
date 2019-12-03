@@ -23,6 +23,9 @@ export default class PerformanceTab extends React.Component {
   }
 
   memorySizeToString(size) {
+    if(size === 0 || size === '0') {
+      return '0';
+    }
     const units = ['B', 'KB', 'MB', 'GB'];
     let unitIndex = 0;
     let value = parseInt(size);
