@@ -34,7 +34,7 @@ export default class PerformanceTab extends React.Component {
       value /= 1024;
       unitIndex ++;
     }
-    return value + ' ' + units[unitIndex];
+    return value.toFixed(1) + ' ' + units[unitIndex];
   }
 
   generateOneLineText(left, right, leftClassName=styles['chart-text'], rightClassName=styles['chart-text']) {
