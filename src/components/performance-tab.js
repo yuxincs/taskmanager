@@ -17,49 +17,78 @@ export default class PerformanceTab extends React.Component {
     memLoadHistory: Array.from({length: 60}, () => 0)
   };
 
-  generateChart(key, data, color, cornerTexts) {
+  generateOneLineText(left, right, leftClassName=styles['chart-text'], rightClassName=styles['chart-text']) {
+    let leftName = leftClassName + ' ' + styles['align-left'];
+    let rightName = rightClassName + ' ' + styles['align-right'];
+    return <div><span className={leftName}>{left}<span className={rightName}>{right}</span></span></div>;
+  }
+
+  generateChart(key, data, rgb, cornerTexts) {
+    // colors for border/line, area, grid
+    let colors = [1, 0.4, 0.1].map((alpha) => 'rgba(' + rgb.join(', ') + ', ' + alpha + ')');
+    let xdata = Array.from(Array(data.length).keys());
     let option =  {
       xAxis: {
         type: 'category',
         boundaryGap: false,
+        data: xdata,
         splitLine: {
-          show: false
+          show: true,
+          lineStyle: { color: colors[2] }
         },
+        axisLabel: { show: false },
+        axisTick: { show: false },
+        axisLine: { show: false }
       },
       yAxis: {
         type: 'value',
         boundaryGap: [0, '100%'],
         splitLine: {
-          show: false
+          show: true,
+          lineStyle: { color: colors[2] },
         },
         max: 100,
-        axisLabel: {
-          show: false
-        },
-        axisTick: {
-          show: false
-        }
+        axisLabel: { show: false },
+        axisTick: { show: false },
+        axisLine: { show: false }
+      },
+      grid: {
+        left: 0,
+        top: 0,
+        right: 0,
+        bottom: 0
       },
       series: [{
         data: data,
         type: 'line',
-        areaStyle: {},
+        areaStyle: {
+          color: colors[1]
+        },
+        lineStyle: {
+          color: colors[0],
+          width: 1
+        },
         showSymbol: false,
         hoverAnimation: false,
         animation: false
       }]
     };
-    return <ReactEcharts
-      className={styles.chart}
-      ref="echarts_react"
-      key={key}
-      option={option}
-    />
+    return <div className={styles.chart}>
+      {this.generateOneLineText(cornerTexts[0], cornerTexts[1])}
+      <div style={{border: '1px solid ' + colors[0]}}>
+        <ReactEcharts
+          ref={'echarts_react' + key}
+          key={key}
+          option={option}
+        />
+      </div>
+      {this.generateOneLineText(cornerTexts[3], cornerTexts[2])}
+    </div>
   }
 
   render() {
     return <Tabs
-      className={styles.performanceTab}
+      className={styles['performance-tab']}
       defaultActiveKey="1"
       tabPosition="left"
       size="large"
@@ -74,7 +103,7 @@ export default class PerformanceTab extends React.Component {
         }
         key="1">
         {
-          this.generateChart('1', this.props.cpuLoadHistory, null,
+          this.generateChart('1', this.props.cpuLoadHistory, [17, 125, 187],
           ['% Utilization', '100 %', '0', '60 Seconds'])
         }
       </Tabs.TabPane>
@@ -87,7 +116,7 @@ export default class PerformanceTab extends React.Component {
         }
         key="2">
         {
-          this.generateChart('2', this.props.memLoadHistory, null,
+          this.generateChart('2', this.props.memLoadHistory, [139, 18, 174],
             ['Memory Usage', 'X GB', '0', '60 Seconds'])
         }
       </Tabs.TabPane>

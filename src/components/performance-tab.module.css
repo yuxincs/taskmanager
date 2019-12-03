@@ -4,7 +4,28 @@
 
 .chart {
     width: 99%; /* weird bugs happen when set to 100% */
+    padding-top: 10px;
+    padding-right: 24px;
 }
+
+.chart-text {
+    color: dimgrey;;
+    font-size: x-small;
+}
+
+.align-left {
+    text-align: left;
+}
+
+.align-right {
+    float: right;
+}
+
+.big-title {
+    color: black;
+    font-size: x-large;
+}
+
 
 .title {
     color: black;
