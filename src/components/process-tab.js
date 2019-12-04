@@ -90,7 +90,7 @@ export default class ProcessTab extends React.Component {
     if(this.state.selectedPID !== record.pid) {
       normal.props.className += ' ' + styles['level-' + Math.min(Math.ceil((parseFloat(text) + 0.001) / 12.5), 8)];
     }
-    normal.children = text + ' %';
+    normal.children = text.toFixed(1) + ' %';
     return normal;
   };
 
