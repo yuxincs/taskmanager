@@ -1,4 +1,4 @@
-import {UPDATE_PROCESS_INFO, UPDATE_STATIC_INFO} from "../constants/action-types";
+import {UPDATE_DISK_INFO, UPDATE_PROCESS_INFO, UPDATE_STATIC_INFO} from "../constants/action-types";
 
 let initialState = {
   cpuLoadHistory: Array.from({length: 60}, () => 0),
@@ -6,7 +6,8 @@ let initialState = {
   cpuStatic: {},
   memoryStatic: {},
   cpuDynamic: {},
-  memoryDynamic: {}
+  memoryDynamic: {},
+  diskInfo: {}
 };
 
 export default function performanceTab(state = initialState, action) {
@@ -24,6 +25,11 @@ export default function performanceTab(state = initialState, action) {
         cpuStatic: action.staticInfo.cpu,
         memoryStatic: action.staticInfo.mem
       });
+    }
+    case UPDATE_DISK_INFO: {
+      return Object.assign(state, {
+        diskInfo: action.diskInfo
+      })
     }
     default:
       return state;

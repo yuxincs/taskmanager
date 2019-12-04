@@ -1,12 +1,19 @@
-import {currentLoad, mem, processes, cpu, memLayout} from "systeminformation";
+import {currentLoad, mem, processes, cpu, memLayout, disksIO} from "systeminformation";
 import { updateProcessInfo } from "./process-tab";
-import { updateStaticInfo } from "./performance-tab";
+import {updateDiskInfo, updateStaticInfo} from "./performance-tab";
 
 
 export function requestProcessInfo() {
   return async (dispatch) => {
     const [procs, curLoad, memory] = await Promise.all([processes(), currentLoad(), mem()]);
     dispatch(updateProcessInfo(procs, curLoad, memory));
+  }
+}
+
+export function requestDiskInfo() {
+  return async (dispatch) => {
+    const disk = await disksIO();
+    dispatch(updateDiskInfo(disk));
   }
 }
 

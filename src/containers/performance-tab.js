@@ -9,7 +9,8 @@ const mapStateToProps = (state, ownProps) => {
     cpuStatic: state.performanceTab.cpuStatic,
     memoryStatic: state.performanceTab.memoryStatic,
     cpuDynamic: state.performanceTab.cpuDynamic,
-    memoryDynamic: state.performanceTab.memoryDynamic
+    memoryDynamic: state.performanceTab.memoryDynamic,
+    diskInfo: state.performanceTab.diskInfo
   };
 };
 
