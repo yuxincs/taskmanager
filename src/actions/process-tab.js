@@ -1,4 +1,3 @@
-import { processes, currentLoad, mem } from 'systeminformation';
 import kill from 'kill-process';
 import { UPDATE_PROCESS_INFO, PROCESS_KILLED } from '../constants/action-types';
 
