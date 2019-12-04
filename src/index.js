@@ -11,15 +11,17 @@ import ProcessTabContainer from './containers/process-tab';
 import PerformanceTabContainer from "./containers/performance-tab";
 import reducer from './reducers';
 
+let middleware = [thunkMiddleware];
 
-const loggerMiddleware = createLogger();
+if (process.env.NODE_ENV !== 'production') {
+  const loggerMiddleware = createLogger();
+  middleware.push(loggerMiddleware);
+}
+
 
 const store = createStore(
   reducer,
-  applyMiddleware(
-    thunkMiddleware,
-    loggerMiddleware
-  )
+  applyMiddleware(...middleware)
 );
 
 store.dispatch(requestProcessInfo());
