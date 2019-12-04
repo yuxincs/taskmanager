@@ -18,8 +18,8 @@
     "redux": "^4.0.4",
     "redux-thunk": "^2.3.0",
     "systeminformation": "^4.16.0",
-    "virtualizedtableforantd": "^0.6.2",
-    "yarn": "^1.19.2"
+    "virtualizedtableforantd": "^0.6.4",
+    "yarn": "^1.21.0"
   },
   "main": "public/electron.js",
   "homepage": "./",
@@ -40,10 +40,10 @@
     "redux-logger": "^3.0.6",
     "concurrently": "^5.0.0",
     "customize-cra": "^0.9.1",
-    "electron": "^7.1.2",
+    "electron": "^7.1.3",
     "electron-builder": "^21.2.0",
     "react-app-rewired": "^2.1.5",
-    "typescript": "^3.7.2",
+    "typescript": "^3.7.3",
     "wait-on": "^3.3.0"
   },
   "browserslist": {
