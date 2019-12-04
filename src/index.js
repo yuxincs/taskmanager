@@ -22,6 +22,7 @@ const store = createStore(
   )
 );
 
+store.dispatch(requestProcessInfo());
 store.dispatch(requestStaticInfo());
 
 setInterval(() => {
