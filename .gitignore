@@ -12,3 +12,6 @@ dist/
 
 # macOS related files
 .DS_Store
+
+# coverage reports
+coverage/
