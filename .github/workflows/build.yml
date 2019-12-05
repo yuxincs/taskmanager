@@ -22,7 +22,7 @@ jobs:
           CI: true
         run: |
           yarn install
-          yarn build
+          CI=false yarn build
           yarn test --coverage
           
       - name: Upload to codecov
