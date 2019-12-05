@@ -26,6 +26,8 @@ jobs:
           yarn test --coverage
           
       - name: Upload to codecov
+        env: 
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
         run: |
           npm install -g codecov
           codecov
