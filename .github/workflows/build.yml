@@ -23,8 +23,13 @@ jobs:
         run: |
           yarn install
           yarn build
-          yarn test
-      
+          yarn test --coverage
+          
+      - name: Upload to codecov
+        run: |
+          npm install -g codecov
+          codecov
+        
       - name: Pack on release branch
         if: startsWith(github.ref, 'refs/heads/release') && startsWith(matrix.os, 'macOS')
         run: yarn electron-pack -ml
