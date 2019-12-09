@@ -6,7 +6,7 @@ import thunkMiddleware from 'redux-thunk';
 import { createLogger } from 'redux-logger';
 import { Icon, Tabs } from 'antd';
 import styles from './index.module.css';
-import {requestDiskInfo, requestProcessInfo, requestStaticInfo} from "./actions/common";
+import {requestDiskInfo, requestProcessInfo, requestStaticInfo} from "./actions/requests";
 import ProcessTabContainer from './containers/process-tab';
 import PerformanceTabContainer from "./containers/performance-tab";
 import reducer from './reducers';
