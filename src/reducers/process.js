@@ -8,13 +8,6 @@ let initialState = {
     sleeping: 0,
     unknown: 0,
     list: []
-  },
-  cpuLoad: {
-    currentload: 0
-  },
-  memLoad: {
-    total: 1,
-    free: 1
   }
 };
 
@@ -22,9 +15,7 @@ export default function process(state = initialState, action) {
   switch(action.type) {
     case UPDATE_PROCESS_INFO: {
       return Object.assign({}, state, {
-        processes: action.processes,
-        cpuLoad: action.cpuLoad,
-        memLoad: action.memLoad
+        processes: action.processes
       });
     }
     default:

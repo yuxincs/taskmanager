@@ -1,12 +1,10 @@
 import kill from 'kill-process';
 import { UPDATE_PROCESS_INFO, PROCESS_KILLED } from '../constants/action-types';
 
-export function updateProcessInfo(processInfo, cpuLoad, memLoad) {
+export function updateProcessInfo(processes) {
   return {
     type: UPDATE_PROCESS_INFO,
-    processes: processInfo,
-    cpuLoad: cpuLoad,
-    memLoad: memLoad
+    processes: processes
   }
 }
 
