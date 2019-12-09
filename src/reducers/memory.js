@@ -10,7 +10,7 @@ let initialState = {
   diskInfo: {}
 };
 
-export default function performanceTab(state = initialState, action) {
+export default function memory(state = initialState, action) {
   switch(action.type) {
     case UPDATE_PROCESS_INFO: {
       return Object.assign(state, {

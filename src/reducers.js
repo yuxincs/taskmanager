@@ -1,10 +1,10 @@
-import processTab from './reducers/process-tab';
-import performanceTab from "./reducers/performance-tab";
+import process from './reducers/process';
+import memory from "./reducers/memory";
 import { combineReducers } from "redux";
 
 const reducer = combineReducers({
-  processTab,
-  performanceTab
+  processTab: process,
+  performanceTab: memory
 });
 
 export default reducer;

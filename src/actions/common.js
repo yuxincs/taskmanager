@@ -1,6 +1,6 @@
 import {currentLoad, mem, processes, cpu, memLayout, disksIO} from "systeminformation";
-import { updateProcessInfo } from "./process-tab";
-import {updateDiskInfo, updateStaticInfo} from "./performance-tab";
+import { updateProcessInfo } from "./process";
+import {updateDiskInfo, updateStaticInfo} from "./memory";
 
 
 export function requestProcessInfo() {

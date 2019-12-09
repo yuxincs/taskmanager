@@ -1,6 +1,6 @@
 import { connect } from "react-redux";
 import ProcessTab from '../components/process-tab';
-import { killProcess } from "../actions/process-tab";
+import { killProcess } from "../actions/process";
 
 const mapStateToProps = (state, ownProps) => {
   return {
