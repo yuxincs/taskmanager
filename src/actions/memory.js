@@ -1,15 +1,11 @@
-import {UPDATE_DISK_INFO, UPDATE_STATIC_INFO} from "../constants/action-types";
+import { cpu, memLayout } from "systeminformation";
 
-export function updateStaticInfo(staticInfo) {
-  return {
-    type: UPDATE_STATIC_INFO,
-    staticInfo: staticInfo
-  }
-}
-
-export function updateDiskInfo(diskInfo) {
-  return {
-    type: UPDATE_DISK_INFO,
-    diskInfo: diskInfo
+export function requestStaticInfo() {
+  return async (dispatch) => {
+    const [cpuInfo, memInfo] = await Promise.all([cpu(), memLayout()]);
+    dispatch(updateStaticInfo({
+      cpu: cpuInfo,
+      mem: memInfo
+    }));
   }
 }
