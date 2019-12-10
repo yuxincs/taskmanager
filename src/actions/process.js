@@ -1,12 +1,20 @@
 import kill from 'kill-process';
 import { UPDATE_PROCESS_INFO, PROCESS_KILLED } from '../constants/action-types';
+import { processes } from "systeminformation";
 
-export function updateProcessInfo(processInfo, cpuLoad, memLoad) {
+
+export function requestProcessInfo() {
+  return async (dispatch) => {
+    const info = await processes();
+    dispatch(updateProcessInfo(info.list));
+  }
+}
+
+
+export function updateProcessInfo(processes) {
   return {
     type: UPDATE_PROCESS_INFO,
-    processes: processInfo,
-    cpuLoad: cpuLoad,
-    memLoad: memLoad
+    processes: processes
   }
 }
 

@@ -4,13 +4,11 @@ import PerformanceTab from '../components/performance-tab';
 const mapStateToProps = (state, ownProps) => {
   return {
     className: ownProps.className,
-    cpuLoadHistory: state.performanceTab.cpuLoadHistory,
-    memLoadHistory: state.performanceTab.memLoadHistory,
-    cpuStatic: state.performanceTab.cpuStatic,
-    memoryStatic: state.performanceTab.memoryStatic,
-    cpuDynamic: state.performanceTab.cpuDynamic,
-    memoryDynamic: state.performanceTab.memoryDynamic,
-    diskInfo: state.performanceTab.diskInfo
+    cpuLoadHistory: state.cpu.loadHistory,
+    cpuInfo: state.cpu.info,
+    memoryLoadHistory: state.memory.loadHistory,
+    memoryLoad: state.memory.load,
+    memoryInfo: state.memory.info
   };
 };
 

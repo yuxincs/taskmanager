@@ -1,13 +1,13 @@
 import { connect } from "react-redux";
 import ProcessTab from '../components/process-tab';
-import { killProcess } from "../actions/process-tab";
+import { killProcess } from "../actions/process";
 
 const mapStateToProps = (state, ownProps) => {
   return {
     className: ownProps.className,
-    processes: state.processTab.processes,
-    cpuLoad: state.processTab.cpuLoad.currentload,
-    memLoad: (state.processTab.memLoad.active / state.processTab.memLoad.total) * 100
+    processes: state.process.processes,
+    cpuLoad: state.cpu.loadHistory[state.cpu.loadHistory.length - 1],
+    memoryLoad: state.memory.loadHistory[state.memory.loadHistory.length - 1]
   };
 };
 

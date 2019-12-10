@@ -6,10 +6,13 @@ import thunkMiddleware from 'redux-thunk';
 import { createLogger } from 'redux-logger';
 import { Icon, Tabs } from 'antd';
 import styles from './index.module.css';
-import {requestDiskInfo, requestProcessInfo, requestStaticInfo} from "./actions/common";
 import ProcessTabContainer from './containers/process-tab';
 import PerformanceTabContainer from "./containers/performance-tab";
 import reducer from './reducers';
+import { requestCPUInfo, requestCPULoad } from "./actions/cpu";
+import { requestMemoryInfo, requestMemoryLoad } from "./actions/memory";
+import { requestProcessInfo } from "./actions/process";
+import { requestDiskLoad } from "./actions/disk";
 
 let middleware = [thunkMiddleware];
 
@@ -24,14 +27,24 @@ const store = createStore(
   applyMiddleware(...middleware)
 );
 
-store.dispatch(requestProcessInfo());
-store.dispatch(requestDiskInfo());
-store.dispatch(requestStaticInfo());
+const requestStaticInfo = () => {
+  store.dispatch(requestCPUInfo());
+  store.dispatch(requestMemoryInfo());
+};
 
-setInterval(() => {
+const requestDynamicInfo = () => {
   store.dispatch(requestProcessInfo());
-  store.dispatch(requestDiskInfo());
-}, 1500);
+  store.dispatch(requestCPULoad());
+  store.dispatch(requestMemoryLoad());
+  store.dispatch(requestDiskLoad());
+};
+
+// first dispatch the actions to request static information (only once)
+requestStaticInfo();
+requestDynamicInfo();
+
+// periodically request dynamic information about process / cpu / memory / disk load etc.
+setInterval(requestDynamicInfo, 1500);
 
 
 class TaskManager extends React.Component{
