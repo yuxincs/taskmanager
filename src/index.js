@@ -6,10 +6,13 @@ import thunkMiddleware from 'redux-thunk';
 import { createLogger } from 'redux-logger';
 import { Icon, Tabs } from 'antd';
 import styles from './index.module.css';
-import {requestDiskInfo, requestProcessInfo, requestStaticInfo} from "./actions/requests";
 import ProcessTabContainer from './containers/process-tab';
 import PerformanceTabContainer from "./containers/performance-tab";
 import reducer from './reducers';
+import { requestCPUInfo, requestCPULoad } from "./actions/cpu";
+import { requestMemoryInfo, requestMemoryLoad } from "./actions/memory";
+import { requestProcessInfo } from "./actions/process";
+import { requestDiskLoad } from "./actions/disk";
 
 let middleware = [thunkMiddleware];
 
@@ -24,13 +27,16 @@ const store = createStore(
   applyMiddleware(...middleware)
 );
 
-store.dispatch(requestProcessInfo());
-store.dispatch(requestDiskInfo());
-store.dispatch(requestStaticInfo());
+// first dispatch the actions to request static information (only once)
+store.dispatch(requestCPUInfo());
+store.dispatch(requestMemoryInfo());
 
+// periodically request dynamic information about process / cpu / memory / disk load etc.
 setInterval(() => {
   store.dispatch(requestProcessInfo());
-  store.dispatch(requestDiskInfo());
+  store.dispatch(requestCPULoad());
+  store.dispatch(requestMemoryLoad());
+  store.dispatch(requestDiskLoad());
 }, 1500);
 
 
