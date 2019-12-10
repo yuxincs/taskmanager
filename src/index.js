@@ -27,17 +27,23 @@ const store = createStore(
   applyMiddleware(...middleware)
 );
 
-// first dispatch the actions to request static information (only once)
-store.dispatch(requestCPUInfo());
-store.dispatch(requestMemoryInfo());
+const requestStaticInfo = () => {
+  store.dispatch(requestCPUInfo());
+  store.dispatch(requestMemoryInfo());
+};
 
-// periodically request dynamic information about process / cpu / memory / disk load etc.
-setInterval(() => {
+const requestDynamicInfo = () => {
   store.dispatch(requestProcessInfo());
   store.dispatch(requestCPULoad());
   store.dispatch(requestMemoryLoad());
   store.dispatch(requestDiskLoad());
-}, 1500);
+};
+
+// first dispatch the actions to request static information (only once)
+requestStaticInfo();
+
+// periodically request dynamic information about process / cpu / memory / disk load etc.
+setInterval(requestDynamicInfo, 1500);
 
 
 class TaskManager extends React.Component{
