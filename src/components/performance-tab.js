@@ -171,7 +171,9 @@ export default class PerformanceTab extends React.Component {
         <Row type="flex" justify="space-between" gutter={20}>
           <Col span={12}>
             <Row type="flex" justify="space-between">
-              <Col><Statistic title="Utilization" value={'TODO'} /></Col>
+              <Col><Statistic title="Utilization" value={
+                this.props.cpuLoadHistory[this.props.cpuLoadHistory.length - 1].toFixed(1) + '%'
+              } /></Col>
               <Col><Statistic title="Speed" value={'TODO'} suffix="GHz"/></Col>
             </Row>
             <Row type="flex" justify="space-between">
