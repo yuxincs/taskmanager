@@ -9,12 +9,19 @@ export default class PerformanceTab extends React.Component {
   static propTypes = {
     className: PropTypes.string,
     cpuLoadHistory: PropTypes.arrayOf(PropTypes.number),
-    memLoadHistory: PropTypes.arrayOf(PropTypes.number)
+    cpuInfo: PropTypes.object,
+    memoryLoadHistory: PropTypes.arrayOf(PropTypes.number),
+    memoryLoad: PropTypes.object,
+    memoryInfo: PropTypes.object
   };
 
   static defaultProps = {
+    className: '',
     cpuLoadHistory: Array.from({length: 60}, () => 0),
-    memLoadHistory: Array.from({length: 60}, () => 0)
+    memoryLoadHistory: Array.from({length: 60}, () => 0),
+    cpuInfo: {},
+    memoryLoad: {},
+    memoryInfo: {}
   };
 
   constructor(props) {
@@ -131,11 +138,14 @@ export default class PerformanceTab extends React.Component {
           [17, 125, 187],
           ['% Utilization', '100 %', '0', '60 Seconds'], ...extraArgs),
         this.generateChart(
-          this.props.memLoadHistory,
+          this.props.memoryLoadHistory,
           [139, 18, 174],
-          ['Memory Usage', this.memorySizeToString(this.props.memoryDynamic.total), '0', '60 Seconds'], ...extraArgs)
+          ['Memory Usage', this.memorySizeToString(this.props.memoryLoad.total), '0', '60 Seconds'], ...extraArgs)
       ];
     });
+
+    // find a slot that has memory information to display memory information
+    let pluggedMemories = this.props.memoryInfo.filter((value) => value.size !== 0);
 
     return <Tabs
       className={styles['performance-tab']}
@@ -150,9 +160,9 @@ export default class PerformanceTab extends React.Component {
           'CPU', this.props.cpuLoadHistory[this.props.cpuLoadHistory.length - 1].toFixed(0) + '%')}
         key="1">
         {this.generateOneLineText('CPU',
-          this.props.cpuStatic.manufacturer + ' ' +
-          this.props.cpuStatic.brand + ' CPU @ ' +
-          this.props.cpuStatic.speed + ' GHz',
+          this.props.cpuInfo.manufacturer + ' ' +
+          this.props.cpuInfo.brand + ' CPU @ ' +
+          this.props.cpuInfo.speed + ' GHz',
           styles['big-title'], styles['title'])}
         <div className={styles['chart']} >
           {charts[0]}
@@ -183,37 +193,37 @@ export default class PerformanceTab extends React.Component {
             <div>L3 Cache:</div>
           </Col>
           <Col className={styles['static-value']} span={5}>
-            <div>{this.props.cpuStatic.speed + ' GHz'}</div>
-            <div>{this.props.cpuStatic.socket === '' ? 'Not Available' : this.props.cpuStatic.socket}</div>
-            <div>{this.props.cpuStatic.physicalCores}</div>
-            <div>{this.props.cpuStatic.cores}</div>
+            <div>{this.props.cpuInfo.speed + ' GHz'}</div>
+            <div>{this.props.cpuInfo.socket === '' ? 'Not Available' : this.props.cpuInfo.socket}</div>
+            <div>{this.props.cpuInfo.physicalCores}</div>
+            <div>{this.props.cpuInfo.cores}</div>
             <div>Not Available</div>
-            <div>{this.memorySizeToString(this.props.cpuStatic.cache.l1d + this.props.cpuStatic.cache.l1i)}</div>
-            <div>{this.memorySizeToString(this.props.cpuStatic.cache.l2)}</div>
-            <div>{this.memorySizeToString(this.props.cpuStatic.cache.l3)}</div>
+            <div>{this.memorySizeToString(this.props.cpuInfo.cache.l1d + this.props.cpuInfo.cache.l1i)}</div>
+            <div>{this.memorySizeToString(this.props.cpuInfo.cache.l2)}</div>
+            <div>{this.memorySizeToString(this.props.cpuInfo.cache.l3)}</div>
           </Col>
         </Row>
       </Tabs.TabPane>
       <Tabs.TabPane
         className={styles['pane']}
         tab={this.generateTab(smallCharts[1],
-          'Memory', this.props.memLoadHistory[this.props.memLoadHistory.length - 1].toFixed(0) + '%')
+          'Memory', this.props.memoryLoadHistory[this.props.memoryLoadHistory.length - 1].toFixed(0) + '%')
         }
         key="2">
-        {this.generateOneLineText('Memory', this.memorySizeToString(this.props.memoryDynamic.total) + ' DRAM', styles['big-title'], styles['big-title'])}
+        {this.generateOneLineText('Memory', this.memorySizeToString(this.props.memoryLoad.total) + ' DRAM', styles['big-title'], styles['big-title'])}
         <div className={styles['chart']} >
           {charts[1]}
         </div>
         <Row type="flex" justify="space-between" gutter={20}>
           <Col span={6}>
-            <Row><Statistic title="In Use" value={this.memorySizeToString(this.props.memoryDynamic.used)} /></Row>
-            <Row><Statistic title="Buffers" value={this.memorySizeToString(this.props.memoryDynamic.buffers)} /></Row>
-            <Row><Statistic title="Swap Used" value={this.memorySizeToString(this.props.memoryDynamic.swapused)} /></Row>
+            <Row><Statistic title="In Use" value={this.memorySizeToString(this.props.memoryLoad.used)} /></Row>
+            <Row><Statistic title="Buffers" value={this.memorySizeToString(this.props.memoryLoad.buffers)} /></Row>
+            <Row><Statistic title="Swap Used" value={this.memorySizeToString(this.props.memoryLoad.swapused)} /></Row>
           </Col>
           <Col span={6}>
-            <Row><Statistic title="Avaliable" value={this.memorySizeToString(this.props.memoryDynamic.free)}/></Row>
-            <Row><Statistic title="Cached" value={this.memorySizeToString(this.props.memoryDynamic.cached)} /></Row>
-              <Row><Statistic title="Swap Available" value={this.memorySizeToString(this.props.memoryDynamic.swapfree)} /></Row>
+            <Row><Statistic title="Avaliable" value={this.memorySizeToString(this.props.memoryLoad.free)}/></Row>
+            <Row><Statistic title="Cached" value={this.memorySizeToString(this.props.memoryLoad.cached)} /></Row>
+              <Row><Statistic title="Swap Available" value={this.memorySizeToString(this.props.memoryLoad.swapfree)} /></Row>
           </Col>
           <Col className={styles['static-title']} span={6}>
             <div>Speed:</div>
@@ -223,9 +233,9 @@ export default class PerformanceTab extends React.Component {
           </Col>
           <Col className={styles['static-value']} span={5}>
             {/* TODO: check what information systeminformation gives when there is an empty slot */}
-            <div>{this.props.memoryStatic[0].clockSpeed + ' MHz'}</div>
-            <div>{this.props.memoryStatic.filter((value) => value.size !== 0).length + ' of ' + this.props.memoryStatic.length}</div>
-            <div>{this.props.memoryStatic[0].formFactor === '' ? 'Not Available' : this.props.memoryStatic[0].formFactor}</div>
+            <div>{pluggedMemories[0].clockSpeed + ' MHz'}</div>
+            <div>{pluggedMemories.length + ' of ' + this.props.memoryInfo.length}</div>
+            <div>{pluggedMemories[0].formFactor === '' ? 'Not Available' : pluggedMemories[0].formFactor}</div>
             <div>Not Available</div>
           </Col>
         </Row>
