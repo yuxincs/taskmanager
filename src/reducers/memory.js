@@ -17,9 +17,9 @@ export default function memory(state = initialState, action) {
     case UPDATE_MEMORY_LOAD: {
       return Object.assign(state, {
         loadHistory: state.loadHistory.slice(1, state.loadHistory.length).concat(
-          [(action.active / action.total) * 100]),
-        used: action.used,
-        total: action.total
+          [(action.load.active / action.load.total) * 100]),
+        used: action.load.used,
+        total: action.load.total
       })
     }
     default:

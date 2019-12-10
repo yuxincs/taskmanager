@@ -14,7 +14,7 @@ export default function cpu(state = initialState, action) {
     }
     case UPDATE_CPU_LOAD: {
       return Object.assign(state, {
-        loadHistory: state.loadHistory.slice(1, state.loadHistory.length).concat([action.currentload])
+        loadHistory: state.loadHistory.slice(1, state.loadHistory.length).concat([action.load.currentload])
       })
     }
     default:
