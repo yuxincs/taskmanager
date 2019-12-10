@@ -181,7 +181,6 @@ export default class PerformanceTab extends React.Component {
             <Row type="flex" justify="space-between">
               <Col><Statistic title="Processes" value={'TODO'} /></Col>
               <Col><Statistic title="Threads" value={'TODO'} /></Col>
-              <Col><Statistic title="Handles" value={'TODO'} /></Col>
             </Row>
             <Row type="flex" justify="space-between">
               <Col><Statistic title="Up Time" value={'TODO'} /></Col>
