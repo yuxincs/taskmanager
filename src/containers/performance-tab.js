@@ -6,6 +6,7 @@ const mapStateToProps = (state, ownProps) => {
     className: ownProps.className,
     cpuLoadHistory: state.cpu.loadHistory,
     cpuInfo: state.cpu.info,
+    cpuSpeed: state.cpu.currentSpeed,
     memoryLoadHistory: state.memory.loadHistory,
     memoryLoad: state.memory.load,
     memoryInfo: state.memory.info

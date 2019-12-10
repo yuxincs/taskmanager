@@ -10,9 +10,10 @@ export default class PerformanceTab extends React.Component {
     className: PropTypes.string,
     cpuLoadHistory: PropTypes.arrayOf(PropTypes.number),
     cpuInfo: PropTypes.object,
+    cpuSpeed: PropTypes.number,
     memoryLoadHistory: PropTypes.arrayOf(PropTypes.number),
     memoryLoad: PropTypes.object,
-    memoryInfo: PropTypes.object
+    memoryInfo: PropTypes.arrayOf(PropTypes.object)
   };
 
   static defaultProps = {
@@ -20,6 +21,7 @@ export default class PerformanceTab extends React.Component {
     cpuLoadHistory: Array.from({length: 60}, () => 0),
     memoryLoadHistory: Array.from({length: 60}, () => 0),
     cpuInfo: {},
+    cpuLoad: {},
     memoryLoad: {},
     memoryInfo: {}
   };
@@ -174,7 +176,7 @@ export default class PerformanceTab extends React.Component {
               <Col><Statistic title="Utilization" value={
                 this.props.cpuLoadHistory[this.props.cpuLoadHistory.length - 1].toFixed(1) + '%'
               } /></Col>
-              <Col><Statistic title="Speed" value={'TODO'} suffix="GHz"/></Col>
+              <Col><Statistic title="Speed" value={this.props.cpuSpeed} suffix="GHz"/></Col>
             </Row>
             <Row type="flex" justify="space-between">
               <Col><Statistic title="Processes" value={'TODO'} /></Col>
