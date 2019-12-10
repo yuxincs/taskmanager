@@ -41,6 +41,7 @@ const requestDynamicInfo = () => {
 
 // first dispatch the actions to request static information (only once)
 requestStaticInfo();
+requestDynamicInfo();
 
 // periodically request dynamic information about process / cpu / memory / disk load etc.
 setInterval(requestDynamicInfo, 1500);
