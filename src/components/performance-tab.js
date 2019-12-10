@@ -8,6 +8,7 @@ import styles from './performance-tab.module.css';
 export default class PerformanceTab extends React.Component {
   static propTypes = {
     className: PropTypes.string,
+    processCount: PropTypes.number,
     cpuLoadHistory: PropTypes.arrayOf(PropTypes.number),
     cpuInfo: PropTypes.object,
     cpuSpeed: PropTypes.number,
@@ -20,8 +21,10 @@ export default class PerformanceTab extends React.Component {
     className: '',
     cpuLoadHistory: Array.from({length: 60}, () => 0),
     memoryLoadHistory: Array.from({length: 60}, () => 0),
+    processCount: 0,
     cpuInfo: {},
     cpuLoad: {},
+    cpuSpeed: 0,
     memoryLoad: {},
     memoryInfo: {}
   };
@@ -179,7 +182,7 @@ export default class PerformanceTab extends React.Component {
               <Col><Statistic title="Speed" value={this.props.cpuSpeed} suffix="GHz"/></Col>
             </Row>
             <Row type="flex" justify="space-between">
-              <Col><Statistic title="Processes" value={'TODO'} /></Col>
+              <Col><Statistic title="Processes" value={this.props.processCount} /></Col>
               <Col><Statistic title="Threads" value={'TODO'} /></Col>
             </Row>
             <Row type="flex" justify="space-between">
