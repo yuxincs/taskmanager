@@ -131,6 +131,7 @@ export default class PerformanceTab extends React.Component {
   }
 
   render() {
+    // generate large charts and small charts to display in tab and in pane
     let [charts, smallCharts] = [[true, '250px'], [false, '45px']].map((extraArgs) => {
       return [
         this.generateChart(
