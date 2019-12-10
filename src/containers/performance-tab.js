@@ -5,6 +5,7 @@ const mapStateToProps = (state, ownProps) => {
   return {
     className: ownProps.className,
     processCount: state.process.processes.length,
+    uptime: state.general.uptime,
     cpuLoadHistory: state.cpu.loadHistory,
     cpuInfo: state.cpu.info,
     cpuSpeed: state.cpu.currentSpeed,

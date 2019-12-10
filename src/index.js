@@ -13,6 +13,7 @@ import { requestCPUCurrentSpeed, requestCPUInfo, requestCPULoad } from "./action
 import { requestMemoryInfo, requestMemoryLoad } from "./actions/memory";
 import { requestProcessInfo } from "./actions/process";
 import { requestDiskLoad } from "./actions/disk";
+import { requestGeneralInfo } from "./actions/general";
 
 let middleware = [thunkMiddleware];
 
@@ -33,6 +34,7 @@ const requestStaticInfo = () => {
 };
 
 const requestDynamicInfo = () => {
+  store.dispatch(requestGeneralInfo());
   store.dispatch(requestProcessInfo());
   store.dispatch(requestCPULoad());
   store.dispatch(requestCPUCurrentSpeed());

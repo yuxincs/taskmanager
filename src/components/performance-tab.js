@@ -9,6 +9,7 @@ export default class PerformanceTab extends React.Component {
   static propTypes = {
     className: PropTypes.string,
     processCount: PropTypes.number,
+    uptime: PropTypes.number,
     cpuLoadHistory: PropTypes.arrayOf(PropTypes.number),
     cpuInfo: PropTypes.object,
     cpuSpeed: PropTypes.number,
@@ -186,7 +187,9 @@ export default class PerformanceTab extends React.Component {
               <Col><Statistic title="Threads" value={'TODO'} /></Col>
             </Row>
             <Row type="flex" justify="space-between">
-              <Col><Statistic title="Up Time" value={'TODO'} /></Col>
+              <Col><Statistic title="Up Time" value={
+                new Date(this.props.uptime * 1000).toISOString().substr(11, 8)
+              } /></Col>
             </Row>
           </Col>
           <Col className={styles['static-title']} span={7}>
