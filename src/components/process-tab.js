@@ -8,9 +8,9 @@ import styles from './process-tab.module.css';
 export default class ProcessTab extends React.Component {
   static propTypes = {
     className: PropTypes.string,
-    processes: PropTypes.object,
+    processes: PropTypes.arrayOf(PropTypes.object),
     cpuLoad: PropTypes.number,
-    memLoad: PropTypes.number,
+    memoryLoad: PropTypes.number,
     killProcess: PropTypes.func
   };
 
@@ -136,7 +136,7 @@ export default class ProcessTab extends React.Component {
         defaultSortOrder: 'descend'
       },
       {
-        title: this.headerRenderer(Math.round( this.props.memLoad * 10) / 10 + ' %', 'Memory'),
+        title: this.headerRenderer(Math.round( this.props.memoryLoad * 10) / 10 + ' %', 'Memory'),
         dataIndex: 'mem_rss',
         width: '100px',
         sorter: (a, b) => a.mem_rss - b.mem_rss,
@@ -147,8 +147,8 @@ export default class ProcessTab extends React.Component {
     return <div className={styles.processTab}>
         <Table
           className={styles.table}
-          loading={this.props.processes.list.length === 0}
-          dataSource={this.props.processes.list}
+          loading={this.props.processes.length === 0}
+          dataSource={this.props.processes}
           /* use VTComponents for virtualized lists for now */
           /* TODO: replace this with cleaner methods when antd 4.0 is released which has built-in support for
           *   virtualized tables */
