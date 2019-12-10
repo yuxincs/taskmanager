@@ -9,7 +9,7 @@ import styles from './index.module.css';
 import ProcessTabContainer from './containers/process-tab';
 import PerformanceTabContainer from "./containers/performance-tab";
 import reducer from './reducers';
-import { requestCPUInfo, requestCPULoad } from "./actions/cpu";
+import { requestCPUCurrentSpeed, requestCPUInfo, requestCPULoad } from "./actions/cpu";
 import { requestMemoryInfo, requestMemoryLoad } from "./actions/memory";
 import { requestProcessInfo } from "./actions/process";
 import { requestDiskLoad } from "./actions/disk";
@@ -35,6 +35,7 @@ const requestStaticInfo = () => {
 const requestDynamicInfo = () => {
   store.dispatch(requestProcessInfo());
   store.dispatch(requestCPULoad());
+  store.dispatch(requestCPUCurrentSpeed());
   store.dispatch(requestMemoryLoad());
   store.dispatch(requestDiskLoad());
 };

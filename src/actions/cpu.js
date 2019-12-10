@@ -1,5 +1,5 @@
-import { UPDATE_CPU_INFO, UPDATE_CPU_LOAD } from "../constants/action-types";
-import { cpu, currentLoad } from "systeminformation";
+import { UPDATE_CPU_CURRENT_SPEED, UPDATE_CPU_INFO, UPDATE_CPU_LOAD } from "../constants/action-types";
+import { cpu, cpuCurrentspeed, currentLoad } from "systeminformation";
 
 export function requestCPULoad() {
   return async (dispatch) => {
@@ -12,6 +12,20 @@ export function requestCPUInfo() {
   return async (dispatch) => {
     const info = await cpu();
     dispatch(updateCPUInfo(info));
+  }
+}
+
+export function requestCPUCurrentSpeed() {
+  return async (dispatch) => {
+    const speed = await cpuCurrentspeed();
+    dispatch(updateCPUCurrentSpeed(speed.avg));
+  }
+}
+
+export function updateCPUCurrentSpeed(speed) {
+  return {
+    type: UPDATE_CPU_CURRENT_SPEED,
+    speed: speed
   }
 }
 
