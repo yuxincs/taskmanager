@@ -1,9 +1,16 @@
 import { disksIO } from "systeminformation";
-import { updateDiskInfo } from "./memory";
+import { UPDATE_DISK_LOAD } from "../constants/action-types";
 
-export function requestDiskInfo() {
+export function requestDiskLoad() {
   return async (dispatch) => {
-    const disk = await disksIO();
-    dispatch(updateDiskInfo(disk));
+    const load = await disksIO();
+    dispatch(updateDiskLoad(load));
+  }
+}
+
+export function updateDiskLoad(load) {
+  return {
+    type: UPDATE_DISK_LOAD,
+    load: load
   }
 }
