@@ -1,5 +1,5 @@
 import { UPDATE_CPU_CURRENT_SPEED, UPDATE_CPU_INFO, UPDATE_CPU_LOAD } from "../constants/action-types";
-import { cpu, cpuCurrentspeed, currentLoad } from "systeminformation";
+import { cpu, cpuCurrentspeed, cpuFlags, currentLoad } from "systeminformation";
 
 export function requestCPULoad() {
   return async (dispatch) => {
@@ -10,7 +10,8 @@ export function requestCPULoad() {
 
 export function requestCPUInfo() {
   return async (dispatch) => {
-    const info = await cpu();
+    const [info, flags] = await Promise.all([cpu(), cpuFlags()]);
+    info.flags = flags;
     dispatch(updateCPUInfo(info));
   }
 }
