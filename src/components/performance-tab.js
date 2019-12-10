@@ -239,13 +239,11 @@ export default class PerformanceTab extends React.Component {
             <div>Speed:</div>
             <div>Slots used:</div>
             <div>Form factor:</div>
-            <div>Hardware reserved</div>
           </Col>
           <Col className={styles['static-value']} span={5}>
             <div>{pluggedMemories[0].clockSpeed + ' MHz'}</div>
             <div>{pluggedMemories.length + ' of ' + this.props.memoryInfo.length}</div>
             <div>{pluggedMemories[0].formFactor === '' ? 'Not Available' : pluggedMemories[0].formFactor}</div>
-            <div>Not Available</div>
           </Col>
         </Row>
       </Tabs.TabPane>
