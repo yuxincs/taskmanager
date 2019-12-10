@@ -47,7 +47,7 @@ requestStaticInfo();
 requestDynamicInfo();
 
 // periodically request dynamic information about process / cpu / memory / disk load etc.
-setInterval(requestDynamicInfo, 1500);
+setInterval(requestDynamicInfo, 1000);
 
 
 class TaskManager extends React.Component{
