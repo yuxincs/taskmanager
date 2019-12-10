@@ -1,14 +1,7 @@
 import { UPDATE_PROCESS_INFO } from "../constants/action-types";
 
 let initialState = {
-  processes: {
-    all: 0,
-    blocked: 0,
-    running: 0,
-    sleeping: 0,
-    unknown: 0,
-    list: []
-  }
+  processes: []
 };
 
 export default function process(state = initialState, action) {

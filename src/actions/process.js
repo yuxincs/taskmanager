@@ -5,8 +5,8 @@ import { processes } from "systeminformation";
 
 export function requestProcessInfo() {
   return async (dispatch) => {
-    const processInfo = await processes();
-    dispatch(updateProcessInfo(processInfo.list));
+    const info = await processes();
+    dispatch(updateProcessInfo(info.list));
   }
 }
 

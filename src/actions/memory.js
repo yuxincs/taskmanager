@@ -13,7 +13,6 @@ export function requestMemoryInfo(info) {
     const info = await memLayout();
     dispatch(updateMemoryInfo(info));
   }
-
 }
 
 export function updateMemoryInfo(info) {
