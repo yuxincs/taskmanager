@@ -184,7 +184,7 @@ export default class PerformanceTab extends React.Component {
             </Row>
             <Row type="flex" justify="space-between">
               <Col><Statistic title="Processes" value={this.props.processCount} /></Col>
-              <Col><Statistic title="Threads" value={'TODO'} /></Col>
+              {/*<Col><Statistic title="Threads" value={'TODO'} /></Col>*/}
             </Row>
             <Row type="flex" justify="space-between">
               <Col><Statistic title="Up Time" value={
