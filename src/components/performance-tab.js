@@ -208,8 +208,8 @@ export default class PerformanceTab extends React.Component {
             <div>{this.props.cpuInfo.physicalCores}</div>
             <div>{this.props.cpuInfo.cores}</div>
             <div>{this.props.cpuInfo.flags.includes('vmx') ? 'Enabled' : 'Disabled'}</div>
-            <div>{this.memorySizeToString(this.props.cpuInfo.cache.l1d + this.props.cpuInfo.cache.l1i)}</div>
-            <div>{this.memorySizeToString(this.props.cpuInfo.cache.l2)}</div>
+            <div>{this.memorySizeToString((this.props.cpuInfo.cache.l1d + this.props.cpuInfo.cache.l1i) * this.props.cpuInfo.physicalCores)}</div>
+            <div>{this.memorySizeToString(this.props.cpuInfo.cache.l2 * this.props.cpuInfo.physicalCores)}</div>
             <div>{this.memorySizeToString(this.props.cpuInfo.cache.l3)}</div>
           </Col>
         </Row>
