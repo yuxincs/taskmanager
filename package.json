@@ -3,7 +3,6 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "add": "^2.0.6",
     "antd": "^3.26.2",
     "babel-plugin-import": "^1.13.0",
     "echarts": "^4.5.0",
@@ -18,8 +17,7 @@
     "redux": "^4.0.4",
     "redux-thunk": "^2.3.0",
     "systeminformation": "^4.16.0",
-    "virtualizedtableforantd": "^0.7.1",
-    "yarn": "^1.21.0"
+    "virtualizedtableforantd": "^0.7.1"
   },
   "main": "public/electron.js",
   "homepage": "./",
