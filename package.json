@@ -3,10 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "antd": "^3.26.2",
+    "antd": "^3.26.3",
     "babel-plugin-import": "^1.13.0",
     "echarts": "^4.5.0",
-    "echarts-for-react": "^2.0.15-beta.0",
+    "echarts-for-react": "^2.0.15-beta.1",
     "electron-is-dev": "^1.1.0",
     "kill-process": "^1.0.2",
     "prop-types": "^15.7.2",
@@ -37,7 +37,7 @@
   "devDependencies": {
     "concurrently": "^5.0.1",
     "customize-cra": "^0.9.1",
-    "electron": "^7.1.4",
+    "electron": "^7.1.5",
     "electron-builder": "^21.2.0",
     "react-app-rewired": "^2.1.5",
     "redux-logger": "^3.0.6",
