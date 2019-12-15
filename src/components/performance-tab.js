@@ -23,11 +23,13 @@ export default class PerformanceTab extends React.Component {
     cpuLoadHistory: Array.from({length: 60}, () => 0),
     memoryLoadHistory: Array.from({length: 60}, () => 0),
     processCount: 0,
-    cpuInfo: {},
-    cpuLoad: {},
+    cpuInfo: {
+      flags: '', cache: {l1i: 0, l1d: 0, l2: 0, l3: 0}, manufacturer: '', brand: '', speed: 0, socket: '',
+      physicalCores: 0, cores: 0},
     cpuSpeed: 0,
-    memoryLoad: {},
-    memoryInfo: {}
+    memoryLoad: {used: 0, buffers: 0, swapused: 0, free: 0, cached: 0, swapfree: 0},
+    memoryInfo: [{size: 0, clockSpeed: 0, formFactor: ''}, {size: 1, clockSpeed: 0, formFactor: ''}],
+    uptime: 0
   };
 
   constructor(props) {
