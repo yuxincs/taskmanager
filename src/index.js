@@ -6,7 +6,7 @@ import thunkMiddleware from 'redux-thunk';
 import { createLogger } from 'redux-logger';
 import { Icon, Tabs } from 'antd';
 import styles from './index.module.css';
-import ProcessTabContainer from './containers/process-tab';
+import ProcessTab from './components/process-tab';
 import PerformanceTabContainer from "./containers/performance-tab";
 import reducer from './reducers';
 import { requestCPUCurrentSpeed, requestCPUInfo, requestCPULoad } from "./actions/cpu";
@@ -67,7 +67,7 @@ class TaskManager extends React.Component{
             </span>
           }
           key="1">
-          <ProcessTabContainer />
+          <ProcessTab />
         </Tabs.TabPane>
         <Tabs.TabPane className={styles.tabPanes}
           tab={
