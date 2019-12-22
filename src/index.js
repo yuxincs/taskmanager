@@ -7,7 +7,7 @@ import { createLogger } from 'redux-logger';
 import { Icon, Tabs } from 'antd';
 import styles from './index.module.css';
 import ProcessTab from './components/process-tab';
-import PerformanceTabContainer from "./containers/performance-tab";
+import PerformanceTab from "./components/performance-tab";
 import reducer from './reducers';
 import { requestCPUCurrentSpeed, requestCPUInfo, requestCPULoad } from "./actions/cpu";
 import { requestMemoryInfo, requestMemoryLoad } from "./actions/memory";
@@ -77,7 +77,7 @@ class TaskManager extends React.Component{
             </span>
           }
           key="2">
-        <PerformanceTabContainer />
+          <PerformanceTab />
         </Tabs.TabPane>
       </Tabs>
     );
