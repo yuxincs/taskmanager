@@ -3,41 +3,21 @@ import PropTypes from 'prop-types';
 import { Tabs, Row, Col, Statistic } from "antd";
 import ReactEcharts from "echarts-for-react";
 import styles from './performance-tab.module.css';
+import { useSelector } from "react-redux";
 
 
-export default class PerformanceTab extends React.Component {
-  static propTypes = {
-    className: PropTypes.string,
-    processCount: PropTypes.number,
-    uptime: PropTypes.number,
-    cpuLoadHistory: PropTypes.arrayOf(PropTypes.number),
-    cpuInfo: PropTypes.object,
-    cpuSpeed: PropTypes.number,
-    memoryLoadHistory: PropTypes.arrayOf(PropTypes.number),
-    memoryLoad: PropTypes.object,
-    memoryInfo: PropTypes.arrayOf(PropTypes.object)
-  };
+export default function PerformanceTab() {
 
-  static defaultProps = {
-    className: '',
-    cpuLoadHistory: Array.from({length: 60}, () => 0),
-    memoryLoadHistory: Array.from({length: 60}, () => 0),
-    processCount: 0,
-    cpuInfo: {
-      flags: '', cache: {l1i: 0, l1d: 0, l2: 0, l3: 0}, manufacturer: '', brand: '', speed: 0, socket: '',
-      physicalCores: 0, cores: 0},
-    cpuSpeed: 0,
-    memoryLoad: {used: 0, buffers: 0, swapused: 0, free: 0, cached: 0, swapfree: 0},
-    memoryInfo: [{size: 0, clockSpeed: 0, formFactor: ''}, {size: 1, clockSpeed: 0, formFactor: ''}],
-    uptime: 0
-  };
+  const upTime = useSelector(state => state.general.uptime);
+  const processCount = useSelector(state => state.process.processes.length);
+  const cpuLoadHistory = useSelector(state => state.cpu.loadHistory);
+  const memoryLoadHistory = useSelector(state => state.memory.loadHistory);
+  const cpuInfo = useSelector(state => state.cpu.info);
+  const cpuSpeed = useSelector(state => state.cpu.currentSpeed);
+  const memoryLoad = useSelector(state => state.memory.load);
+  const memoryInfo = useSelector(state => state.memory.info);
 
-  constructor(props) {
-    super(props);
-    this.chartNum = 0;
-  }
-
-  memorySizeToString(size) {
+  const memorySizeToString = (size) => {
     if(size === 0 || size === '0') {
       return '0';
     }
@@ -50,16 +30,16 @@ export default class PerformanceTab extends React.Component {
       unitIndex ++;
     }
     return value.toFixed(1) + ' ' + units[unitIndex];
-  }
+  };
 
-  generateOneLineText(left, right, leftClassName=styles['chart-text'], rightClassName=styles['chart-text']) {
+  const generateOneLineText = (left, right, leftClassName=styles['chart-text'], rightClassName=styles['chart-text']) => {
     return <Row type="flex" justify="space-between">
       <Col className={leftClassName}>{left}</Col>
       <Col className={rightClassName}>{right}</Col>
     </Row>;
-  }
+  };
 
-  generateTab(chart, title, subtitle) {
+  const generateTab = (chart, title, subtitle) => {
     return <div className={styles['tab']}>
       <div className={styles['tab-chart']}>{chart}</div>
       <div className={styles['tab-text']}>
@@ -67,13 +47,13 @@ export default class PerformanceTab extends React.Component {
         <span className={styles.subtitle}>{subtitle}</span>
       </div>
     </div>
-  }
+  };
 
-  generateChart(data, rgb, cornerTexts, showExtras, height) {
+  const generateChart = (key, data, rgb, cornerTexts, showExtras, height) => {
     // colors for border/line, area, grid
-    let colors = [1, 0.4, 0.1].map((alpha) => 'rgba(' + rgb.join(', ') + ', ' + alpha + ')');
-    let xdata = Array.from(Array(data.length).keys());
-    let option =  {
+    const colors = [1, 0.4, 0.1].map((alpha) => 'rgba(' + rgb.join(', ') + ', ' + alpha + ')');
+    const xdata = Array.from(Array(data.length).keys());
+    const option = {
       xAxis: {
         type: 'category',
         boundaryGap: false,
@@ -120,43 +100,45 @@ export default class PerformanceTab extends React.Component {
       }]
     };
 
-    let topLine = showExtras ? this.generateOneLineText(cornerTexts[0], cornerTexts[1]) : null;
-    let bottomLine = showExtras ? this.generateOneLineText(cornerTexts[3], cornerTexts[2]) : null;
+    const topLine = showExtras ? generateOneLineText(cornerTexts[0], cornerTexts[1]) : null;
+    const bottomLine = showExtras ? generateOneLineText(cornerTexts[3], cornerTexts[2]) : null;
 
-    this.chartNum ++;
-    return <div>
-      {topLine}
-      <div style={{border: '1px solid ' + colors[0]}}>
-        <ReactEcharts
-          style={{height: height}}
-          ref={'echarts_react' + this.chartNum}
-          key={this.chartNum}
-          option={option}
-        />
+    return (
+      <div>
+        {topLine}
+        <div style={{border: '1px solid ' + colors[0]}}>
+          <ReactEcharts
+            style={{height: height}}
+            key={key}
+            option={option}
+          />
+        </div>
+        {bottomLine}
       </div>
-      {bottomLine}
-    </div>
-  }
+    );
+  };
 
-  render() {
-    // generate large charts and small charts to display in tab and in pane
-    let [charts, smallCharts] = [[true, '250px'], [false, '45px']].map((extraArgs) => {
-      return [
-        this.generateChart(
-          this.props.cpuLoadHistory,
-          [17, 125, 187],
-          ['% Utilization', '100 %', '0', '60 Seconds'], ...extraArgs),
-        this.generateChart(
-          this.props.memoryLoadHistory,
-          [139, 18, 174],
-          ['Memory Usage', this.memorySizeToString(this.props.memoryLoad.total), '0', '60 Seconds'], ...extraArgs)
-      ];
-    });
+  // generate large charts and small charts to display in tab and in pane
+  let [charts, smallCharts] = [[true, '250px'], [false, '45px']].map((extraArgs, index) => {
+    return [
+      generateChart(
+        index * 2,
+        cpuLoadHistory,
+        [17, 125, 187],
+        ['% Utilization', '100 %', '0', '60 Seconds'], ...extraArgs),
+      generateChart(
+        index * 2 + 1,
+        memoryLoadHistory,
+        [139, 18, 174],
+        ['Memory Usage', memorySizeToString(memoryLoad.total), '0', '60 Seconds'], ...extraArgs)
+    ];
+  });
 
-    // find a slot that has memory information to display memory information
-    let pluggedMemories = this.props.memoryInfo.filter((value) => value.size !== 0);
+  // find a slot that has memory information to display memory information
+  let pluggedMemories = memoryInfo.filter((value) => value.size !== 0);
 
-    return <Tabs
+  return (
+    <Tabs
       className={styles['performance-tab']}
       defaultActiveKey="1"
       tabPosition="left"
@@ -165,13 +147,11 @@ export default class PerformanceTab extends React.Component {
     >
       <Tabs.TabPane
         className={styles['pane']}
-        tab={this.generateTab(smallCharts[0],
-          'CPU', this.props.cpuLoadHistory[this.props.cpuLoadHistory.length - 1].toFixed(0) + '%')}
+        tab={generateTab(smallCharts[0],
+          'CPU', cpuLoadHistory[cpuLoadHistory.length - 1].toFixed(0) + '%')}
         key="1">
-        {this.generateOneLineText('CPU',
-          this.props.cpuInfo.manufacturer + ' ' +
-          this.props.cpuInfo.brand + ' CPU @ ' +
-          this.props.cpuInfo.speed + ' GHz',
+        {generateOneLineText('CPU',
+          cpuInfo.manufacturer + ' ' + cpuInfo.brand + ' CPU @ ' + cpuInfo.speed + ' GHz',
           styles['big-title'], styles['title'])}
         <div className={styles['chart']} >
           {charts[0]}
@@ -180,17 +160,17 @@ export default class PerformanceTab extends React.Component {
           <Col span={12}>
             <Row type="flex" justify="space-between">
               <Col><Statistic title="Utilization" value={
-                this.props.cpuLoadHistory[this.props.cpuLoadHistory.length - 1].toFixed(1) + '%'
+                cpuLoadHistory[cpuLoadHistory.length - 1].toFixed(1) + '%'
               } /></Col>
-              <Col><Statistic title="Speed" value={this.props.cpuSpeed} suffix="GHz"/></Col>
+              <Col><Statistic title="Speed" value={cpuSpeed} suffix="GHz"/></Col>
             </Row>
             <Row type="flex" justify="space-between">
-              <Col><Statistic title="Processes" value={this.props.processCount} /></Col>
+              <Col><Statistic title="Processes" value={processCount} /></Col>
               {/*<Col><Statistic title="Threads" value={'TODO'} /></Col>*/}
             </Row>
             <Row type="flex" justify="space-between">
               <Col><Statistic title="Up Time" value={
-                new Date(this.props.uptime * 1000).toISOString().substr(11, 8)
+                new Date(upTime * 1000).toISOString().substr(11, 8)
               } /></Col>
             </Row>
           </Col>
@@ -205,37 +185,37 @@ export default class PerformanceTab extends React.Component {
             <div>L3 Cache:</div>
           </Col>
           <Col className={styles['static-value']} span={5}>
-            <div>{this.props.cpuInfo.speed + ' GHz'}</div>
-            <div>{this.props.cpuInfo.socket === '' ? 'Not Available' : this.props.cpuInfo.socket}</div>
-            <div>{this.props.cpuInfo.physicalCores}</div>
-            <div>{this.props.cpuInfo.cores}</div>
-            <div>{this.props.cpuInfo.flags.includes('vmx') ? 'Enabled' : 'Disabled'}</div>
-            <div>{this.memorySizeToString((this.props.cpuInfo.cache.l1d + this.props.cpuInfo.cache.l1i) * this.props.cpuInfo.physicalCores)}</div>
-            <div>{this.memorySizeToString(this.props.cpuInfo.cache.l2 * this.props.cpuInfo.physicalCores)}</div>
-            <div>{this.memorySizeToString(this.props.cpuInfo.cache.l3)}</div>
+            <div>{cpuInfo.speed + ' GHz'}</div>
+            <div>{cpuInfo.socket === '' ? 'Not Available' : cpuInfo.socket}</div>
+            <div>{cpuInfo.physicalCores}</div>
+            <div>{cpuInfo.cores}</div>
+            <div>{cpuInfo.flags.includes('vmx') ? 'Enabled' : 'Disabled'}</div>
+            <div>{memorySizeToString((cpuInfo.cache.l1d + cpuInfo.cache.l1i) * cpuInfo.physicalCores)}</div>
+            <div>{memorySizeToString(cpuInfo.cache.l2 * cpuInfo.physicalCores)}</div>
+            <div>{memorySizeToString(cpuInfo.cache.l3)}</div>
           </Col>
         </Row>
       </Tabs.TabPane>
       <Tabs.TabPane
         className={styles['pane']}
-        tab={this.generateTab(smallCharts[1],
-          'Memory', this.props.memoryLoadHistory[this.props.memoryLoadHistory.length - 1].toFixed(0) + '%')
+        tab={generateTab(smallCharts[1],
+          'Memory', memoryLoadHistory[memoryLoadHistory.length - 1].toFixed(0) + '%')
         }
         key="2">
-        {this.generateOneLineText('Memory', this.memorySizeToString(this.props.memoryLoad.total) + ' DRAM', styles['big-title'], styles['big-title'])}
+        {generateOneLineText('Memory', memorySizeToString(memoryLoad.total) + ' DRAM', styles['big-title'], styles['big-title'])}
         <div className={styles['chart']} >
           {charts[1]}
         </div>
         <Row type="flex" justify="space-between" gutter={20}>
           <Col span={6}>
-            <Row><Statistic title="In Use" value={this.memorySizeToString(this.props.memoryLoad.used)} /></Row>
-            <Row><Statistic title="Buffers" value={this.memorySizeToString(this.props.memoryLoad.buffers)} /></Row>
-            <Row><Statistic title="Swap Used" value={this.memorySizeToString(this.props.memoryLoad.swapused)} /></Row>
+            <Row><Statistic title="In Use" value={memorySizeToString(memoryLoad.used)} /></Row>
+            <Row><Statistic title="Buffers" value={memorySizeToString(memoryLoad.buffers)} /></Row>
+            <Row><Statistic title="Swap Used" value={memorySizeToString(memoryLoad.swapused)} /></Row>
           </Col>
           <Col span={6}>
-            <Row><Statistic title="Avaliable" value={this.memorySizeToString(this.props.memoryLoad.free)}/></Row>
-            <Row><Statistic title="Cached" value={this.memorySizeToString(this.props.memoryLoad.cached)} /></Row>
-              <Row><Statistic title="Swap Available" value={this.memorySizeToString(this.props.memoryLoad.swapfree)} /></Row>
+            <Row><Statistic title="Avaliable" value={memorySizeToString(memoryLoad.free)}/></Row>
+            <Row><Statistic title="Cached" value={memorySizeToString(memoryLoad.cached)} /></Row>
+            <Row><Statistic title="Swap Available" value={memorySizeToString(memoryLoad.swapfree)} /></Row>
           </Col>
           <Col className={styles['static-title']} span={6}>
             <div>Speed:</div>
@@ -244,11 +224,11 @@ export default class PerformanceTab extends React.Component {
           </Col>
           <Col className={styles['static-value']} span={5}>
             <div>{pluggedMemories[0].clockSpeed + ' MHz'}</div>
-            <div>{pluggedMemories.length + ' of ' + this.props.memoryInfo.length}</div>
+            <div>{pluggedMemories.length + ' of ' + memoryInfo.length}</div>
             <div>{pluggedMemories[0].formFactor === '' ? 'Not Available' : pluggedMemories[0].formFactor}</div>
           </Col>
         </Row>
       </Tabs.TabPane>
     </Tabs>
-  }
+  );
 }

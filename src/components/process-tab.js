@@ -1,41 +1,25 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React, { useState } from 'react';
+import { useSelector, useDispatch } from "react-redux";
 import { Table, Button, Badge, Icon } from "antd";
 import { VTComponents } from 'virtualizedtableforantd';
 import styles from './process-tab.module.css';
+import { killProcess } from "../actions/process";
 
 
-export default class ProcessTab extends React.Component {
-  static propTypes = {
-    className: PropTypes.string,
-    processes: PropTypes.arrayOf(PropTypes.object),
-    cpuLoad: PropTypes.number,
-    memoryLoad: PropTypes.number,
-    killProcess: PropTypes.func
-  };
+export default function ProcessTab() {
+  const [selectedPID, setSelectedPID] = useState('');
+  const cpuLoad = useSelector(state => state.cpu.loadHistory[state.cpu.loadHistory.length - 1]);
+  const memoryLoad = useSelector(state => state.memory.loadHistory[state.memory.loadHistory.length - 1]);
+  const processes = useSelector(state => state.process.processes);
+  const dispatch = useDispatch();
 
-  static defaultProps = {
-    processes: []
-  };
-
-  static statePriority = {
+  const statePriority = {
     'running': 3,
     'sleeping': 2,
     'blocked': 1
   };
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      'selectedPID': ''
-    };
-  }
-
-  onSelectRow = record =>  {
-    this.setState({'selectedPID': record.pid});
-  };
-
-  normalCellRenderer = text => {
+  const normalCellRenderer = text => {
     return {
       props: {
         style: { borderBottom: 'none', transition: 'none', padding: '8px 8px'} // TODO: padding fix is for VTComponent
@@ -44,22 +28,24 @@ export default class ProcessTab extends React.Component {
     }
   };
 
-  headerRenderer = (title, subtitle) => {
-    return <div>
-      <span className={styles.title}>{title}</span>
-      <br />
-      <span className={styles.subtitle}>{subtitle}</span>
-    </div>;
+  const headerRenderer = (title, subtitle) => {
+    return (
+      <div>
+        <span className={styles.title}>{title}</span>
+        <br />
+        <span className={styles.subtitle}>{subtitle}</span>
+      </div>
+    );
   };
 
-  processCellRenderer = (text, record) => {
-    let normal = this.normalCellRenderer(text);
+  const processCellRenderer = (text, record) => {
+    let normal = normalCellRenderer(text);
     normal.children = <span><Icon type="profile" theme="twoTone" />&emsp;{text}</span>;
     return normal;
   };
 
-  stateCellRenderer = (text, record) => {
-    let normal = this.normalCellRenderer(text);
+  const stateCellRenderer = (text, record) => {
+    let normal = normalCellRenderer(text);
     const stateBadge = {
       'running': <Badge status="success" />,
       'sleeping': <Badge status="warning" />,
@@ -69,8 +55,8 @@ export default class ProcessTab extends React.Component {
     return normal;
   };
 
-  memoryCellRenderer = (text, record) => {
-    let base = this.percentageCellRenderer(record.pmem, record);
+  const memoryCellRenderer = (text, record) => {
+    let base = percentageCellRenderer(record.pmem, record);
     const units = ['KB', 'MB', 'GB'];
     let unitIndex = 0;
     let value = parseInt(text);
@@ -83,101 +69,99 @@ export default class ProcessTab extends React.Component {
     return base;
   };
 
-  percentageCellRenderer = (text, record) => {
-    let normal = this.normalCellRenderer(text);
+  const percentageCellRenderer = (text, record) => {
+    let normal = normalCellRenderer(text);
     normal.props.className = styles['num-cell'];
 
-    if(this.state.selectedPID !== record.pid) {
+    if(selectedPID !== record.pid) {
       normal.props.className += ' ' + styles['level-' + Math.min(Math.ceil((parseFloat(text) + 0.001) / 12.5), 8)];
     }
     normal.children = text.toFixed(1) + ' %';
     return normal;
   };
 
-  render() {
-    const columns = [
-      {
-        title: this.headerRenderer('', 'Name'),
-        dataIndex: 'command',
-        width: '200px',
-        sorter: (a, b) => a.command.localeCompare(b.command),
-        render: this.processCellRenderer,
-        ellipsis: true
-      },
-      {
-        title: this.headerRenderer('', <Icon type="check-circle" />),
-        dataIndex: 'state',
-        width: '35px',
-        sorter: (a, b) => ProcessTab.statePriority[a.state] - ProcessTab.statePriority[b.state],
-        render: this.stateCellRenderer
-      },
-      {
-        title: this.headerRenderer('', 'PID'),
-        dataIndex: 'pid',
-        sorter: (a, b) => a.pid - b.pid,
-        render: this.normalCellRenderer,
-        width: '80px',
-        ellipsis: true
-      },
-      {
-        title: this.headerRenderer('', 'User'),
-        dataIndex: 'user',
-        sorter: (a, b) => a.user.localeCompare(b.user),
-        render: this.normalCellRenderer,
-        width: '80px',
-        ellipsis: true
-      },
-      {
-        title: this.headerRenderer(Math.round( this.props.cpuLoad * 10) / 10 + ' %', 'CPU'),
-        dataIndex: 'pcpu',
-        sorter: (a, b) => a.pcpu - b.pcpu,
-        width: '100px',
-        render: this.percentageCellRenderer,
-        defaultSortOrder: 'descend'
-      },
-      {
-        title: this.headerRenderer(Math.round( this.props.memoryLoad * 10) / 10 + ' %', 'Memory'),
-        dataIndex: 'mem_rss',
-        width: '100px',
-        sorter: (a, b) => a.mem_rss - b.mem_rss,
-        render: this.memoryCellRenderer
-      }
-    ];
+  const columns = [
+    {
+      title: headerRenderer('', 'Name'),
+      dataIndex: 'command',
+      width: '200px',
+      sorter: (a, b) => a.command.localeCompare(b.command),
+      render: processCellRenderer,
+      ellipsis: true
+    },
+    {
+      title: headerRenderer('', <Icon type="check-circle" />),
+      dataIndex: 'state',
+      width: '35px',
+      sorter: (a, b) => statePriority[a.state] - statePriority[b.state],
+      render: stateCellRenderer
+    },
+    {
+      title: headerRenderer('', 'PID'),
+      dataIndex: 'pid',
+      sorter: (a, b) => a.pid - b.pid,
+      render: normalCellRenderer,
+      width: '80px',
+      ellipsis: true
+    },
+    {
+      title: headerRenderer('', 'User'),
+      dataIndex: 'user',
+      sorter: (a, b) => a.user.localeCompare(b.user),
+      render: normalCellRenderer,
+      width: '80px',
+      ellipsis: true
+    },
+    {
+      title: headerRenderer(Math.round( cpuLoad * 10) / 10 + ' %', 'CPU'),
+      dataIndex: 'pcpu',
+      sorter: (a, b) => a.pcpu - b.pcpu,
+      width: '100px',
+      render: percentageCellRenderer,
+      defaultSortOrder: 'descend'
+    },
+    {
+      title: headerRenderer(Math.round( memoryLoad * 10) / 10 + ' %', 'Memory'),
+      dataIndex: 'mem_rss',
+      width: '100px',
+      sorter: (a, b) => a.mem_rss - b.mem_rss,
+      render: memoryCellRenderer
+    }
+  ];
 
-    return <div className={styles.processTab}>
-        <Table
-          className={styles.table}
-          loading={this.props.processes.length === 0}
-          dataSource={this.props.processes}
-          /* use VTComponents for virtualized lists for now */
-          /* TODO: replace this with cleaner methods when antd 4.0 is released which has built-in support for
-          *   virtualized tables */
-          components={VTComponents({
-            id: 1,
-            destroy: true
-          })}
-          columns={columns}
-          bordered={false}
-          scroll={{ y: 'calc(100vh - 80px - 20px - 61px)' }} // minus footer(80px) / tablist(20px) / table header(61px)
-          rowKey="pid"
-          rowClassName={record => styles.row + (this.state.selectedPID === record.pid ? ' ' + styles.selected : '')}
-          pagination={false}
-          size="small"
-          onRow={(record, rowIndex) => {
-            return {
-              onClick: event => this.onSelectRow(record)
-            };
-          }}
-        />
-        <div className={styles.footer}>
-          <Button className={styles.endtask} type="primary" disabled={this.state.selectedPID === ''}
-                  onClick={() => {
-                    this.setState({selectedPID: ''});
-                    this.props.killProcess(this.state.selectedPID);
-                  }}>
-            End Task
-          </Button>
-        </div>
-      </div>
-  }
+  return (
+    <div className={styles.processTab}>
+    <Table
+      className={styles.table}
+      loading={processes.length === 0}
+      dataSource={processes}
+      /* use VTComponents for virtualized lists for now */
+      /* TODO: replace this with cleaner methods when antd 4.0 is released which has built-in support for
+      *   virtualized tables */
+      components={VTComponents({
+        id: 1,
+        destroy: true
+      })}
+      columns={columns}
+      bordered={false}
+      scroll={{ y: 'calc(100vh - 80px - 20px - 61px)' }} // minus footer(80px) / tablist(20px) / table header(61px)
+      rowKey="pid"
+      rowClassName={record => styles.row + (selectedPID === record.pid ? ' ' + styles.selected : '')}
+      pagination={false}
+      size="small"
+      onRow={(record, rowIndex) => {
+        return { onClick: () => setSelectedPID(record.pid) };
+      }}
+    />
+    <div className={styles.footer}>
+      <Button className={styles.endtask} type="primary" disabled={selectedPID === ''}
+              onClick={() => {
+                dispatch(killProcess(selectedPID));
+                setSelectedPID('');
+              }}>
+        End Task
+      </Button>
+    </div>
+  </div>
+  );
 }

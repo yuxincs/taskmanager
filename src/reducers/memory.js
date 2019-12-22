@@ -2,8 +2,8 @@ import { UPDATE_MEMORY_INFO, UPDATE_MEMORY_LOAD } from "../constants/action-type
 
 let initialState = {
   loadHistory: Array.from({length: 60}, () => 0),
-  load: {},
-  info: {}
+  load: {used: 0, buffers: 0, swapused: 0, free: 0, cached: 0, swapfree: 0},
+  info: [{size: 0, clockSpeed: 0, formFactor: ''}, {size: 1, clockSpeed: 0, formFactor: ''}]
 };
 
 export default function memory(state = initialState, action) {
