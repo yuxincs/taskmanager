@@ -2,7 +2,8 @@ import { UPDATE_CPU_CURRENT_SPEED, UPDATE_CPU_INFO, UPDATE_CPU_LOAD } from "../c
 
 let initialState = {
   loadHistory: Array.from({length: 60}, () => 0),
-  info: {},
+  info: {flags: '', cache: {l1i: 0, l1d: 0, l2: 0, l3: 0}, manufacturer: '', brand: '', speed: 0, socket: '',
+    physicalCores: 0, cores: 0},
   currentSpeed: 0
 };
 
