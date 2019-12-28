@@ -9,7 +9,6 @@
     "echarts-for-react": "^2.0.15-beta.1",
     "electron-is-dev": "^1.1.0",
     "kill-process": "^1.0.2",
-    "prop-types": "^15.7.2",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
     "react-redux": "^7.1.3",

@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { Tabs, Row, Col, Statistic } from "antd";
 import ReactEcharts from "echarts-for-react";
 import styles from './performance-tab.module.css';
