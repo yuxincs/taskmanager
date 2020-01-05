@@ -15,8 +15,7 @@
     "react-scripts": "3.3.0",
     "redux": "^4.0.5",
     "redux-thunk": "^2.3.0",
-    "systeminformation": "^4.17.3",
-    "virtualizedtableforantd": "^0.7.5"
+    "systeminformation": "^4.17.3"
   },
   "main": "public/electron.js",
   "homepage": "./",
