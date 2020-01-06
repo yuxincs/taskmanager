@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from "react-redux";
-import { Table, Button, Badge, Icon } from "antd";
+import { Table, Button, Badge } from "antd";
+import { CheckCircleOutlined, DiffTwoTone } from "@ant-design/icons";
 import styles from './process-tab.module.css';
 import { killProcess } from "../actions/process";
 
@@ -39,7 +40,7 @@ export default function ProcessTab() {
 
   const processCellRenderer = (text, record) => {
     let normal = normalCellRenderer(text);
-    normal.children = <span><Icon type="profile" theme="twoTone" />&emsp;{text}</span>;
+    normal.children = <span><DiffTwoTone />&emsp;{text}</span>;
     return normal;
   };
 
@@ -89,7 +90,7 @@ export default function ProcessTab() {
       ellipsis: true
     },
     {
-      title: headerRenderer('', <Icon type="check-circle" />),
+      title: headerRenderer('', <CheckCircleOutlined />),
       dataIndex: 'state',
       width: '35px',
       sorter: (a, b) => statePriority[a.state] - statePriority[b.state],

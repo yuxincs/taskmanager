@@ -4,7 +4,8 @@ import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
 import thunkMiddleware from 'redux-thunk';
 import { createLogger } from 'redux-logger';
-import { Icon, Tabs } from 'antd';
+import { Tabs } from 'antd';
+import { RocketOutlined, SwitcherOutlined } from "@ant-design/icons";
 import styles from './index.module.css';
 import ProcessTab from './components/process-tab';
 import PerformanceTab from "./components/performance-tab";
@@ -62,7 +63,7 @@ class TaskManager extends React.Component{
         <Tabs.TabPane className={styles.tabPanes}
           tab={
             <span>
-              <Icon type="switcher" />
+              <SwitcherOutlined />
               Processes
             </span>
           }
@@ -72,7 +73,7 @@ class TaskManager extends React.Component{
         <Tabs.TabPane className={styles.tabPanes}
           tab={
             <span>
-              <Icon type="rocket" />
+              <RocketOutlined />
               Performance
             </span>
           }
