@@ -11887,10 +11887,10 @@ verror@1.10.0:
     core-util-is "1.0.2"
     extsprintf "^1.2.0"
 
-virtualizedtableforantd@^0.7.5:
-  version "0.7.5"
-  resolved "https://registry.yarnpkg.com/virtualizedtableforantd/-/virtualizedtableforantd-0.7.5.tgz#933324d65219c5b474fac9ff2274ee5e5b661bdc"
-  integrity sha512-L3ZAvz0Gk4n/xPVpCuGIfyjUo4N0uTDphsV3NKY5bSPAZaNE+XY0KzYLkKbIwENdtaTAxJ5CkBpCRkKhGThHBQ==
+virtualizedtableforantd@0.7.4:
+  version "0.7.4"
+  resolved "https://registry.yarnpkg.com/virtualizedtableforantd/-/virtualizedtableforantd-0.7.4.tgz#e878d56d2ae1f08d49b8b8e0aeb59a99ca037033"
+  integrity sha512-zoermRklvz2lmdhRA/j6aDRKOU5l1NSlXpl98zgs8zkQ/ojposHa9AlIjeHCwYz4fOZByhM2YBOP0b7ztNUR8g==
   dependencies:
     antd "^3.13.6"
     react "^16.0.0"

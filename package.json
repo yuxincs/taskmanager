@@ -16,7 +16,7 @@
     "redux": "^4.0.5",
     "redux-thunk": "^2.3.0",
     "systeminformation": "^4.17.3",
-    "virtualizedtableforantd": "^0.7.5"
+    "virtualizedtableforantd": "0.7.4"
   },
   "main": "public/electron.js",
   "homepage": "./",
