@@ -15,7 +15,7 @@
     "react-scripts": "3.3.0",
     "redux": "^4.0.5",
     "redux-thunk": "^2.3.0",
-    "systeminformation": "^4.19.1",
+    "systeminformation": "^4.21.0",
     "virtualizedtableforantd": "0.7.5"
   },
   "main": "public/electron.js",
@@ -34,14 +34,14 @@
     "extends": "react-app"
   },
   "devDependencies": {
-    "concurrently": "^5.0.2",
+    "concurrently": "^5.1.0",
     "customize-cra": "^0.9.1",
-    "electron": "^7.1.9",
-    "electron-builder": "^22.2.0",
+    "electron": "^7.1.10",
+    "electron-builder": "^22.3.2",
     "react-app-rewired": "^2.1.5",
     "redux-logger": "^3.0.6",
-    "typescript": "^3.7.4",
-    "wait-on": "^3.3.0",
+    "typescript": "^3.7.5",
+    "wait-on": "^4.0.0",
     "jest-canvas-mock": "^2.2.0"
   },
   "browserslist": {
