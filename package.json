@@ -36,7 +36,7 @@
   "devDependencies": {
     "concurrently": "^5.1.0",
     "customize-cra": "^0.9.1",
-    "electron": "^7.1.10",
+    "electron": "^7.1.11",
     "electron-builder": "^22.3.2",
     "react-app-rewired": "^2.1.5",
     "redux-logger": "^3.0.6",
