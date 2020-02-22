@@ -3,8 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@ant-design/icons": "^4.0.0-alpha.19",
-    "antd": "^4.0.0-rc.0",
+    "@ant-design/icons": "^2.1.1",
+    "antd": "^4.0.0-rc.5",
     "babel-plugin-import": "^1.13.0",
     "echarts": "^4.6.0",
     "echarts-for-react": "^2.0.15-beta.1",
@@ -38,11 +38,11 @@
     "customize-cra": "^0.9.1",
     "electron": "^8.0.1",
     "electron-builder": "^22.3.2",
+    "jest-canvas-mock": "^2.2.0",
     "react-app-rewired": "^2.1.5",
     "redux-logger": "^3.0.6",
     "typescript": "^3.8.2",
-    "wait-on": "^4.0.0",
-    "jest-canvas-mock": "^2.2.0"
+    "wait-on": "^4.0.0"
   },
   "browserslist": {
     "production": [
