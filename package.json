@@ -16,7 +16,7 @@
     "react-scripts": "3.4.0",
     "redux": "^4.0.5",
     "redux-thunk": "^2.3.0",
-    "systeminformation": "^4.17.3"
+    "systeminformation": "^4.22.3"
   },
   "main": "public/electron.js",
   "homepage": "./",
