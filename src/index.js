@@ -51,45 +51,43 @@ requestDynamicInfo();
 setInterval(requestDynamicInfo, 1000);
 
 
-class TaskManager extends React.Component{
-  render() {
-    return (
-      <Tabs
-        className={styles.tabs}
-        tabBarStyle={{margin: 0}}
-        defaultActiveKey="1"
-        size="small" 
-        >
-        <Tabs.TabPane className={styles.tabPanes}
-          tab={
-            <span>
+function TaskManager() {
+  return (
+    <Tabs
+      className={styles.tabs}
+      tabBarStyle={{margin: 0}}
+      defaultActiveKey="1"
+      size="small"
+    >
+      <Tabs.TabPane className={styles.tabPanes}
+                    tab={
+                      <span>
               <SwitcherOutline />
               Processes
             </span>
-          }
-          key="1">
-          <ProcessTab />
-        </Tabs.TabPane>
-        <Tabs.TabPane className={styles.tabPanes}
-          tab={
-            <span>
+                    }
+                    key="1">
+        <ProcessTab />
+      </Tabs.TabPane>
+      <Tabs.TabPane className={styles.tabPanes}
+                    tab={
+                      <span>
               <RocketOutline />
               Performance
             </span>
-          }
-          key="2">
-          <PerformanceTab />
-        </Tabs.TabPane>
-      </Tabs>
-    );
-  }
+                    }
+                    key="2">
+        <PerformanceTab />
+      </Tabs.TabPane>
+    </Tabs>
+  );
 }
+
 
 document.getElementById('root').className += ' ' + styles.root;
 
 ReactDOM.render(
   <Provider store={store}>
     <TaskManager />
-  </Provider>,
-  document.getElementById('root')
-);
+  </Provider>
+  ,  document.getElementById('root'));
