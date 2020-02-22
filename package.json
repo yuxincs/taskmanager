@@ -12,8 +12,8 @@
     "kill-process": "^1.0.2",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
-    "react-redux": "^7.1.3",
-    "react-scripts": "3.3.0",
+    "react-redux": "^7.2.0",
+    "react-scripts": "3.4.0",
     "redux": "^4.0.5",
     "redux-thunk": "^2.3.0",
     "systeminformation": "^4.17.3"
@@ -34,14 +34,14 @@
     "extends": "react-app"
   },
   "devDependencies": {
-    "concurrently": "^5.0.2",
+    "concurrently": "^5.1.0",
     "customize-cra": "^0.9.1",
-    "electron": "^7.1.7",
-    "electron-builder": "^21.2.0",
+    "electron": "^8.0.1",
+    "electron-builder": "^22.3.2",
     "react-app-rewired": "^2.1.5",
     "redux-logger": "^3.0.6",
-    "typescript": "^3.7.4",
-    "wait-on": "^3.3.0",
+    "typescript": "^3.8.2",
+    "wait-on": "^4.0.0",
     "jest-canvas-mock": "^2.2.0"
   },
   "browserslist": {
