@@ -51,7 +51,7 @@ requestDynamicInfo();
 setInterval(requestDynamicInfo, 1000);
 
 
-function TaskManager() {
+const TaskManager = () => {
   return (
     <Tabs
       className={styles.tabs}
@@ -59,29 +59,29 @@ function TaskManager() {
       defaultActiveKey="1"
       size="small"
     >
-      <Tabs.TabPane className={styles.tabPanes}
-                    tab={
-                      <span>
-              <SwitcherOutline />
-              Processes
-            </span>
-                    }
-                    key="1">
+      <Tabs.TabPane
+        className={styles.tabPanes}
+        tab={
+          <div>
+            <SwitcherOutline />Processes
+          </div>
+        }
+        key="1">
         <ProcessTab />
       </Tabs.TabPane>
-      <Tabs.TabPane className={styles.tabPanes}
-                    tab={
-                      <span>
-              <RocketOutline />
-              Performance
-            </span>
-                    }
-                    key="2">
+      <Tabs.TabPane
+        className={styles.tabPanes}
+        tab={
+          <div>
+            <RocketOutline />Performance
+          </div>
+        }
+        key="2">
         <PerformanceTab />
       </Tabs.TabPane>
     </Tabs>
   );
-}
+};
 
 
 document.getElementById('root').className += ' ' + styles.root;
@@ -89,5 +89,6 @@ document.getElementById('root').className += ' ' + styles.root;
 ReactDOM.render(
   <Provider store={store}>
     <TaskManager />
-  </Provider>
-  ,  document.getElementById('root'));
+  </Provider>,
+  document.getElementById('root')
+);
