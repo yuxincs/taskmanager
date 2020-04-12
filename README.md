@@ -13,6 +13,11 @@ A Windows-Like Task Manager built for Linux and macOS, based on [Electron](https
 
 Previously there is a C++ version based on QT, at [v1.0-qt-based](https://github.com/yxwangcs/taskmanager/tree/v1.0-qt-based) branch.
 
+## Run
+This project is managed by [create-react-app](https://reactjs.org/docs/create-a-new-react-app.html#create-react-app) and yarn. 
+
+Simply run `yarn install` and `yarn electron-dev` to run the taskmanager in develop mode or `yarn electron-pack` to pack it for different platforms.
+
 ## TODO
 
 * Per-process network / diskIO statistics display.
