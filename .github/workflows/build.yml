@@ -26,11 +26,7 @@ jobs:
           yarn test --coverage
           
       - name: Upload to codecov
-        env: 
-          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
-        run: |
-          npm install -g codecov
-          codecov
+        uses: codecov/codecov-action@v1
         
       - name: Pack on release branch
         if: startsWith(github.ref, 'refs/heads/release') && startsWith(matrix.os, 'macOS')
