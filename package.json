@@ -61,12 +61,12 @@
     ]
   },
   "author": {
-    "name": "Yuxin (Ryan) Wang"
+    "name": "Yuxin Wang"
   },
   "build": {
     "appId": "me.yuxinwang.taskmanager",
     "productName": "TaskManager",
-    "copyright": "Copyright © 2019 ${author}",
+    "copyright": "Copyright © 2019-2020 ${author}",
     "mac": {
       "category": "public.app-category.utilities"
     },
