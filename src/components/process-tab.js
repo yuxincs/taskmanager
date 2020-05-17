@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from "react-redux";
-import { Table, Button, Badge, Icon } from "antd";
-import { VTComponents } from 'virtualizedtableforantd';
+import { VList } from 'virtuallist-antd';
+import { Table, Button, Badge } from "antd";
+import { CheckCircleOutlined, DiffTwoTone } from "@ant-design/icons";
 import styles from './process-tab.module.css';
 import { killProcess } from "../actions/process";
 
@@ -22,7 +23,7 @@ export default function ProcessTab() {
   const normalCellRenderer = text => {
     return {
       props: {
-        style: { borderBottom: 'none', transition: 'none', padding: '8px 8px'} // TODO: padding fix is for VTComponent
+        style: { borderBottom: 'none', transition: 'none'}
       },
       children: text
     }
@@ -40,7 +41,7 @@ export default function ProcessTab() {
 
   const processCellRenderer = (text, record) => {
     let normal = normalCellRenderer(text);
-    normal.children = <span><Icon type="profile" theme="twoTone" />&emsp;{text}</span>;
+    normal.children = <span><DiffTwoTone />&emsp;{text}</span>;
     return normal;
   };
 
@@ -90,7 +91,7 @@ export default function ProcessTab() {
       ellipsis: true
     },
     {
-      title: headerRenderer('', <Icon type="check-circle" />),
+      title: headerRenderer('', <CheckCircleOutlined />),
       dataIndex: 'state',
       width: '35px',
       sorter: (a, b) => statePriority[a.state] - statePriority[b.state],
@@ -135,13 +136,6 @@ export default function ProcessTab() {
       className={styles.table}
       loading={processes.length === 0}
       dataSource={processes}
-      /* use VTComponents for virtualized lists for now */
-      /* TODO: replace this with cleaner methods when antd 4.0 is released which has built-in support for
-      *   virtualized tables */
-      components={VTComponents({
-        id: 1,
-        destroy: true
-      })}
       columns={columns}
       bordered={false}
       scroll={{ y: 'calc(100vh - 80px - 20px - 61px)' }} // minus footer(80px) / tablist(20px) / table header(61px)
@@ -152,6 +146,9 @@ export default function ProcessTab() {
       onRow={(record, rowIndex) => {
         return { onClick: () => setSelectedPID(record.pid) };
       }}
+      components={VList({
+        height: 'calc(100vh - 80px - 20px - 61px)'
+      })}
     />
     <div className={styles.footer}>
       <Button className={styles.endtask} type="primary" disabled={selectedPID === ''}

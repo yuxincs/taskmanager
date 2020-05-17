@@ -4,7 +4,8 @@ import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
 import thunkMiddleware from 'redux-thunk';
 import { createLogger } from 'redux-logger';
-import { Icon, Tabs } from 'antd';
+import { Tabs } from 'antd';
+import { RocketOutlined, SwitcherOutlined } from "@ant-design/icons";
 import styles from './index.module.css';
 import ProcessTab from './components/process-tab';
 import PerformanceTab from "./components/performance-tab";
@@ -50,39 +51,38 @@ requestDynamicInfo();
 setInterval(requestDynamicInfo, 1000);
 
 
-class TaskManager extends React.Component{
-  render() {
-    return (
-      <Tabs
-        className={styles.tabs}
-        tabBarStyle={{margin: 0}}
-        defaultActiveKey="1"
-        size="small" 
-        >
-        <Tabs.TabPane className={styles.tabPanes}
-          tab={
-            <span>
-              <Icon type="switcher" />
-              Processes
-            </span>
-          }
-          key="1">
-          <ProcessTab />
-        </Tabs.TabPane>
-        <Tabs.TabPane className={styles.tabPanes}
-          tab={
-            <span>
-              <Icon type="rocket" />
-              Performance
-            </span>
-          }
-          key="2">
-          <PerformanceTab />
-        </Tabs.TabPane>
-      </Tabs>
-    );
-  }
-}
+const TaskManager = () => {
+  return (
+    <Tabs
+      className={styles.tabs}
+      tabBarStyle={{margin: 0}}
+      defaultActiveKey="1"
+      size="small"
+    >
+      <Tabs.TabPane
+        className={styles.tabPanes}
+        tab={
+          <div>
+            <SwitcherOutlined />Processes
+          </div>
+        }
+        key="1">
+        <ProcessTab />
+      </Tabs.TabPane>
+      <Tabs.TabPane
+        className={styles.tabPanes}
+        tab={
+          <div>
+            <RocketOutlined />Performance
+          </div>
+        }
+        key="2">
+        <PerformanceTab />
+      </Tabs.TabPane>
+    </Tabs>
+  );
+};
+
 
 document.getElementById('root').className += ' ' + styles.root;
 
