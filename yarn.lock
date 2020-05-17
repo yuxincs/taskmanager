@@ -11797,6 +11797,11 @@ verror@1.10.0:
     core-util-is "1.0.2"
     extsprintf "^1.2.0"
 
+virtuallist-antd@^0.4.2:
+  version "0.4.2"
+  resolved "https://registry.yarnpkg.com/virtuallist-antd/-/virtuallist-antd-0.4.2.tgz#2c56603bc02c238094d80c904212f41f389bb32c"
+  integrity sha512-T/Z2v8S4zB5iTa1qZAP5DOExwtes46IFO4xrAedWOEFQwU+vVOxFmd1hYUIg/vpmwPzkYdrZpB0RUP/T6sDsmw==
+
 vm-browserify@^1.0.1:
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/vm-browserify/-/vm-browserify-1.1.2.tgz#78641c488b8e6ca91a75f511e7a3b32a86e5dda0"

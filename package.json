@@ -19,7 +19,8 @@
     "react-window": "^1.8.5",
     "redux": "^4.0.5",
     "redux-thunk": "^2.3.0",
-    "systeminformation": "^4.26.1"
+    "systeminformation": "^4.26.1",
+    "virtuallist-antd": "^0.4.2"
   },
   "main": "public/electron.js",
   "homepage": "./",

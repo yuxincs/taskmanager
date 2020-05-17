@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from "react-redux";
+import { VList } from 'virtuallist-antd';
 import { Table, Button, Badge } from "antd";
 import { CheckCircleOutlined, DiffTwoTone } from "@ant-design/icons";
 import styles from './process-tab.module.css';
@@ -145,6 +146,9 @@ export default function ProcessTab() {
       onRow={(record, rowIndex) => {
         return { onClick: () => setSelectedPID(record.pid) };
       }}
+      components={VList({
+        height: 'calc(100vh - 80px - 20px - 61px)'
+      })}
     />
     <div className={styles.footer}>
       <Button className={styles.endtask} type="primary" disabled={selectedPID === ''}
