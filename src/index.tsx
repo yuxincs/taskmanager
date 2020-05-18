@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
-import { createStore, applyMiddleware } from 'redux';
+import {createStore, applyMiddleware, Middleware} from 'redux';
 import thunkMiddleware from 'redux-thunk';
 import { createLogger } from 'redux-logger';
 import { Tabs } from 'antd';
@@ -16,7 +16,7 @@ import { requestProcessInfo } from "./actions/process";
 import { requestDiskLoad } from "./actions/disk";
 import { requestGeneralInfo } from "./actions/general";
 
-let middleware = [thunkMiddleware];
+let middleware: Array<Middleware> = [thunkMiddleware];
 
 if (process.env.NODE_ENV !== 'production') {
   const loggerMiddleware = createLogger();
@@ -83,12 +83,13 @@ const TaskManager = () => {
   );
 };
 
+let rootElement = document.getElementById('root');
 
-document.getElementById('root').className += ' ' + styles.root;
+rootElement!.className += ' ' + styles.root;
 
 ReactDOM.render(
   <Provider store={store}>
     <TaskManager />
   </Provider>,
-  document.getElementById('root')
+  rootElement
 );
