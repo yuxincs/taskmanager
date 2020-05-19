@@ -12,10 +12,10 @@ import PerformanceTab from "./components/performance-tab";
 import reducer from './reducers';
 import {updateCPUCurrentSpeed, updateCPUInfo, updateCPULoad} from "./actions/cpu";
 import {updateMemoryInfo, updateMemoryLoad} from "./actions/memory";
-import { requestProcessInfo } from "./actions/process";
+import {updateProcessInfo} from "./actions/process";
 import { requestDiskLoad } from "./actions/disk";
 import { requestGeneralInfo } from "./actions/general";
-import {cpu, cpuCurrentspeed, cpuFlags, currentLoad, mem, memLayout} from "systeminformation";
+import {cpu, cpuCurrentspeed, cpuFlags, currentLoad, mem, memLayout, processes} from "systeminformation";
 
 let middleware: Array<Middleware> = [thunkMiddleware];
 
@@ -45,8 +45,9 @@ const requestDynamicInfo = () => {
   cpuCurrentspeed().then((speed) => store.dispatch(updateCPUCurrentSpeed(speed.avg)));
   // request memory load
   mem().then((load) => store.dispatch(updateMemoryLoad(load)));
+  // request process info
+  processes().then((procs) => store.dispatch(updateProcessInfo(procs.list)));
   store.dispatch(requestGeneralInfo());
-  store.dispatch(requestProcessInfo());
   store.dispatch(requestDiskLoad());
 };
 

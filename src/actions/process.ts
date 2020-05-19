@@ -1,31 +1,35 @@
+// @ts-ignore
 import kill from 'kill-process';
-import { UPDATE_PROCESS_INFO, PROCESS_KILLED } from '../constants/action-types';
-import { processes } from "systeminformation";
+import {Systeminformation} from "systeminformation";
+import {ThunkAction} from "redux-thunk";
 
-
-export function requestProcessInfo() {
-  return async (dispatch) => {
-    const info = await processes();
-    dispatch(updateProcessInfo(info.list));
-  }
+interface UpdateProcessInfo {
+  type: 'UPDATE_PROCESS_INFO',
+  processes: Systeminformation.ProcessesProcessData[]
 }
 
+interface ProcessKilled {
+  type: 'PROCESS_KILLED',
+  pid: number
+}
 
-export function updateProcessInfo(processes) {
+export type ProcessActions = UpdateProcessInfo | ProcessKilled;
+
+export function updateProcessInfo(processes: Systeminformation.ProcessesProcessData[]): UpdateProcessInfo {
   return {
-    type: UPDATE_PROCESS_INFO,
+    type: 'UPDATE_PROCESS_INFO',
     processes: processes
   }
 }
 
-export function processKilled(pid) {
+export function processKilled(pid: number): ProcessKilled {
   return {
-    type: PROCESS_KILLED,
+    type: 'PROCESS_KILLED',
     pid: pid
   }
 }
 
-export function killProcess(pid) {
+export function killProcess(pid: number): ThunkAction<any, any, any, ProcessKilled> {
   return async (dispatch) => {
     await kill(pid);
     dispatch(processKilled(pid));
