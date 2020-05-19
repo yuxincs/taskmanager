@@ -1,19 +1,13 @@
-import { time } from "systeminformation";
-import { UPDATE_GENERAL_INFO } from "../constants/action-types";
-
-export function requestGeneralInfo() {
-  return async (dispatch) => {
-    const curTime = await time();
-    const general = {
-      uptime: curTime.uptime
-    };
-    dispatch(updateGeneralInfo(general));
-  }
+interface UpdateUpTime {
+  type: 'UPDATE_UPTIME',
+  uptime: number
 }
 
-export function updateGeneralInfo(info) {
+export type GeneralActions = UpdateUpTime;
+
+export function UpdateUpTime(uptime: number): UpdateUpTime {
   return {
-    type: UPDATE_GENERAL_INFO,
-    ...info
+    type: 'UPDATE_UPTIME',
+    uptime: uptime
   }
 }

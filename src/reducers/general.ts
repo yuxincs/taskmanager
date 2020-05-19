@@ -1,15 +1,20 @@
-import { UPDATE_GENERAL_INFO } from "../constants/action-types";
+import {GeneralActions} from "../actions/general";
 
-let initialState = {
+interface GeneralState {
+  uptime: number
+}
+
+let initialState: GeneralState = {
   uptime: 0
 };
 
-export default function general(state = initialState, action) {
+export default function general(state = initialState, action: GeneralActions) {
   switch(action.type) {
-    case UPDATE_GENERAL_INFO: {
-      return Object.assign({}, state, {
+    case 'UPDATE_UPTIME': {
+      return {
+        ...state,
         uptime: action.uptime
-      });
+      }
     }
     default:
       return state;

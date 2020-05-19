@@ -14,8 +14,8 @@ import {updateCPUCurrentSpeed, updateCPUInfo, updateCPULoad} from "./actions/cpu
 import {updateMemoryInfo, updateMemoryLoad} from "./actions/memory";
 import {updateProcessInfo} from "./actions/process";
 import {updateDiskLoad} from "./actions/disk";
-import { requestGeneralInfo } from "./actions/general";
-import {cpu, cpuCurrentspeed, cpuFlags, currentLoad, disksIO, mem, memLayout, processes} from "systeminformation";
+import {UpdateUpTime} from './actions/general';
+import {cpu, cpuCurrentspeed, cpuFlags, currentLoad, disksIO, mem, memLayout, processes, time} from "systeminformation";
 
 let middleware: Array<Middleware> = [thunkMiddleware];
 
@@ -49,7 +49,8 @@ const requestDynamicInfo = () => {
   processes().then((procs) => store.dispatch(updateProcessInfo(procs.list)));
   // request disk IO information
   disksIO().then((load) => store.dispatch(updateDiskLoad(load)));
-  store.dispatch(requestGeneralInfo());
+  // request uptime
+  store.dispatch(UpdateUpTime(parseInt(time().uptime)));
 };
 
 // first dispatch the actions to request static information (only once)
