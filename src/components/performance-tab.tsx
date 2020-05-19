@@ -231,9 +231,9 @@ export default function PerformanceTab() {
             <div>Form factor:</div>
           </Col>
           <Col className={styles['static-value']} span={5}>
-            <div>{pluggedMemories[0].clockSpeed + ' MHz'}</div>
+            <div>{pluggedMemories.length >= 1 ? pluggedMemories[0].clockSpeed + ' MHz': 'N/A'}</div>
             <div>{pluggedMemories.length + ' of ' + memoryInfo.length}</div>
-            <div>{pluggedMemories[0].formFactor === '' ? 'Not Available' : pluggedMemories[0].formFactor}</div>
+            <div>{pluggedMemories.length >= 1 ? (pluggedMemories[0].formFactor === '' ? 'N/A' : pluggedMemories[0].formFactor) : 'N/A'}</div>
           </Col>
         </Row>
       </Tabs.TabPane>
