@@ -33,8 +33,7 @@ export default function PerformanceTab() {
   };
 
   const generateOneLineText = (left: React.ReactNode, right: React.ReactNode, leftClassName=styles['chart-text'], rightClassName=styles['chart-text']) => {
-    // @ts-ignore
-    return <Row type="flex" justify="space-between">
+    return <Row justify="space-between">
       <Col className={leftClassName}>{left}</Col>
       <Col className={rightClassName}>{right}</Col>
     </Row>;
@@ -159,23 +158,19 @@ export default function PerformanceTab() {
         <div className={styles['chart']} >
           {charts[0]}
         </div>
-        {/* @ts-ignore */}
-        <Row type="flex" justify="space-between" gutter={20}>
+        <Row justify="space-between" gutter={20}>
           <Col span={12}>
-            {/* @ts-ignore */}
-            <Row type="flex" justify="space-between">
+            <Row justify="space-between">
               <Col><Statistic title="Utilization" value={
                 cpuLoadHistory[cpuLoadHistory.length - 1].toFixed(1) + '%'
               } /></Col>
               <Col><Statistic title="Speed" value={cpuSpeed} suffix="GHz"/></Col>
             </Row>
-            {/* @ts-ignore */}
-            <Row type="flex" justify="space-between">
+            <Row justify="space-between">
               <Col><Statistic title="Processes" value={processCount} /></Col>
               {/*<Col><Statistic title="Threads" value={'TODO'} /></Col>*/}
             </Row>
-            {/* @ts-ignore */}
-            <Row type="flex" justify="space-between">
+            <Row justify="space-between">
               <Col><Statistic title="Up Time" value={
                 new Date(upTime * 1000).toISOString().substr(11, 8)
               } /></Col>
@@ -213,8 +208,7 @@ export default function PerformanceTab() {
         <div className={styles['chart']} >
           {charts[1]}
         </div>
-        {/* @ts-ignore */}
-        <Row type="flex" justify="space-between" gutter={20}>
+        <Row justify="space-between" gutter={20}>
           <Col span={6}>
             <Row><Statistic title="In Use" value={memorySizeToString(memoryLoad.used)} /></Row>
             <Row><Statistic title="Buffers" value={memorySizeToString(memoryLoad.buffers)} /></Row>
