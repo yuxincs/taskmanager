@@ -1,23 +1,10 @@
 import {CPUActions} from "../actions/cpu";
+import {Systeminformation} from "systeminformation";
 
 interface CPUState {
   loadHistory: Array<number>,
   currentSpeed: number,
-  info: {
-    flags: string,
-    cache: {
-      l1i: number,
-      l1d: number,
-      l2: number,
-      l3: number
-    },
-    manufacturer: string,
-    brand: string,
-    speed: number,
-    socket: string,
-    physicalCores: number,
-    cores: number
-  }
+  info: Systeminformation.CpuWithFlagsData
 }
 
 let initialState: CPUState = {
@@ -33,10 +20,20 @@ let initialState: CPUState = {
     },
     manufacturer: '',
     brand: '',
-    speed: 0,
+    speed: '0',
     socket: '',
     physicalCores: 0,
-    cores: 0
+    cores: 0,
+    vendor: '',
+    family: '',
+    model: '',
+    stepping: '',
+    revision: '',
+    voltage: '',
+    speedmin: '',
+    speedmax: '',
+    governor: '',
+    processors: 0
   }
 };
 
