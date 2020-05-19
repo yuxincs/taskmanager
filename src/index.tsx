@@ -13,9 +13,9 @@ import reducer from './reducers';
 import {updateCPUCurrentSpeed, updateCPUInfo, updateCPULoad} from "./actions/cpu";
 import {updateMemoryInfo, updateMemoryLoad} from "./actions/memory";
 import {updateProcessInfo} from "./actions/process";
-import { requestDiskLoad } from "./actions/disk";
+import {updateDiskLoad} from "./actions/disk";
 import { requestGeneralInfo } from "./actions/general";
-import {cpu, cpuCurrentspeed, cpuFlags, currentLoad, mem, memLayout, processes} from "systeminformation";
+import {cpu, cpuCurrentspeed, cpuFlags, currentLoad, disksIO, mem, memLayout, processes} from "systeminformation";
 
 let middleware: Array<Middleware> = [thunkMiddleware];
 
@@ -47,8 +47,9 @@ const requestDynamicInfo = () => {
   mem().then((load) => store.dispatch(updateMemoryLoad(load)));
   // request process info
   processes().then((procs) => store.dispatch(updateProcessInfo(procs.list)));
+  // request disk IO information
+  disksIO().then((load) => store.dispatch(updateDiskLoad(load)));
   store.dispatch(requestGeneralInfo());
-  store.dispatch(requestDiskLoad());
 };
 
 // first dispatch the actions to request static information (only once)
