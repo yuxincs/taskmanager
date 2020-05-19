@@ -5,7 +5,8 @@ import { Provider } from "react-redux";
 import { applyMiddleware, createStore } from "redux";
 import reducer from "../reducers";
 import thunkMiddleware from "redux-thunk";
-import { requestProcessInfo } from "../actions/process";
+import {processes} from "systeminformation";
+import {updateProcessInfo} from "../actions/process";
 
 const store = createStore(
   reducer,
@@ -21,7 +22,7 @@ it('renders without crashing', () => {
 
 it('renders with processes', () => {
   const div = document.createElement('div');
-  store.dispatch(requestProcessInfo());
+  processes().then((procs) => store.dispatch(updateProcessInfo(procs.list)));
   ReactDOM.render(<Provider store={store}><ProcessTab /></Provider>, div);
   ReactDOM.unmountComponentAtNode(div);
 });
