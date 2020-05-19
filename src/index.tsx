@@ -30,7 +30,7 @@ const store = createStore(
   applyMiddleware(...middleware)
 );
 
-const requestStaticInfo = () => {
+export const requestStaticInfo = () => {
   Promise.all([cpu(), cpuFlags()]).then(
     ([info, flags]) => store.dispatch(updateCPUInfo({...info, flags: flags}))
   );
@@ -38,7 +38,7 @@ const requestStaticInfo = () => {
 };
 
 
-const requestDynamicInfo = () => {
+export const requestDynamicInfo = () => {
   // request CPU Load
   currentLoad().then((load) => store.dispatch(updateCPULoad(load)));
   // request cpu current speed
