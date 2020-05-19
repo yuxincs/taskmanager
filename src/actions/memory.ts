@@ -1,30 +1,27 @@
-import { mem, memLayout } from "systeminformation";
-import { UPDATE_MEMORY_INFO, UPDATE_MEMORY_LOAD } from "../constants/action-types";
+import {Systeminformation} from "systeminformation";
 
-export function requestMemoryLoad() {
-  return async (dispatch) => {
-    const load = await mem();
-    dispatch(updateMemoryLoad(load));
-  }
+interface UpdateMemoryInfo {
+  type: 'UPDATE_MEMORY_INFO',
+  info: Systeminformation.MemLayoutData[]
 }
 
-export function requestMemoryInfo(info) {
-  return async (dispatch) => {
-    const info = await memLayout();
-    dispatch(updateMemoryInfo(info));
-  }
+interface UpdateMemoryLoad {
+  type: 'UPDATE_MEMORY_LOAD',
+  load: Systeminformation.MemData
 }
 
-export function updateMemoryInfo(info) {
+export type MemoryActions = UpdateMemoryInfo | UpdateMemoryLoad;
+
+export function updateMemoryInfo(info: Systeminformation.MemLayoutData[]): UpdateMemoryInfo {
   return {
-    type: UPDATE_MEMORY_INFO,
+    type: 'UPDATE_MEMORY_INFO',
     info: info
   }
 }
 
-export function updateMemoryLoad(load) {
+export function updateMemoryLoad(load: Systeminformation.MemData): UpdateMemoryLoad {
   return {
-    type: UPDATE_MEMORY_LOAD,
+    type: 'UPDATE_MEMORY_LOAD',
     load: load
   }
 }

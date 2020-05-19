@@ -11,11 +11,11 @@ import ProcessTab from './components/process-tab';
 import PerformanceTab from "./components/performance-tab";
 import reducer from './reducers';
 import {updateCPUCurrentSpeed, updateCPUInfo, updateCPULoad} from "./actions/cpu";
-import { requestMemoryInfo, requestMemoryLoad } from "./actions/memory";
+import {updateMemoryInfo, updateMemoryLoad} from "./actions/memory";
 import { requestProcessInfo } from "./actions/process";
 import { requestDiskLoad } from "./actions/disk";
 import { requestGeneralInfo } from "./actions/general";
-import {cpu, cpuCurrentspeed, cpuFlags, currentLoad} from "systeminformation";
+import {cpu, cpuCurrentspeed, cpuFlags, currentLoad, mem, memLayout} from "systeminformation";
 
 let middleware: Array<Middleware> = [thunkMiddleware];
 
@@ -34,7 +34,7 @@ const requestStaticInfo = () => {
   Promise.all([cpu(), cpuFlags()]).then(
     ([info, flags]) => store.dispatch(updateCPUInfo({...info, flags: flags}))
   );
-  store.dispatch(requestMemoryInfo());
+  memLayout().then((info) => store.dispatch(updateMemoryInfo(info)));
 };
 
 
@@ -43,9 +43,10 @@ const requestDynamicInfo = () => {
   currentLoad().then((load) => store.dispatch(updateCPULoad(load)));
   // request cpu current speed
   cpuCurrentspeed().then((speed) => store.dispatch(updateCPUCurrentSpeed(speed.avg)));
+  // request memory load
+  mem().then((load) => store.dispatch(updateMemoryLoad(load)));
   store.dispatch(requestGeneralInfo());
   store.dispatch(requestProcessInfo());
-  store.dispatch(requestMemoryLoad());
   store.dispatch(requestDiskLoad());
 };
 
