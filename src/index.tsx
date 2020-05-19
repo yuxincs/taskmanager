@@ -10,11 +10,12 @@ import styles from './index.module.css';
 import ProcessTab from './components/process-tab';
 import PerformanceTab from "./components/performance-tab";
 import reducer from './reducers';
-import { requestCPUCurrentSpeed, requestCPUInfo, requestCPULoad } from "./actions/cpu";
+import {updateCPUCurrentSpeed, updateCPUInfo, updateCPULoad} from "./actions/cpu";
 import { requestMemoryInfo, requestMemoryLoad } from "./actions/memory";
 import { requestProcessInfo } from "./actions/process";
 import { requestDiskLoad } from "./actions/disk";
 import { requestGeneralInfo } from "./actions/general";
+import {cpu, cpuCurrentspeed, cpuFlags, currentLoad} from "systeminformation";
 
 let middleware: Array<Middleware> = [thunkMiddleware];
 
@@ -30,15 +31,20 @@ const store = createStore(
 );
 
 const requestStaticInfo = () => {
-  store.dispatch(requestCPUInfo());
+  Promise.all([cpu(), cpuFlags()]).then(
+    ([info, flags]) => store.dispatch(updateCPUInfo({...info, flags: flags}))
+  );
   store.dispatch(requestMemoryInfo());
 };
 
+
 const requestDynamicInfo = () => {
+  // request CPU Load
+  currentLoad().then((load) => store.dispatch(updateCPULoad(load)));
+  // request cpu current speed
+  cpuCurrentspeed().then((speed) => store.dispatch(updateCPUCurrentSpeed(speed.avg)));
   store.dispatch(requestGeneralInfo());
   store.dispatch(requestProcessInfo());
-  store.dispatch(requestCPULoad());
-  store.dispatch(requestCPUCurrentSpeed());
   store.dispatch(requestMemoryLoad());
   store.dispatch(requestDiskLoad());
 };
