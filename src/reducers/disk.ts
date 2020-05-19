@@ -1,6 +1,6 @@
 import {DiskActions} from "../actions/disk";
 
-interface DiskState {
+export interface DiskState {
   readHistory: number[],
   writeHistory: number[]
 }

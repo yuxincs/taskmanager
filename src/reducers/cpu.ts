@@ -1,7 +1,7 @@
 import {CPUActions} from "../actions/cpu";
 import {Systeminformation} from "systeminformation";
 
-interface CPUState {
+export interface CPUState {
   loadHistory: number[],
   currentSpeed: number,
   info: Systeminformation.CpuWithFlagsData

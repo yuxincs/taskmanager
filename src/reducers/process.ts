@@ -1,7 +1,7 @@
 import {Systeminformation} from "systeminformation";
 import {ProcessActions} from "../actions/process";
 
-interface ProcessState {
+export interface ProcessState {
   processes: Systeminformation.ProcessesProcessData[]
 }
 

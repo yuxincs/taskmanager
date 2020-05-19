@@ -2,7 +2,7 @@ import {MemoryActions} from "../actions/memory";
 import {Systeminformation} from "systeminformation";
 
 
-interface MemoryState {
+export interface MemoryState {
   loadHistory: number[],
   load: Systeminformation.MemData,
   info: Systeminformation.MemLayoutData[]

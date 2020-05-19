@@ -1,6 +1,6 @@
 import {GeneralActions} from "../actions/general";
 
-interface GeneralState {
+export interface GeneralState {
   uptime: number
 }
 
