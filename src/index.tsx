@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
-import { createStore, applyMiddleware } from 'redux';
+import {createStore, applyMiddleware, Middleware} from 'redux';
 import thunkMiddleware from 'redux-thunk';
 import { createLogger } from 'redux-logger';
 import { Tabs } from 'antd';
@@ -10,13 +10,14 @@ import styles from './index.module.css';
 import ProcessTab from './components/process-tab';
 import PerformanceTab from "./components/performance-tab";
 import reducer from './reducers';
-import { requestCPUCurrentSpeed, requestCPUInfo, requestCPULoad } from "./actions/cpu";
-import { requestMemoryInfo, requestMemoryLoad } from "./actions/memory";
-import { requestProcessInfo } from "./actions/process";
-import { requestDiskLoad } from "./actions/disk";
-import { requestGeneralInfo } from "./actions/general";
+import {updateCPUCurrentSpeed, updateCPUInfo, updateCPULoad} from "./actions/cpu";
+import {updateMemoryInfo, updateMemoryLoad} from "./actions/memory";
+import {updateProcessInfo} from "./actions/process";
+import {updateDiskLoad} from "./actions/disk";
+import {UpdateUpTime} from './actions/general';
+import {cpu, cpuCurrentspeed, cpuFlags, currentLoad, disksIO, mem, memLayout, processes, time} from "systeminformation";
 
-let middleware = [thunkMiddleware];
+let middleware: Array<Middleware> = [thunkMiddleware];
 
 if (process.env.NODE_ENV !== 'production') {
   const loggerMiddleware = createLogger();
@@ -30,17 +31,26 @@ const store = createStore(
 );
 
 const requestStaticInfo = () => {
-  store.dispatch(requestCPUInfo());
-  store.dispatch(requestMemoryInfo());
+  Promise.all([cpu(), cpuFlags()]).then(
+    ([info, flags]) => store.dispatch(updateCPUInfo({...info, flags: flags}))
+  );
+  memLayout().then((info) => store.dispatch(updateMemoryInfo(info)));
 };
 
+
 const requestDynamicInfo = () => {
-  store.dispatch(requestGeneralInfo());
-  store.dispatch(requestProcessInfo());
-  store.dispatch(requestCPULoad());
-  store.dispatch(requestCPUCurrentSpeed());
-  store.dispatch(requestMemoryLoad());
-  store.dispatch(requestDiskLoad());
+  // request CPU Load
+  currentLoad().then((load) => store.dispatch(updateCPULoad(load)));
+  // request cpu current speed
+  cpuCurrentspeed().then((speed) => store.dispatch(updateCPUCurrentSpeed(speed.avg)));
+  // request memory load
+  mem().then((load) => store.dispatch(updateMemoryLoad(load)));
+  // request process info
+  processes().then((procs) => store.dispatch(updateProcessInfo(procs.list)));
+  // request disk IO information
+  disksIO().then((load) => store.dispatch(updateDiskLoad(load)));
+  // request uptime
+  store.dispatch(UpdateUpTime(parseInt(time().uptime)));
 };
 
 // first dispatch the actions to request static information (only once)
@@ -83,12 +93,13 @@ const TaskManager = () => {
   );
 };
 
+let rootElement = document.getElementById('root');
 
-document.getElementById('root').className += ' ' + styles.root;
+rootElement!.className += ' ' + styles.root;
 
 ReactDOM.render(
   <Provider store={store}>
     <TaskManager />
   </Provider>,
-  document.getElementById('root')
+  rootElement
 );

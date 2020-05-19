@@ -3,26 +3,27 @@ import { Tabs, Row, Col, Statistic } from "antd";
 import ReactEcharts from "echarts-for-react";
 import styles from './performance-tab.module.css';
 import { useSelector } from "react-redux";
+import {RootState} from "../reducers";
 
 
 export default function PerformanceTab() {
 
-  const upTime = useSelector(state => state.general.uptime);
-  const processCount = useSelector(state => state.process.processes.length);
-  const cpuLoadHistory = useSelector(state => state.cpu.loadHistory);
-  const memoryLoadHistory = useSelector(state => state.memory.loadHistory);
-  const cpuInfo = useSelector(state => state.cpu.info);
-  const cpuSpeed = useSelector(state => state.cpu.currentSpeed);
-  const memoryLoad = useSelector(state => state.memory.load);
-  const memoryInfo = useSelector(state => state.memory.info);
+  const upTime = useSelector((state: RootState) => state.general.uptime);
+  const processCount = useSelector((state: RootState) => state.process.processes.length);
+  const cpuLoadHistory = useSelector((state: RootState) => state.cpu.loadHistory);
+  const memoryLoadHistory = useSelector((state: RootState) => state.memory.loadHistory);
+  const cpuInfo = useSelector((state: RootState) => state.cpu.info);
+  const cpuSpeed = useSelector((state: RootState) => state.cpu.currentSpeed);
+  const memoryLoad = useSelector((state: RootState) => state.memory.load);
+  const memoryInfo = useSelector((state: RootState) => state.memory.info);
 
-  const memorySizeToString = (size) => {
-    if(size === 0 || size === '0') {
+  const memorySizeToString = (size: number) => {
+    if(size === 0) {
       return '0';
     }
     const units = ['B', 'KB', 'MB', 'GB'];
     let unitIndex = 0;
-    let value = parseInt(size);
+    let value = size;
     // iteratively divide 1024 to find the best suitable memory unit
     while(value > 1024 && unitIndex < units.length) {
       value /= 1024;
@@ -31,14 +32,15 @@ export default function PerformanceTab() {
     return value.toFixed(1) + ' ' + units[unitIndex];
   };
 
-  const generateOneLineText = (left, right, leftClassName=styles['chart-text'], rightClassName=styles['chart-text']) => {
+  const generateOneLineText = (left: React.ReactNode, right: React.ReactNode, leftClassName=styles['chart-text'], rightClassName=styles['chart-text']) => {
+    // @ts-ignore
     return <Row type="flex" justify="space-between">
       <Col className={leftClassName}>{left}</Col>
       <Col className={rightClassName}>{right}</Col>
     </Row>;
   };
 
-  const generateTab = (chart, title, subtitle) => {
+  const generateTab = (chart: React.ReactNode, title: React.ReactNode, subtitle: React.ReactNode) => {
     return <div className={styles['tab']}>
       <div className={styles['tab-chart']}>{chart}</div>
       <div className={styles['tab-text']}>
@@ -48,7 +50,7 @@ export default function PerformanceTab() {
     </div>
   };
 
-  const generateChart = (key, data, rgb, cornerTexts, showExtras, height) => {
+  const generateChart = (key: string, data: number[], rgb: string[], cornerTexts: string[], showExtras: boolean, height: string) => {
     // colors for border/line, area, grid
     const colors = [1, 0.4, 0.1].map((alpha) => 'rgba(' + rgb.join(', ') + ', ' + alpha + ')');
     const xdata = Array.from(Array(data.length).keys());
@@ -124,11 +126,13 @@ export default function PerformanceTab() {
         index * 2,
         cpuLoadHistory,
         [17, 125, 187],
+        // @ts-ignore
         ['% Utilization', '100 %', '0', '60 Seconds'], ...extraArgs),
       generateChart(
         index * 2 + 1,
         memoryLoadHistory,
         [139, 18, 174],
+        // @ts-ignore
         ['Memory Usage', memorySizeToString(memoryLoad.total), '0', '60 Seconds'], ...extraArgs)
     ];
   });
@@ -155,18 +159,22 @@ export default function PerformanceTab() {
         <div className={styles['chart']} >
           {charts[0]}
         </div>
+        {/* @ts-ignore */}
         <Row type="flex" justify="space-between" gutter={20}>
           <Col span={12}>
+            {/* @ts-ignore */}
             <Row type="flex" justify="space-between">
               <Col><Statistic title="Utilization" value={
                 cpuLoadHistory[cpuLoadHistory.length - 1].toFixed(1) + '%'
               } /></Col>
               <Col><Statistic title="Speed" value={cpuSpeed} suffix="GHz"/></Col>
             </Row>
+            {/* @ts-ignore */}
             <Row type="flex" justify="space-between">
               <Col><Statistic title="Processes" value={processCount} /></Col>
               {/*<Col><Statistic title="Threads" value={'TODO'} /></Col>*/}
             </Row>
+            {/* @ts-ignore */}
             <Row type="flex" justify="space-between">
               <Col><Statistic title="Up Time" value={
                 new Date(upTime * 1000).toISOString().substr(11, 8)
@@ -205,6 +213,7 @@ export default function PerformanceTab() {
         <div className={styles['chart']} >
           {charts[1]}
         </div>
+        {/* @ts-ignore */}
         <Row type="flex" justify="space-between" gutter={20}>
           <Col span={6}>
             <Row><Statistic title="In Use" value={memorySizeToString(memoryLoad.used)} /></Row>
@@ -222,9 +231,9 @@ export default function PerformanceTab() {
             <div>Form factor:</div>
           </Col>
           <Col className={styles['static-value']} span={5}>
-            <div>{pluggedMemories[0].clockSpeed + ' MHz'}</div>
+            <div>{pluggedMemories.length >= 1 ? pluggedMemories[0].clockSpeed + ' MHz': 'N/A'}</div>
             <div>{pluggedMemories.length + ' of ' + memoryInfo.length}</div>
-            <div>{pluggedMemories[0].formFactor === '' ? 'Not Available' : pluggedMemories[0].formFactor}</div>
+            <div>{pluggedMemories.length >= 1 ? (pluggedMemories[0].formFactor === '' ? 'N/A' : pluggedMemories[0].formFactor) : 'N/A'}</div>
           </Col>
         </Row>
       </Tabs.TabPane>
