@@ -17,7 +17,7 @@ export default function PerformanceTab() {
   const memoryLoad = useSelector((state: RootState) => state.memory.load);
   const memoryInfo = useSelector((state: RootState) => state.memory.info);
 
-  const memorySizeToString = (size: number) => {
+  const memorySizeToString = (size: number): string => {
     if(size === 0) {
       return '0';
     }
