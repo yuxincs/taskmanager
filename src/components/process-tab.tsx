@@ -19,9 +19,9 @@ interface HeaderProps {
 const Header: React.FC<HeaderProps> = props => {
   return (
     <div>
-      <span className={styles.title}>{props.title}</span>
+      <span className={styles['title']}>{props.title}</span>
       <br />
-      <span className={styles.subtitle}>{props.subtitle}</span>
+      <span className={styles['subtitle']}>{props.subtitle}</span>
     </div>
   );
 }
@@ -142,9 +142,9 @@ const ProcessTab: React.FC = () => {
   ];
 
   return (
-    <div className={styles.processTab}>
+    <div className={styles['process-tab']}>
     <Table
-      className={styles.table}
+      className={styles['table']}
       loading={processes.length === 0}
       dataSource={processes}
       // @ts-ignore
@@ -153,7 +153,7 @@ const ProcessTab: React.FC = () => {
       scroll={{ y: 'calc(100vh - 80px - 20px - 61px)' }} // minus footer(80px) / tablist(20px) / table header(61px)
       rowKey="pid"
       // @ts-ignore
-      rowClassName={record => styles.row + (selectedPID === record.pid ? ' ' + styles.selected : '')}
+      rowClassName={record => styles['row'] + (selectedPID === record.pid ? ' ' + styles['selected'] : '')}
       pagination={false}
       size="small"
       onRow={(record, rowIndex) => {
@@ -164,8 +164,8 @@ const ProcessTab: React.FC = () => {
         height: 'calc(100vh - 80px - 20px - 61px)'
       })}
     />
-    <div className={styles.footer}>
-      <Button className={styles.endtask} type="primary" disabled={selectedPID === -1}
+    <div className={styles['footer']}>
+      <Button className={styles['endtask']} type="primary" disabled={selectedPID === -1}
               onClick={() => {
                 // @ts-ignore
                 dispatch(killProcess(selectedPID));

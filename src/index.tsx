@@ -65,20 +65,20 @@ setInterval(requestDynamicInfo, 1000);
 const TaskManager = () => {
   return (
     <Tabs
-      className={styles.tabs}
+      className={styles['tabs']}
       tabBarStyle={{margin: 0}}
       defaultActiveKey="1"
       size="small"
     >
       <Tabs.TabPane
-        className={styles.tabPanes}
+        className={styles['tab-panes']}
         tab={<span><SwitcherOutlined />Processes</span>}
         key="1"
       >
         <ProcessTab />
       </Tabs.TabPane>
       <Tabs.TabPane
-        className={styles.tabPanes}
+        className={styles['tab-panes']}
         tab={<span><RocketOutlined />Performance</span>}
         key="2"
       >
@@ -90,7 +90,7 @@ const TaskManager = () => {
 
 let rootElement = document.getElementById('root');
 
-rootElement!.className += ' ' + styles.root;
+rootElement!.className += ' ' + styles['root'];
 
 ReactDOM.render(
   <Provider store={store}>
