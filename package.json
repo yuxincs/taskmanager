@@ -14,7 +14,6 @@
     "classnames": "^2.2.6",
     "echarts": "^4.7.0",
     "echarts-for-react": "^2.0.16",
-    "electron-is-dev": "^1.2.0",
     "kill-process": "^1.0.2",
     "rc-resize-observer": "^0.2.1",
     "react": "^16.13.1",
@@ -48,7 +47,6 @@
     "electron": "^9.0.0",
     "electron-builder": "^22.6.1",
     "jest-canvas-mock": "^2.2.0",
-    "react-app-rewired": "^2.1.6",
     "redux-logger": "^3.0.6",
     "typescript": "^3.9.3",
     "wait-on": "^5.0.0"
