@@ -41,37 +41,37 @@
 }
 
 .selected {
-  background-color: rgba(36, 169, 225, 0.3);
+  background-color: rgba(36, 169, 225, 0.3) !important;
 }
 
 .level-1 {
-  background-color: rgb(255, 244, 196);
+  background-color: rgb(255, 244, 196) !important;
 }
 
 .level-2 {
-  background-color: rgb(249, 236, 168);
+  background-color: rgb(249, 236, 168) !important;
 }
 
 .level-3 {
-  background-color: rgb(255, 236, 135);
+  background-color: rgb(255, 236, 135) !important;
 }
 
 .level-4 {
-  background-color: rgb(255, 210, 98);
+  background-color: rgb(255, 210, 98) !important;
 }
 
 .level-5 {
-  background-color: rgb(255, 198, 61);
+  background-color: rgb(255, 198, 61) !important;
 }
 
 .level-6 {
-  background-color: rgb(252, 184, 97);
+  background-color: rgb(252, 184, 97) !important;
 }
 
 .level-7 {
-  background-color: rgb(252, 184, 22);
+  background-color: rgb(252, 184, 22) !important;
 }
 
 .level-8 {
-  background-color: rgb(254, 120, 64);
+  background-color: rgb(254, 120, 64) !important;
 }
