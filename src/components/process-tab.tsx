@@ -34,7 +34,8 @@ Header.defaultProps = {
 const statePriority = {
   'running': 3,
   'sleeping': 2,
-  'blocked': 1
+  'blocked': 1,
+  'zombie': 0
 };
 
 const ProcessTab: React.FC = () => {
@@ -53,6 +54,7 @@ const ProcessTab: React.FC = () => {
       case 'running': return <Badge status="success" />;
       case 'sleeping': return <Badge status="warning" />;
       case 'blocked': return <Badge status="error" />;
+      case 'zombie': return <Badge status="default" />;
       default: console.error('Process state unknown: ' + record.state); return <Badge status="default" />;
     }
   }
