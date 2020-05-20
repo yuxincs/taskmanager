@@ -25,7 +25,7 @@ const SideTab: React.FC<SideTabProps> = (props) => {
 }
 
 interface ChartProps {
-  key: number,
+  chartKey: number,
   data: number[],
   rgb: number[],
   cornerTexts: string[],
@@ -107,7 +107,7 @@ const Chart: React.FC<ChartProps> = (props) => {
       <div style={{border: '1px solid ' + colors[0]}}>
         <ReactEcharts
           style={{height: props.height}}
-          key={props.key}
+          key={props.chartKey}
           option={option}
         />
       </div>
@@ -149,7 +149,7 @@ export default function PerformanceTab() {
     let height = extraArgs[1] as string;
     return [
       <Chart
-        key={index * 2}
+        chartKey={index * 2}
         data={cpuLoadHistory}
         rgb={[17, 125, 187]}
         cornerTexts={['% Utilization', '100 %', '0', '60 Seconds']}
@@ -157,7 +157,7 @@ export default function PerformanceTab() {
         height={height}
       />,
       <Chart
-        key={index * 2 + 1}
+        chartKey={index * 2 + 1}
         data={memoryLoadHistory}
         rgb={[139, 18, 174]}
         cornerTexts={['Memory Usage', memorySizeToString(memoryLoad.total), '0', '60 Seconds']}
