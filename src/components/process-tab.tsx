@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import { useSelector, useDispatch } from "react-redux";
 import { VList } from 'virtuallist-antd';
 import { Table, Button, Badge } from "antd";
@@ -6,131 +6,134 @@ import { CheckCircleOutlined, DiffTwoTone } from "@ant-design/icons";
 import styles from './process-tab.module.css';
 import { killProcess } from "../actions/process";
 import {RootState} from "../reducers";
+import classNames from 'classnames';
+import {Systeminformation} from 'systeminformation';
 
+type ProcessesProcessData = Systeminformation.ProcessesProcessData;
 
-export default function ProcessTab() {
-  const [selectedPID, setSelectedPID] = useState('');
+interface HeaderProps {
+  title?: string | JSX.Element,
+  subtitle: string | JSX.Element
+}
+
+const Header: React.FC<HeaderProps> = props => {
+  return (
+    <div>
+      <span className={styles['title']}>{props.title}</span>
+      <br />
+      <span className={styles['subtitle']}>{props.subtitle}</span>
+    </div>
+  );
+}
+
+Header.defaultProps = {
+  title: '',
+  subtitle: ''
+}
+
+const statePriority = {
+  'running': 3,
+  'sleeping': 2,
+  'blocked': 1,
+  'zombie': 0
+};
+
+const ProcessTab: React.FC = () => {
+  const [selectedPID, setSelectedPID] = useState(-1);
   const cpuLoad = useSelector((state: RootState) => state.cpu.loadHistory[state.cpu.loadHistory.length - 1]);
   const memoryLoad = useSelector((state: RootState) => state.memory.loadHistory[state.memory.loadHistory.length - 1]);
   const processes = useSelector((state: RootState) => state.process.processes);
   const dispatch = useDispatch();
 
-  const statePriority = {
-    'running': 3,
-    'sleeping': 2,
-    'blocked': 1
-  };
+  const processCellRenderer = (text: string, record: ProcessesProcessData): JSX.Element => {
+    return <span><DiffTwoTone />&emsp;{text}</span>;
+  }
 
-  const normalCellRenderer = (text: string): React.ReactNode => {
-    return {
-      props: {
-        style: { borderBottom: 'none', transition: 'none'}
-      },
-      children: text
+  const stateCellRenderer = (text: string, record: ProcessesProcessData): JSX.Element => {
+    switch(record.state) {
+      case 'running': return <Badge status="success" />;
+      case 'sleeping': return <Badge status="warning" />;
+      case 'blocked': return <Badge status="error" />;
+      case 'zombie': return <Badge status="default" />;
+      default: console.error('Process state unknown: ' + record.state); return <Badge status="default" />;
     }
-  };
+  }
 
-  const headerRenderer = (title: string, subtitle: React.ReactNode | string) => {
-    return (
-      <div>
-        <span className={styles.title}>{title}</span>
-        <br />
-        <span className={styles.subtitle}>{subtitle}</span>
-      </div>
-    );
-  };
+  // helper function to generate correct class names (background colors, etc.) for percentage cells
+  const percentageClassName = (selected: boolean, percent: number): string => {
+    let className = styles['num-cell'];
+    if(!selected) {
+      className = classNames(className, styles['level-' + Math.min(Math.ceil((percent + 0.001) / 12.5), 8)])
+    }
+    return className;
+  }
 
-  const processCellRenderer = (text: string, record: React.ReactNode): React.ReactNode => {
-    let normal = normalCellRenderer(text);
-    // @ts-ignore
-    normal.children = <span><DiffTwoTone />&emsp;{text}</span>;
-    return normal;
-  };
+  const cpuCellRenderer = (text: string, record: ProcessesProcessData) => {
+    let className = percentageClassName(selectedPID === record.pid, record.pcpu);
+    return {
+      props: {className: className},
+      children: parseFloat(text).toFixed(1) + ' %'
+    }
+  }
 
-  const stateCellRenderer = (text: string, record: any): React.ReactNode => {
-    let normal = normalCellRenderer(text);
-    const stateBadge = {
-      'running': <Badge status="success" />,
-      'sleeping': <Badge status="warning" />,
-      'blocked': <Badge status="error" />
-    };
-    // @ts-ignore
-    normal.children = stateBadge[record.state];
-    return normal;
-  };
-
-  const memoryCellRenderer = (text: string, record: any) => {
-    let base = percentageCellRenderer(record.pmem, record);
+  const memoryCellRenderer = (text: string, record: ProcessesProcessData) => {
+    let className = percentageClassName(selectedPID === record.pid, record.pmem);
+    let value = record.mem_rss;
     const units = ['KB', 'MB', 'GB'];
     let unitIndex = 0;
-    let value = parseInt(text);
     // iteratively divide 1024 to find the best suitable memory unit
     while(value > 1024 && unitIndex < units.length) {
       value /= 1024;
       unitIndex ++;
     }
-    // @ts-ignore
-    base.children = value.toFixed(1) + ' ' + units[unitIndex];
-    return base;
-  };
-
-  const percentageCellRenderer = (text: string, record: any) => {
-    let normal = normalCellRenderer(text);
-    // @ts-ignore
-    normal.props.className = styles['num-cell'];
-
-    if(selectedPID !== record.pid) {
-      // @ts-ignore
-      normal.props.className += ' ' + styles['level-' + Math.min(Math.ceil((parseFloat(text) + 0.001) / 12.5), 8)];
+    return {
+      props: {className: className},
+      children: value.toFixed(1) + ' ' + units[unitIndex]
     }
-    // @ts-ignore
-    normal.children = text.toFixed(1) + ' %';
-    return normal;
-  };
+  }
 
   const columns = [
     {
-      title: headerRenderer('', 'Name'),
+      title: <Header subtitle={'Name'} />,
       dataIndex: 'command',
       width: '200px',
-      sorter: (a: any, b: any) => a.command.localeCompare(b.command),
+      sorter: (a: ProcessesProcessData, b: ProcessesProcessData) => a.command.localeCompare(b.command),
       render: processCellRenderer,
       ellipsis: true
     },
     {
-      title: headerRenderer('', <CheckCircleOutlined />),
+      title: <Header subtitle={<CheckCircleOutlined/>} />,
       dataIndex: 'state',
       width: '35px',
       // @ts-ignore
-      sorter: (a: any, b: any) => statePriority[a.state] - statePriority[b.state],
+      sorter: (a: ProcessesProcessData, b: ProcessesProcessData) => statePriority[a.state] - statePriority[b.state],
       render: stateCellRenderer
     },
     {
-      title: headerRenderer('', 'PID'),
+      title: <Header subtitle="PID" />,
       dataIndex: 'pid',
-      sorter: (a: any, b: any) => a.pid - b.pid,
-      render: normalCellRenderer,
+      sorter: (a: ProcessesProcessData, b: ProcessesProcessData) => a.pid - b.pid,
       width: '80px',
       ellipsis: true
     },
     {
-      title: headerRenderer('', 'User'),
+      title: <Header subtitle="User" />,
       dataIndex: 'user',
-      sorter: (a: any, b: any) => a.user.localeCompare(b.user),
-      render: normalCellRenderer,
+      sorter: (a: ProcessesProcessData, b: ProcessesProcessData) => a.user.localeCompare(b.user),
+      //render: (text: string) => <NormalCell>{text}</NormalCell>,
       width: '80px',
       ellipsis: true
     },
     {
-      title: headerRenderer(Math.round( cpuLoad * 10) / 10 + ' %', 'CPU'),
+      title: <Header title={Math.round( cpuLoad * 10) / 10 + ' %'} subtitle="CPU" />,
       dataIndex: 'pcpu',
-      sorter: (a: any, b: any) => a.pcpu - b.pcpu,
+      sorter: (a: ProcessesProcessData, b: ProcessesProcessData) => a.pcpu - b.pcpu,
       width: '100px',
-      render: percentageCellRenderer,
+      render: cpuCellRenderer,
       defaultSortOrder: 'descend'
     },
     {
-      title: headerRenderer(Math.round( memoryLoad * 10) / 10 + ' %', 'Memory'),
+      title: <Header title={Math.round( memoryLoad * 10) / 10 + ' %'} subtitle="Memory" />,
       dataIndex: 'mem_rss',
       width: '100px',
       sorter: (a: any, b: any) => a.mem_rss - b.mem_rss,
@@ -139,9 +142,9 @@ export default function ProcessTab() {
   ];
 
   return (
-    <div className={styles.processTab}>
+    <div className={styles['process-tab']}>
     <Table
-      className={styles.table}
+      className={styles['table']}
       loading={processes.length === 0}
       dataSource={processes}
       // @ts-ignore
@@ -150,7 +153,7 @@ export default function ProcessTab() {
       scroll={{ y: 'calc(100vh - 80px - 20px - 61px)' }} // minus footer(80px) / tablist(20px) / table header(61px)
       rowKey="pid"
       // @ts-ignore
-      rowClassName={record => styles.row + (selectedPID === record.pid ? ' ' + styles.selected : '')}
+      rowClassName={record => styles['row'] + (selectedPID === record.pid ? ' ' + styles['selected'] : '')}
       pagination={false}
       size="small"
       onRow={(record, rowIndex) => {
@@ -161,12 +164,12 @@ export default function ProcessTab() {
         height: 'calc(100vh - 80px - 20px - 61px)'
       })}
     />
-    <div className={styles.footer}>
-      <Button className={styles.endtask} type="primary" disabled={selectedPID === ''}
+    <div className={styles['footer']}>
+      <Button className={styles['endtask']} type="primary" disabled={selectedPID === -1}
               onClick={() => {
                 // @ts-ignore
                 dispatch(killProcess(selectedPID));
-                setSelectedPID('');
+                setSelectedPID(-1);
               }}>
         End Task
       </Button>
@@ -174,3 +177,5 @@ export default function ProcessTab() {
   </div>
   );
 }
+
+export default ProcessTab;

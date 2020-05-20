@@ -6,8 +6,118 @@ import { useSelector } from "react-redux";
 import {RootState} from "../reducers";
 
 
-export default function PerformanceTab() {
+interface SideTabProps {
+  icon: JSX.Element,
+  title: string,
+  subtitle: string
+}
 
+const SideTab: React.FC<SideTabProps> = (props) => {
+  return (
+    <div className={styles['tab']}>
+      <div className={styles['tab-chart']}>{props.icon}</div>
+      <div className={styles['tab-text']}>
+        <span className={styles.title}>{props.title}</span><br />
+        <span className={styles.subtitle}>{props.subtitle}</span>
+      </div>
+    </div>
+  );
+}
+
+interface ChartProps {
+  key: number,
+  data: number[],
+  rgb: number[],
+  cornerTexts: string[],
+  showExtras: boolean,
+  height: string
+}
+
+const Chart: React.FC<ChartProps> = (props) => {
+  // colors for border/line, area, grid
+  const colors = [1, 0.4, 0.1].map((alpha) => 'rgba(' + props.rgb.join(', ') + ', ' + alpha + ')');
+  const xdata = Array.from(Array(props.data.length).keys());
+  const option = {
+    xAxis: {
+      type: 'category',
+      boundaryGap: false,
+      data: xdata,
+      splitLine: {
+        show: props.showExtras,
+        lineStyle: { color: colors[2] }
+      },
+      axisLabel: { show: false },
+      axisTick: { show: false },
+      axisLine: { show: false }
+    },
+    yAxis: {
+      type: 'value',
+      boundaryGap: [0, '100%'],
+      splitLine: {
+        show: props.showExtras,
+        lineStyle: { color: colors[2] },
+      },
+      max: 100,
+      axisLabel: { show: false },
+      axisTick: { show: false },
+      axisLine: { show: false }
+    },
+    grid: {
+      left: 0,
+      top: 0,
+      right: 0,
+      bottom: 0
+    },
+    series: [{
+      data: props.data,
+      type: 'line',
+      areaStyle: {
+        color: colors[1]
+      },
+      lineStyle: {
+        color: colors[0],
+        width: 1
+      },
+      showSymbol: false,
+      hoverAnimation: false,
+      animation: false
+    }]
+  };
+
+  let topLine = null;
+  let bottomLine = null;
+  if(props.showExtras){
+    topLine = (
+      <Row justify="space-between">
+        <Col>{props.cornerTexts[0]}</Col>
+        <Col>{props.cornerTexts[1]}</Col>
+      </Row>
+    );
+    bottomLine = (
+      <Row justify="space-between">
+        <Col>{props.cornerTexts[2]}</Col>
+        <Col>{props.cornerTexts[3]}</Col>
+      </Row>
+    );
+  }
+
+  return (
+    <div>
+      {topLine}
+      <div style={{border: '1px solid ' + colors[0]}}>
+        <ReactEcharts
+          style={{height: props.height}}
+          key={props.key}
+          option={option}
+        />
+      </div>
+      {bottomLine}
+    </div>
+  );
+}
+
+
+export default function PerformanceTab() {
   const upTime = useSelector((state: RootState) => state.general.uptime);
   const processCount = useSelector((state: RootState) => state.process.processes.length);
   const cpuLoadHistory = useSelector((state: RootState) => state.cpu.loadHistory);
@@ -32,107 +142,28 @@ export default function PerformanceTab() {
     return value.toFixed(1) + ' ' + units[unitIndex];
   };
 
-  const generateOneLineText = (left: React.ReactNode, right: React.ReactNode, leftClassName=styles['chart-text'], rightClassName=styles['chart-text']) => {
-    return <Row justify="space-between">
-      <Col className={leftClassName}>{left}</Col>
-      <Col className={rightClassName}>{right}</Col>
-    </Row>;
-  };
-
-  const generateTab = (chart: React.ReactNode, title: React.ReactNode, subtitle: React.ReactNode) => {
-    return <div className={styles['tab']}>
-      <div className={styles['tab-chart']}>{chart}</div>
-      <div className={styles['tab-text']}>
-        <span className={styles.title}>{title}</span><br />
-        <span className={styles.subtitle}>{subtitle}</span>
-      </div>
-    </div>
-  };
-
-  const generateChart = (key: string, data: number[], rgb: string[], cornerTexts: string[], showExtras: boolean, height: string) => {
-    // colors for border/line, area, grid
-    const colors = [1, 0.4, 0.1].map((alpha) => 'rgba(' + rgb.join(', ') + ', ' + alpha + ')');
-    const xdata = Array.from(Array(data.length).keys());
-    const option = {
-      xAxis: {
-        type: 'category',
-        boundaryGap: false,
-        data: xdata,
-        splitLine: {
-          show: showExtras,
-          lineStyle: { color: colors[2] }
-        },
-        axisLabel: { show: false },
-        axisTick: { show: false },
-        axisLine: { show: false }
-      },
-      yAxis: {
-        type: 'value',
-        boundaryGap: [0, '100%'],
-        splitLine: {
-          show: showExtras,
-          lineStyle: { color: colors[2] },
-        },
-        max: 100,
-        axisLabel: { show: false },
-        axisTick: { show: false },
-        axisLine: { show: false }
-      },
-      grid: {
-        left: 0,
-        top: 0,
-        right: 0,
-        bottom: 0
-      },
-      series: [{
-        data: data,
-        type: 'line',
-        areaStyle: {
-          color: colors[1]
-        },
-        lineStyle: {
-          color: colors[0],
-          width: 1
-        },
-        showSymbol: false,
-        hoverAnimation: false,
-        animation: false
-      }]
-    };
-
-    const topLine = showExtras ? generateOneLineText(cornerTexts[0], cornerTexts[1]) : null;
-    const bottomLine = showExtras ? generateOneLineText(cornerTexts[3], cornerTexts[2]) : null;
-
-    return (
-      <div>
-        {topLine}
-        <div style={{border: '1px solid ' + colors[0]}}>
-          <ReactEcharts
-            style={{height: height}}
-            key={key}
-            option={option}
-          />
-        </div>
-        {bottomLine}
-      </div>
-    );
-  };
 
   // generate large charts and small charts to display in tab and in pane
   let [charts, smallCharts] = [[true, '250px'], [false, '45px']].map((extraArgs, index) => {
+    let showExtras = extraArgs[0] as boolean;
+    let height = extraArgs[1] as string;
     return [
-      generateChart(
-        index * 2,
-        cpuLoadHistory,
-        [17, 125, 187],
-        // @ts-ignore
-        ['% Utilization', '100 %', '0', '60 Seconds'], ...extraArgs),
-      generateChart(
-        index * 2 + 1,
-        memoryLoadHistory,
-        [139, 18, 174],
-        // @ts-ignore
-        ['Memory Usage', memorySizeToString(memoryLoad.total), '0', '60 Seconds'], ...extraArgs)
+      <Chart
+        key={index * 2}
+        data={cpuLoadHistory}
+        rgb={[17, 125, 187]}
+        cornerTexts={['% Utilization', '100 %', '0', '60 Seconds']}
+        showExtras={showExtras}
+        height={height}
+      />,
+      <Chart
+        key={index * 2 + 1}
+        data={memoryLoadHistory}
+        rgb={[139, 18, 174]}
+        cornerTexts={['Memory Usage', memorySizeToString(memoryLoad.total), '0', '60 Seconds']}
+        showExtras={showExtras}
+        height={height}
+      />
     ];
   });
 
@@ -149,31 +180,46 @@ export default function PerformanceTab() {
     >
       <Tabs.TabPane
         className={styles['pane']}
-        tab={generateTab(smallCharts[0],
-          'CPU', cpuLoadHistory[cpuLoadHistory.length - 1].toFixed(0) + '%')}
-        key="1">
-        {generateOneLineText('CPU',
-          cpuInfo.manufacturer + ' ' + cpuInfo.brand + ' CPU @ ' + cpuInfo.speed + ' GHz',
-          styles['big-title'], styles['title'])}
+        tab={
+          <SideTab
+            icon={smallCharts[0]}
+            title="CPU"
+            subtitle={cpuLoadHistory[cpuLoadHistory.length - 1].toFixed(0) + '%'}
+          />
+        }
+        key="1"
+      >
+        <Row justify="space-between">
+          <Col className={styles['big-title']}>CPU</Col>
+          <Col className={styles['title']}>
+            {cpuInfo.manufacturer + ' ' + cpuInfo.brand + ' CPU @ ' + cpuInfo.speed + ' GHz'}
+          </Col>
+        </Row>
         <div className={styles['chart']} >
           {charts[0]}
         </div>
         <Row justify="space-between" gutter={20}>
           <Col span={12}>
             <Row justify="space-between">
-              <Col><Statistic title="Utilization" value={
-                cpuLoadHistory[cpuLoadHistory.length - 1].toFixed(1) + '%'
-              } /></Col>
-              <Col><Statistic title="Speed" value={cpuSpeed} suffix="GHz"/></Col>
+              <Col>
+                <Statistic
+                title="Utilization"
+                value={cpuLoadHistory[cpuLoadHistory.length - 1].toFixed(1) + '%'}
+                />
+              </Col>
+              <Col><Statistic title="Speed" value={cpuSpeed} suffix="GHz" /></Col>
             </Row>
             <Row justify="space-between">
               <Col><Statistic title="Processes" value={processCount} /></Col>
               {/*<Col><Statistic title="Threads" value={'TODO'} /></Col>*/}
             </Row>
             <Row justify="space-between">
-              <Col><Statistic title="Up Time" value={
-                new Date(upTime * 1000).toISOString().substr(11, 8)
-              } /></Col>
+              <Col>
+                <Statistic
+                  title="Up Time"
+                  value={new Date(upTime * 1000).toISOString().substr(11, 8)}
+                />
+              </Col>
             </Row>
           </Col>
           <Col className={styles['static-title']} span={7}>
@@ -200,11 +246,19 @@ export default function PerformanceTab() {
       </Tabs.TabPane>
       <Tabs.TabPane
         className={styles['pane']}
-        tab={generateTab(smallCharts[1],
-          'Memory', memoryLoadHistory[memoryLoadHistory.length - 1].toFixed(0) + '%')
+        tab={
+          <SideTab
+            icon={smallCharts[1]}
+            title="Memory"
+            subtitle={memoryLoadHistory[memoryLoadHistory.length - 1].toFixed(0) + '%'}
+          />
         }
-        key="2">
-        {generateOneLineText('Memory', memorySizeToString(memoryLoad.total) + ' DRAM', styles['big-title'], styles['big-title'])}
+        key="2"
+      >
+        <Row justify="space-between">
+          <Col className={styles['big-title']}>Memory</Col>
+          <Col className={styles['big-title']}>{memorySizeToString(memoryLoad.total) + ' DRAM'}</Col>
+        </Row>
         <div className={styles['chart']} >
           {charts[1]}
         </div>
