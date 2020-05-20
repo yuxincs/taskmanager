@@ -1,11 +1,12 @@
 const electron = require('electron');
+const path = require('path');
+
 const app = electron.app;
 const BrowserWindow = electron.BrowserWindow;
 
-const path = require('path');
-const isDev = require('electron-is-dev');
+const isDev = 'ELECTRON_IS_DEV' in process.env ? parseInt(process.env.ELECTRON_IS_DEV, 10) === 1 : !app.isPackaged;
 
-let mainWindow;
+let mainWindow = null;
 
 function createWindow() {
     mainWindow = new BrowserWindow({width: 700, height: 700, webPreferences: { nodeIntegration: true }});
