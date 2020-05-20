@@ -33,13 +33,6 @@ interface ChartProps {
   height: string
 }
 
-const generateOneLineText = (left: React.ReactNode, right: React.ReactNode, leftClassName=styles['chart-text'], rightClassName=styles['chart-text']) => {
-  return <Row justify="space-between">
-    <Col className={leftClassName}>{left}</Col>
-    <Col className={rightClassName}>{right}</Col>
-  </Row>;
-};
-
 const Chart: React.FC<ChartProps> = (props) => {
   // colors for border/line, area, grid
   const colors = [1, 0.4, 0.1].map((alpha) => 'rgba(' + props.rgb.join(', ') + ', ' + alpha + ')');
@@ -91,8 +84,22 @@ const Chart: React.FC<ChartProps> = (props) => {
     }]
   };
 
-  const topLine = props.showExtras ? generateOneLineText(props.cornerTexts[0], props.cornerTexts[1]) : null;
-  const bottomLine = props.showExtras ? generateOneLineText(props.cornerTexts[3], props.cornerTexts[2]) : null;
+  let topLine = null;
+  let bottomLine = null;
+  if(props.showExtras){
+    topLine = (
+      <Row justify="space-between">
+        <Col>{props.cornerTexts[0]}</Col>
+        <Col>{props.cornerTexts[1]}</Col>
+      </Row>
+    );
+    bottomLine = (
+      <Row justify="space-between">
+        <Col>{props.cornerTexts[2]}</Col>
+        <Col>{props.cornerTexts[3]}</Col>
+      </Row>
+    );
+  }
 
   return (
     <div>
@@ -180,9 +187,12 @@ export default function PerformanceTab() {
         }
         key="1"
       >
-        {generateOneLineText('CPU',
-          cpuInfo.manufacturer + ' ' + cpuInfo.brand + ' CPU @ ' + cpuInfo.speed + ' GHz',
-          styles['big-title'], styles['title'])}
+        <Row justify="space-between">
+          <Col className={styles['big-title']}>CPU</Col>
+          <Col className={styles['title']}>
+            {cpuInfo.manufacturer + ' ' + cpuInfo.brand + ' CPU @ ' + cpuInfo.speed + ' GHz'}
+          </Col>
+        </Row>
         <div className={styles['chart']} >
           {charts[0]}
         </div>
@@ -238,7 +248,10 @@ export default function PerformanceTab() {
         }
         key="2"
       >
-        {generateOneLineText('Memory', memorySizeToString(memoryLoad.total) + ' DRAM', styles['big-title'], styles['big-title'])}
+        <Row justify="space-between">
+          <Col className={styles['big-title']}>Memory</Col>
+          <Col className={styles['big-title']}>{memorySizeToString(memoryLoad.total) + ' DRAM'}</Col>
+        </Row>
         <div className={styles['chart']} >
           {charts[1]}
         </div>
