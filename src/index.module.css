@@ -21,6 +21,10 @@ code {
   height: 100%;
 }
 
+.tab {
+  padding-left: .5em;
+}
+
 .tab-panes {
   height: calc(100vh - 20px); /* remove tab header size */
 }
