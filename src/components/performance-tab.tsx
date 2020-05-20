@@ -24,6 +24,91 @@ const SideTab: React.FC<SideTabProps> = (props) => {
   );
 }
 
+interface ChartProps {
+  key: number,
+  data: number[],
+  rgb: number[],
+  cornerTexts: string[],
+  showExtras: boolean,
+  height: string
+}
+
+const generateOneLineText = (left: React.ReactNode, right: React.ReactNode, leftClassName=styles['chart-text'], rightClassName=styles['chart-text']) => {
+  return <Row justify="space-between">
+    <Col className={leftClassName}>{left}</Col>
+    <Col className={rightClassName}>{right}</Col>
+  </Row>;
+};
+
+const Chart: React.FC<ChartProps> = (props) => {
+  // colors for border/line, area, grid
+  const colors = [1, 0.4, 0.1].map((alpha) => 'rgba(' + props.rgb.join(', ') + ', ' + alpha + ')');
+  const xdata = Array.from(Array(props.data.length).keys());
+  const option = {
+    xAxis: {
+      type: 'category',
+      boundaryGap: false,
+      data: xdata,
+      splitLine: {
+        show: props.showExtras,
+        lineStyle: { color: colors[2] }
+      },
+      axisLabel: { show: false },
+      axisTick: { show: false },
+      axisLine: { show: false }
+    },
+    yAxis: {
+      type: 'value',
+      boundaryGap: [0, '100%'],
+      splitLine: {
+        show: props.showExtras,
+        lineStyle: { color: colors[2] },
+      },
+      max: 100,
+      axisLabel: { show: false },
+      axisTick: { show: false },
+      axisLine: { show: false }
+    },
+    grid: {
+      left: 0,
+      top: 0,
+      right: 0,
+      bottom: 0
+    },
+    series: [{
+      data: props.data,
+      type: 'line',
+      areaStyle: {
+        color: colors[1]
+      },
+      lineStyle: {
+        color: colors[0],
+        width: 1
+      },
+      showSymbol: false,
+      hoverAnimation: false,
+      animation: false
+    }]
+  };
+
+  const topLine = props.showExtras ? generateOneLineText(props.cornerTexts[0], props.cornerTexts[1]) : null;
+  const bottomLine = props.showExtras ? generateOneLineText(props.cornerTexts[3], props.cornerTexts[2]) : null;
+
+  return (
+    <div>
+      {topLine}
+      <div style={{border: '1px solid ' + colors[0]}}>
+        <ReactEcharts
+          style={{height: props.height}}
+          key={props.key}
+          option={option}
+        />
+      </div>
+      {bottomLine}
+    </div>
+  );
+}
+
 
 export default function PerformanceTab() {
 
@@ -51,97 +136,26 @@ export default function PerformanceTab() {
     return value.toFixed(1) + ' ' + units[unitIndex];
   };
 
-  const generateOneLineText = (left: React.ReactNode, right: React.ReactNode, leftClassName=styles['chart-text'], rightClassName=styles['chart-text']) => {
-    return <Row justify="space-between">
-      <Col className={leftClassName}>{left}</Col>
-      <Col className={rightClassName}>{right}</Col>
-    </Row>;
-  };
-
-  const generateChart = (key: string, data: number[], rgb: string[], cornerTexts: string[], showExtras: boolean, height: string) => {
-    // colors for border/line, area, grid
-    const colors = [1, 0.4, 0.1].map((alpha) => 'rgba(' + rgb.join(', ') + ', ' + alpha + ')');
-    const xdata = Array.from(Array(data.length).keys());
-    const option = {
-      xAxis: {
-        type: 'category',
-        boundaryGap: false,
-        data: xdata,
-        splitLine: {
-          show: showExtras,
-          lineStyle: { color: colors[2] }
-        },
-        axisLabel: { show: false },
-        axisTick: { show: false },
-        axisLine: { show: false }
-      },
-      yAxis: {
-        type: 'value',
-        boundaryGap: [0, '100%'],
-        splitLine: {
-          show: showExtras,
-          lineStyle: { color: colors[2] },
-        },
-        max: 100,
-        axisLabel: { show: false },
-        axisTick: { show: false },
-        axisLine: { show: false }
-      },
-      grid: {
-        left: 0,
-        top: 0,
-        right: 0,
-        bottom: 0
-      },
-      series: [{
-        data: data,
-        type: 'line',
-        areaStyle: {
-          color: colors[1]
-        },
-        lineStyle: {
-          color: colors[0],
-          width: 1
-        },
-        showSymbol: false,
-        hoverAnimation: false,
-        animation: false
-      }]
-    };
-
-    const topLine = showExtras ? generateOneLineText(cornerTexts[0], cornerTexts[1]) : null;
-    const bottomLine = showExtras ? generateOneLineText(cornerTexts[3], cornerTexts[2]) : null;
-
-    return (
-      <div>
-        {topLine}
-        <div style={{border: '1px solid ' + colors[0]}}>
-          <ReactEcharts
-            style={{height: height}}
-            key={key}
-            option={option}
-          />
-        </div>
-        {bottomLine}
-      </div>
-    );
-  };
 
   // generate large charts and small charts to display in tab and in pane
   let [charts, smallCharts] = [[true, '250px'], [false, '45px']].map((extraArgs, index) => {
+    let showExtras = extraArgs[0] as boolean;
+    let height = extraArgs[1] as string;
     return [
-      generateChart(
-        index * 2,
-        cpuLoadHistory,
-        [17, 125, 187],
-        // @ts-ignore
-        ['% Utilization', '100 %', '0', '60 Seconds'], ...extraArgs),
-      generateChart(
-        index * 2 + 1,
-        memoryLoadHistory,
-        [139, 18, 174],
-        // @ts-ignore
-        ['Memory Usage', memorySizeToString(memoryLoad.total), '0', '60 Seconds'], ...extraArgs)
+      <Chart
+        key={index * 2}
+        data={cpuLoadHistory}
+        rgb={[17, 125, 187]}
+        cornerTexts={['% Utilization', '100 %', '0', '60 Seconds']}
+        showExtras={showExtras}
+        height={height} />,
+      <Chart
+        key={index * 2 + 1}
+        data={memoryLoadHistory}
+        rgb={[139, 18, 174]}
+        cornerTexts={['Memory Usage', memorySizeToString(memoryLoad.total), '0', '60 Seconds']}
+        showExtras={showExtras}
+        height={height} />
     ];
   });
 
