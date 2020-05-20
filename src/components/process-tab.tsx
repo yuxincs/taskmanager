@@ -130,7 +130,7 @@ const ProcessTab: React.FC = () => {
       sorter: (a: ProcessesProcessData, b: ProcessesProcessData) => a.pcpu - b.pcpu,
       width: '100px',
       render: cpuCellRenderer,
-      defaultSortOrder: 'descend'
+      defaultSortOrder: 'descend' as 'descend'
     },
     {
       title: <Header title={Math.round( memoryLoad * 10) / 10 + ' %'} subtitle="Memory" />,
@@ -147,7 +147,6 @@ const ProcessTab: React.FC = () => {
       className={styles['table']}
       loading={processes.length === 0}
       dataSource={processes}
-      // @ts-ignore
       columns={columns}
       bordered={false}
       scroll={{ y: 'calc(100vh - 80px - 20px - 61px)' }} // minus footer(80px) / tablist(20px) / table header(61px)
