@@ -52,11 +52,11 @@
 
 .title {
     color: black;
-    font-size: large;
+    font-size: 20px;
 }
 
 .subtitle {
     color: dimgray;
-    font-size: small;
+    font-size: 12px;
     font-weight: normal;
 }
