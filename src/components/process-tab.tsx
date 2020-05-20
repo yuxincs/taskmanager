@@ -151,12 +151,10 @@ const ProcessTab: React.FC = () => {
       bordered={false}
       scroll={{ y: 'calc(100vh - 80px - 20px - 61px)' }} // minus footer(80px) / tablist(20px) / table header(61px)
       rowKey="pid"
-      // @ts-ignore
       rowClassName={record => styles['row'] + (selectedPID === record.pid ? ' ' + styles['selected'] : '')}
       pagination={false}
       size="small"
       onRow={(record, rowIndex) => {
-        // @ts-ignore
         return { onClick: () => setSelectedPID(record.pid) };
       }}
       components={VList({
