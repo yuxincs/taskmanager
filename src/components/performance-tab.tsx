@@ -277,7 +277,7 @@ export default function PerformanceTab() {
             <Row><Statistic title="Swap Used" value={memorySizeToString(memoryLoad.swapused).join(' ')} /></Row>
           </Col>
           <Col span={6}>
-            <Row><Statistic title="Avaliable" value={memorySizeToString(memoryLoad.free).join(' ')}/></Row>
+            <Row><Statistic title="Available" value={memorySizeToString(memoryLoad.free).join(' ')}/></Row>
             <Row><Statistic title="Cached" value={memorySizeToString(memoryLoad.cached).join(' ')} /></Row>
             <Row><Statistic title="Swap Available" value={memorySizeToString(memoryLoad.swapfree).join(' ')} /></Row>
           </Col>
