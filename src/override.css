@@ -2,3 +2,6 @@
     border-bottom: 0;
     transition: none;
 }
+td.ant-table-column-sort {
+    background: none;
+}
