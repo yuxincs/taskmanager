@@ -154,14 +154,16 @@ export default function PerformanceTab() {
         rgb={[17, 125, 187]}
         cornerTexts={['% Utilization', '100 %', '0', '60 Seconds']}
         showExtras={showExtras}
-        height={height} />,
+        height={height}
+      />,
       <Chart
         key={index * 2 + 1}
         data={memoryLoadHistory}
         rgb={[139, 18, 174]}
         cornerTexts={['Memory Usage', memorySizeToString(memoryLoad.total), '0', '60 Seconds']}
         showExtras={showExtras}
-        height={height} />
+        height={height}
+      />
     ];
   });
 
@@ -199,10 +201,13 @@ export default function PerformanceTab() {
         <Row justify="space-between" gutter={20}>
           <Col span={12}>
             <Row justify="space-between">
-              <Col><Statistic title="Utilization" value={
-                cpuLoadHistory[cpuLoadHistory.length - 1].toFixed(1) + '%'
-              } /></Col>
-              <Col><Statistic title="Speed" value={cpuSpeed} suffix="GHz"/></Col>
+              <Col>
+                <Statistic
+                title="Utilization"
+                value={cpuLoadHistory[cpuLoadHistory.length - 1].toFixed(1) + '%'}
+                />
+              </Col>
+              <Col><Statistic title="Speed" value={cpuSpeed} suffix="GHz" /></Col>
             </Row>
             <Row justify="space-between">
               <Col><Statistic title="Processes" value={processCount} /></Col>
@@ -241,10 +246,12 @@ export default function PerformanceTab() {
       </Tabs.TabPane>
       <Tabs.TabPane
         className={styles['pane']}
-        tab={<SideTab
-          icon={smallCharts[1]}
-          title="Memory"
-          subtitle={memoryLoadHistory[memoryLoadHistory.length - 1].toFixed(0) + '%'} />
+        tab={
+          <SideTab
+            icon={smallCharts[1]}
+            title="Memory"
+            subtitle={memoryLoadHistory[memoryLoadHistory.length - 1].toFixed(0) + '%'}
+          />
         }
         key="2"
       >
