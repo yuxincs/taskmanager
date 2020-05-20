@@ -31,12 +31,23 @@ Header.defaultProps = {
   subtitle: ''
 }
 
-const statePriority = {
+
+type ProcessState = 'running' | 'sleeping' | 'blocked' | 'zombie';
+
+interface StatePriority {
+  readonly 'running': number,
+  readonly 'sleeping': number,
+  readonly 'blocked': number,
+  readonly 'zombie': number
+}
+
+const statePriority: StatePriority = {
   'running': 3,
   'sleeping': 2,
   'blocked': 1,
   'zombie': 0
 };
+
 
 const ProcessTab: React.FC = () => {
   const [selectedPID, setSelectedPID] = useState(-1);
@@ -105,8 +116,8 @@ const ProcessTab: React.FC = () => {
       title: <Header subtitle={<CheckCircleOutlined/>} />,
       dataIndex: 'state',
       width: '35px',
-      // @ts-ignore
-      sorter: (a: ProcessesProcessData, b: ProcessesProcessData) => statePriority[a.state] - statePriority[b.state],
+      sorter: (a: ProcessesProcessData, b: ProcessesProcessData) =>
+        statePriority[a.state as ProcessState] - statePriority[b.state as ProcessState],
       render: stateCellRenderer
     },
     {
