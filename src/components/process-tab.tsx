@@ -7,6 +7,12 @@ import styles from './process-tab.module.css';
 import { killProcess } from "../actions/process";
 import {RootState} from "../reducers";
 
+const statePriority = {
+  'running': 3,
+  'sleeping': 2,
+  'blocked': 1
+};
+
 
 export default function ProcessTab() {
   const [selectedPID, setSelectedPID] = useState('');
@@ -14,13 +20,7 @@ export default function ProcessTab() {
   const memoryLoad = useSelector((state: RootState) => state.memory.loadHistory[state.memory.loadHistory.length - 1]);
   const processes = useSelector((state: RootState) => state.process.processes);
   const dispatch = useDispatch();
-
-  const statePriority = {
-    'running': 3,
-    'sleeping': 2,
-    'blocked': 1
-  };
-
+  
   const normalCellRenderer = (text: string): React.ReactNode => {
     return {
       props: {
