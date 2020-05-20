@@ -6,6 +6,25 @@ import { useSelector } from "react-redux";
 import {RootState} from "../reducers";
 
 
+interface SideTabProps {
+  icon: JSX.Element,
+  title: string,
+  subtitle: string
+}
+
+const SideTab: React.FC<SideTabProps> = (props) => {
+  return (
+    <div className={styles['tab']}>
+      <div className={styles['tab-chart']}>{props.icon}</div>
+      <div className={styles['tab-text']}>
+        <span className={styles.title}>{props.title}</span><br />
+        <span className={styles.subtitle}>{props.subtitle}</span>
+      </div>
+    </div>
+  );
+}
+
+
 export default function PerformanceTab() {
 
   const upTime = useSelector((state: RootState) => state.general.uptime);
@@ -37,16 +56,6 @@ export default function PerformanceTab() {
       <Col className={leftClassName}>{left}</Col>
       <Col className={rightClassName}>{right}</Col>
     </Row>;
-  };
-
-  const generateTab = (chart: React.ReactNode, title: React.ReactNode, subtitle: React.ReactNode) => {
-    return <div className={styles['tab']}>
-      <div className={styles['tab-chart']}>{chart}</div>
-      <div className={styles['tab-text']}>
-        <span className={styles.title}>{title}</span><br />
-        <span className={styles.subtitle}>{subtitle}</span>
-      </div>
-    </div>
   };
 
   const generateChart = (key: string, data: number[], rgb: string[], cornerTexts: string[], showExtras: boolean, height: string) => {
@@ -149,8 +158,11 @@ export default function PerformanceTab() {
     >
       <Tabs.TabPane
         className={styles['pane']}
-        tab={generateTab(smallCharts[0],
-          'CPU', cpuLoadHistory[cpuLoadHistory.length - 1].toFixed(0) + '%')}
+        tab={<SideTab
+          icon={smallCharts[0]}
+          title="CPU"
+          subtitle={cpuLoadHistory[cpuLoadHistory.length - 1].toFixed(0) + '%'} />
+        }
         key="1">
         {generateOneLineText('CPU',
           cpuInfo.manufacturer + ' ' + cpuInfo.brand + ' CPU @ ' + cpuInfo.speed + ' GHz',
@@ -200,8 +212,10 @@ export default function PerformanceTab() {
       </Tabs.TabPane>
       <Tabs.TabPane
         className={styles['pane']}
-        tab={generateTab(smallCharts[1],
-          'Memory', memoryLoadHistory[memoryLoadHistory.length - 1].toFixed(0) + '%')
+        tab={<SideTab
+          icon={smallCharts[1]}
+          title="Memory"
+          subtitle={memoryLoadHistory[memoryLoadHistory.length - 1].toFixed(0) + '%'} />
         }
         key="2">
         {generateOneLineText('Memory', memorySizeToString(memoryLoad.total) + ' DRAM', styles['big-title'], styles['big-title'])}
