@@ -120,7 +120,6 @@ const ProcessTab: React.FC = () => {
       title: <Header subtitle="User" />,
       dataIndex: 'user',
       sorter: (a: ProcessesProcessData, b: ProcessesProcessData) => a.user.localeCompare(b.user),
-      //render: (text: string) => <NormalCell>{text}</NormalCell>,
       width: '80px',
       ellipsis: true
     },
