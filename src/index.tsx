@@ -73,13 +73,15 @@ const TaskManager = () => {
       <Tabs.TabPane
         className={styles.tabPanes}
         tab={<span><SwitcherOutlined />Processes</span>}
-        key="1">
+        key="1"
+      >
         <ProcessTab />
       </Tabs.TabPane>
       <Tabs.TabPane
         className={styles.tabPanes}
         tab={<span><RocketOutlined />Performance</span>}
-        key="2">
+        key="2"
+      >
         <PerformanceTab />
       </Tabs.TabPane>
     </Tabs>
