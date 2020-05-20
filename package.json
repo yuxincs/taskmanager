@@ -47,6 +47,7 @@
     "electron": "^9.0.0",
     "electron-builder": "^22.6.1",
     "jest-canvas-mock": "^2.2.0",
+    "react-app-rewired": "^2.1.6",
     "redux-logger": "^3.0.6",
     "typescript": "^3.9.3",
     "wait-on": "^5.0.0"
