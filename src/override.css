@@ -2,6 +2,11 @@
     border-bottom: 0;
     transition: none;
 }
+
+th.ant-table-column-sort {
+    background-color: rgba(178, 219, 255, 0.8) !important;
+}
+
 td.ant-table-column-sort {
     background: none;
 }
