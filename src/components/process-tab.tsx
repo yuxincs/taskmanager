@@ -167,7 +167,6 @@ const ProcessTab: React.FC = () => {
     <div className={styles['footer']}>
       <Button className={styles['endtask']} type="primary" disabled={selectedPID === -1}
               onClick={() => {
-                // @ts-ignore
                 dispatch(killProcess(selectedPID));
                 setSelectedPID(-1);
               }}>
