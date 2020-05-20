@@ -35,7 +35,7 @@ interface ChartProps {
 
 const Chart: React.FC<ChartProps> = (props) => {
   // colors for border/line, area, grid
-  const colors = [1, 0.4, 0.1].map((alpha) => 'rgba(' + props.rgb.join(', ') + ', ' + alpha + ')');
+  const colors = [1, 0.4, 0.1].map((alpha) => `rgba(${props.rgb.join(',')},${alpha})`);
   const xdata = Array.from(Array(props.data.length).keys());
   const option = {
     xAxis: {
@@ -178,6 +178,7 @@ export default function PerformanceTab() {
   const [totalMemory, unit] = memorySizeToString(memoryLoad.total);
   const activeMemory = memorySizeToString(memoryLoad.active, unit as resizeOption)[0];
   const cpuCurrentLoad = cpuLoadHistory[cpuLoadHistory.length - 1].toFixed(0);
+  const memoryCurrentLoad = memoryLoadHistory[memoryLoadHistory.length - 1].toFixed(0);
   return (
     <Tabs
       className={styles['performance-tab']}
@@ -192,7 +193,7 @@ export default function PerformanceTab() {
           <SideTab
             icon={smallCharts[0]}
             title="CPU"
-            subtitle={cpuCurrentLoad + '%\t' + cpuCurrentSpeed + ' GHz'}
+            subtitle={`${cpuCurrentLoad}%\t${cpuCurrentSpeed} GHz`}
           />
         }
         key="1"
@@ -200,7 +201,7 @@ export default function PerformanceTab() {
         <Row justify="space-between">
           <Col className={styles['big-title']}>CPU</Col>
           <Col className={styles['title']}>
-            {cpuInfo.manufacturer + ' ' + cpuInfo.brand + ' CPU @ ' + cpuInfo.speed + ' GHz'}
+            {`${cpuInfo.manufacturer} ${cpuInfo.brand} CPU @ ${cpuInfo.speed} GHz`}
           </Col>
         </Row>
         <div className={styles['chart']} >
@@ -212,7 +213,7 @@ export default function PerformanceTab() {
               <Col>
                 <Statistic
                 title="Utilization"
-                value={cpuLoadHistory[cpuLoadHistory.length - 1].toFixed(1) + '%'}
+                value={`${cpuCurrentLoad}%`}
                 />
               </Col>
               <Col><Statistic title="Speed" value={cpuSpeed} suffix="GHz" /></Col>
@@ -241,7 +242,7 @@ export default function PerformanceTab() {
             <div>L3 Cache:</div>
           </Col>
           <Col className={styles['static-value']} span={5}>
-            <div>{cpuInfo.speed + ' GHz'}</div>
+            <div>{`${cpuInfo.speed } GHz`}</div>
             <div>{cpuInfo.socket === '' ? 'Not Available' : cpuInfo.socket}</div>
             <div>{cpuInfo.physicalCores}</div>
             <div>{cpuInfo.cores}</div>
@@ -258,14 +259,13 @@ export default function PerformanceTab() {
           <SideTab
             icon={smallCharts[1]}
             title="Memory"
-            subtitle={`${activeMemory} / ${totalMemory} ${unit} 
-            ${memoryLoadHistory[memoryLoadHistory.length - 1].toFixed(0)} %`}/>
+            subtitle={`${activeMemory} / ${totalMemory} ${unit} (${memoryCurrentLoad} %)`}/>
         }
         key="2"
       >
         <Row justify="space-between">
           <Col className={styles['big-title']}>Memory</Col>
-          <Col className={styles['big-title']}>{memorySizeToString(memoryLoad.total).join(' ') + ' DRAM'}</Col>
+          <Col className={styles['big-title']}>{`${memorySizeToString(memoryLoad.total).join(' ')} DRAM`}</Col>
         </Row>
         <div className={styles['chart']} >
           {charts[1]}
@@ -287,8 +287,8 @@ export default function PerformanceTab() {
             <div>Form factor:</div>
           </Col>
           <Col className={styles['static-value']} span={5}>
-            <div>{pluggedMemories.length >= 1 ? pluggedMemories[0].clockSpeed + ' MHz': 'N/A'}</div>
-            <div>{pluggedMemories.length + ' of ' + memoryInfo.length}</div>
+            <div>{pluggedMemories.length >= 1 ? `${pluggedMemories[0].clockSpeed} MHz`: 'N/A'}</div>
+            <div>{`${pluggedMemories.length} of ${memoryInfo.length}`}</div>
             <div>{pluggedMemories.length >= 1 ? (pluggedMemories[0].formFactor === '' ? 'N/A' : pluggedMemories[0].formFactor) : 'N/A'}</div>
           </Col>
         </Row>
