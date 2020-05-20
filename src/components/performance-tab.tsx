@@ -124,12 +124,14 @@ export default function PerformanceTab() {
   const memoryLoadHistory = useSelector((state: RootState) => state.memory.loadHistory);
   const cpuInfo = useSelector((state: RootState) => state.cpu.info);
   const cpuSpeed = useSelector((state: RootState) => state.cpu.currentSpeed);
+  const cpuCurrentSpeed = useSelector((state: RootState) => state.cpu.currentSpeed);
   const memoryLoad = useSelector((state: RootState) => state.memory.load);
   const memoryInfo = useSelector((state: RootState) => state.memory.info);
 
-  const memorySizeToString = (size: number): string => {
+  type resizeOption = 'auto' | 'B' | 'KB' | 'MB' | 'GB';
+  const memorySizeToString = (size: number, resize: resizeOption = 'auto'): [string, string] => {
     if(size === 0) {
-      return '0';
+      return ['0', 'B'];
     }
     const units = ['B', 'KB', 'MB', 'GB'];
     let unitIndex = 0;
@@ -138,8 +140,11 @@ export default function PerformanceTab() {
     while(value > 1024 && unitIndex < units.length) {
       value /= 1024;
       unitIndex ++;
+      if(resize !== 'auto' && resize === units[unitIndex])
+        break;
     }
-    return value.toFixed(1) + ' ' + units[unitIndex];
+
+    return [value.toFixed(1), units[unitIndex]];
   };
 
 
@@ -160,7 +165,7 @@ export default function PerformanceTab() {
         chartKey={index * 2 + 1}
         data={memoryLoadHistory}
         rgb={[139, 18, 174]}
-        cornerTexts={['Memory Usage', memorySizeToString(memoryLoad.total), '0', '60 Seconds']}
+        cornerTexts={['Memory Usage', memorySizeToString(memoryLoad.total).join(' '), '0', '60 Seconds']}
         showExtras={showExtras}
         height={height}
       />
@@ -170,6 +175,9 @@ export default function PerformanceTab() {
   // find a slot that has memory information to display memory information
   let pluggedMemories = memoryInfo.filter((value) => value.size !== 0);
 
+  const [totalMemory, unit] = memorySizeToString(memoryLoad.total);
+  const activeMemory = memorySizeToString(memoryLoad.active, unit as resizeOption)[0];
+  const cpuCurrentLoad = cpuLoadHistory[cpuLoadHistory.length - 1].toFixed(0);
   return (
     <Tabs
       className={styles['performance-tab']}
@@ -184,7 +192,7 @@ export default function PerformanceTab() {
           <SideTab
             icon={smallCharts[0]}
             title="CPU"
-            subtitle={cpuLoadHistory[cpuLoadHistory.length - 1].toFixed(0) + '%'}
+            subtitle={cpuCurrentLoad + '%\t' + cpuCurrentSpeed + ' GHz'}
           />
         }
         key="1"
@@ -238,9 +246,9 @@ export default function PerformanceTab() {
             <div>{cpuInfo.physicalCores}</div>
             <div>{cpuInfo.cores}</div>
             <div>{cpuInfo.flags.includes('vmx') ? 'Enabled' : 'Disabled'}</div>
-            <div>{memorySizeToString((cpuInfo.cache.l1d + cpuInfo.cache.l1i) * cpuInfo.physicalCores)}</div>
-            <div>{memorySizeToString(cpuInfo.cache.l2 * cpuInfo.physicalCores)}</div>
-            <div>{memorySizeToString(cpuInfo.cache.l3)}</div>
+            <div>{memorySizeToString((cpuInfo.cache.l1d + cpuInfo.cache.l1i) * cpuInfo.physicalCores).join(' ')}</div>
+            <div>{memorySizeToString(cpuInfo.cache.l2 * cpuInfo.physicalCores).join(' ')}</div>
+            <div>{memorySizeToString(cpuInfo.cache.l3).join(' ')}</div>
           </Col>
         </Row>
       </Tabs.TabPane>
@@ -250,28 +258,28 @@ export default function PerformanceTab() {
           <SideTab
             icon={smallCharts[1]}
             title="Memory"
-            subtitle={memoryLoadHistory[memoryLoadHistory.length - 1].toFixed(0) + '%'}
-          />
+            subtitle={`${activeMemory} / ${totalMemory} ${unit} 
+            ${memoryLoadHistory[memoryLoadHistory.length - 1].toFixed(0)} %`}/>
         }
         key="2"
       >
         <Row justify="space-between">
           <Col className={styles['big-title']}>Memory</Col>
-          <Col className={styles['big-title']}>{memorySizeToString(memoryLoad.total) + ' DRAM'}</Col>
+          <Col className={styles['big-title']}>{memorySizeToString(memoryLoad.total).join(' ') + ' DRAM'}</Col>
         </Row>
         <div className={styles['chart']} >
           {charts[1]}
         </div>
         <Row justify="space-between" gutter={20}>
           <Col span={6}>
-            <Row><Statistic title="In Use" value={memorySizeToString(memoryLoad.used)} /></Row>
-            <Row><Statistic title="Buffers" value={memorySizeToString(memoryLoad.buffers)} /></Row>
-            <Row><Statistic title="Swap Used" value={memorySizeToString(memoryLoad.swapused)} /></Row>
+            <Row><Statistic title="In Use" value={memorySizeToString(memoryLoad.used).join(' ')} /></Row>
+            <Row><Statistic title="Buffers" value={memorySizeToString(memoryLoad.buffers).join(' ')} /></Row>
+            <Row><Statistic title="Swap Used" value={memorySizeToString(memoryLoad.swapused).join(' ')} /></Row>
           </Col>
           <Col span={6}>
-            <Row><Statistic title="Avaliable" value={memorySizeToString(memoryLoad.free)}/></Row>
-            <Row><Statistic title="Cached" value={memorySizeToString(memoryLoad.cached)} /></Row>
-            <Row><Statistic title="Swap Available" value={memorySizeToString(memoryLoad.swapfree)} /></Row>
+            <Row><Statistic title="Avaliable" value={memorySizeToString(memoryLoad.free).join(' ')}/></Row>
+            <Row><Statistic title="Cached" value={memorySizeToString(memoryLoad.cached).join(' ')} /></Row>
+            <Row><Statistic title="Swap Available" value={memorySizeToString(memoryLoad.swapfree).join(' ')} /></Row>
           </Col>
           <Col className={styles['static-title']} span={6}>
             <div>Speed:</div>
