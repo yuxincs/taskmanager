@@ -111,7 +111,6 @@ const Chart: React.FC<ChartProps> = (props) => {
 
 
 export default function PerformanceTab() {
-
   const upTime = useSelector((state: RootState) => state.general.uptime);
   const processCount = useSelector((state: RootState) => state.process.processes.length);
   const cpuLoadHistory = useSelector((state: RootState) => state.cpu.loadHistory);
@@ -172,12 +171,15 @@ export default function PerformanceTab() {
     >
       <Tabs.TabPane
         className={styles['pane']}
-        tab={<SideTab
-          icon={smallCharts[0]}
-          title="CPU"
-          subtitle={cpuLoadHistory[cpuLoadHistory.length - 1].toFixed(0) + '%'} />
+        tab={
+          <SideTab
+            icon={smallCharts[0]}
+            title="CPU"
+            subtitle={cpuLoadHistory[cpuLoadHistory.length - 1].toFixed(0) + '%'}
+          />
         }
-        key="1">
+        key="1"
+      >
         {generateOneLineText('CPU',
           cpuInfo.manufacturer + ' ' + cpuInfo.brand + ' CPU @ ' + cpuInfo.speed + ' GHz',
           styles['big-title'], styles['title'])}
@@ -197,9 +199,12 @@ export default function PerformanceTab() {
               {/*<Col><Statistic title="Threads" value={'TODO'} /></Col>*/}
             </Row>
             <Row justify="space-between">
-              <Col><Statistic title="Up Time" value={
-                new Date(upTime * 1000).toISOString().substr(11, 8)
-              } /></Col>
+              <Col>
+                <Statistic
+                  title="Up Time"
+                  value={new Date(upTime * 1000).toISOString().substr(11, 8)}
+                />
+              </Col>
             </Row>
           </Col>
           <Col className={styles['static-title']} span={7}>
@@ -231,7 +236,8 @@ export default function PerformanceTab() {
           title="Memory"
           subtitle={memoryLoadHistory[memoryLoadHistory.length - 1].toFixed(0) + '%'} />
         }
-        key="2">
+        key="2"
+      >
         {generateOneLineText('Memory', memorySizeToString(memoryLoad.total) + ' DRAM', styles['big-title'], styles['big-title'])}
         <div className={styles['chart']} >
           {charts[1]}
