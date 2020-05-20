@@ -149,9 +149,9 @@ export default function PerformanceTab() {
 
 
   // generate large charts and small charts to display in tab and in pane
-  let [charts, smallCharts] = [[true, '250px'], [false, '45px']].map((extraArgs, index) => {
-    let showExtras = extraArgs[0] as boolean;
-    let height = extraArgs[1] as string;
+  const [charts, smallCharts] = [[true, '250px'], [false, '45px']].map((extraArgs, index) => {
+    const showExtras = extraArgs[0] as boolean;
+    const height = extraArgs[1] as string;
     return [
       <Chart
         chartKey={index * 2}
@@ -173,7 +173,7 @@ export default function PerformanceTab() {
   });
 
   // find a slot that has memory information to display memory information
-  let pluggedMemories = memoryInfo.filter((value) => value.size !== 0);
+  const pluggedMemories = memoryInfo.filter((value) => value.size !== 0);
 
   const [totalMemory, unit] = memorySizeToString(memoryLoad.total);
   const activeMemory = memorySizeToString(memoryLoad.active, unit as resizeOption)[0];
