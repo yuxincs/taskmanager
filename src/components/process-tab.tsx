@@ -150,7 +150,7 @@ const ProcessTab: React.FC = () => {
       render: memoryCellRenderer
     }
   ];
-
+  let scrollY = 'calc(100vh - 80px - 20px - 64px)'
   return (
     <div className={styles['process-tab']}>
     <Table
@@ -159,7 +159,7 @@ const ProcessTab: React.FC = () => {
       dataSource={processes}
       columns={columns}
       bordered={false}
-      scroll={{ y: 'calc(100vh - 80px - 20px - 61px)' }} // minus footer(80px) / tablist(20px) / table header(61px)
+      scroll={{ y: scrollY }} // minus footer(80px) / tablist(20px) / table header(61px)
       rowKey="pid"
       rowClassName={record => styles['row'] + (selectedPID === record.pid ? ' ' + styles['selected'] : '')}
       pagination={false}
@@ -168,7 +168,7 @@ const ProcessTab: React.FC = () => {
         return { onClick: () => setSelectedPID(record.pid) };
       }}
       components={VList({
-        height: 'calc(100vh - 80px - 20px - 61px)'
+        height: scrollY
       })}
     />
     <div className={styles['footer']}>
