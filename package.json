@@ -11,20 +11,17 @@
     "@types/react-redux": "^7.1.9",
     "@types/redux-logger": "^3.0.7",
     "antd": "^4.2.4",
-    "babel-plugin-import": "^1.13.0",
     "classnames": "^2.2.6",
     "echarts": "^4.7.0",
     "echarts-for-react": "^2.0.16",
     "kill-process": "^1.0.2",
-    "rc-resize-observer": "^0.2.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-redux": "^7.2.0",
     "react-scripts": "^3.4.1",
-    "react-window": "^1.8.5",
     "redux": "^4.0.5",
     "redux-thunk": "^2.3.0",
-    "systeminformation": "^4.26.2",
+    "systeminformation": "^4.26.4",
     "virtuallist-antd": "^0.4.4"
   },
   "main": "public/electron.js",
@@ -51,7 +48,8 @@
     "react-app-rewired": "^2.1.6",
     "redux-logger": "^3.0.6",
     "typescript": "^3.9.3",
-    "wait-on": "^5.0.0"
+    "wait-on": "^5.0.0",
+    "babel-plugin-import": "^1.13.0"
   },
   "browserslist": {
     "production": [
