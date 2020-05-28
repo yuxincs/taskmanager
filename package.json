@@ -21,7 +21,7 @@
     "react-scripts": "^3.4.1",
     "redux": "^4.0.5",
     "redux-thunk": "^2.3.0",
-    "systeminformation": "^4.26.4",
+    "systeminformation": "^4.26.5",
     "virtuallist-antd": "^0.4.4"
   },
   "main": "public/electron.js",
@@ -43,7 +43,7 @@
     "concurrently": "^5.2.0",
     "customize-cra": "^0.9.1",
     "electron": "^9.0.0",
-    "electron-builder": "^22.6.1",
+    "electron-builder": "^22.7.0",
     "jest-canvas-mock": "^2.2.0",
     "react-app-rewired": "^2.1.6",
     "redux-logger": "^3.0.6",
