@@ -94,7 +94,9 @@ rootElement!.className += ' ' + styles['root'];
 
 ReactDOM.render(
   <Provider store={store}>
-    <TaskManager />
+    <React.StrictMode>
+      <TaskManager />
+    </React.StrictMode>
   </Provider>,
   rootElement
 );
