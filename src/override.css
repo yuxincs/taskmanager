@@ -4,9 +4,13 @@
 }
 
 th.ant-table-column-sort {
-    background-color: rgba(178, 219, 255, 0.6) !important;
+    background-color: rgba(178, 219, 255, 0.4) !important;
 }
 
 td.ant-table-column-sort {
     background: none;
+}
+
+.ant-table-tbody > tr.ant-table-row-level-0:hover > td {
+    background-color: rgba(36, 169, 225, 0.1) !important;
 }
