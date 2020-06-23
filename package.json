@@ -3,14 +3,14 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@ant-design/icons": "^4.2.0",
+    "@ant-design/icons": "^4.2.1",
     "@types/classnames": "^2.2.10",
-    "@types/jest": "^25.2.3",
-    "@types/react": "^16.9.35",
+    "@types/jest": "^26.0.0",
+    "@types/react": "^16.9.38",
     "@types/react-dom": "^16.9.8",
     "@types/react-redux": "^7.1.9",
     "@types/redux-logger": "^3.0.8",
-    "antd": "^4.2.5",
+    "antd": "^4.3.5",
     "classnames": "^2.2.6",
     "dayjs": "^1.8.28",
     "echarts": "^4.8.0",
@@ -23,8 +23,7 @@
     "react-scripts": "^3.4.1",
     "redux": "^4.0.5",
     "redux-thunk": "^2.3.0",
-    "systeminformation": "^4.26.5",
-    "virtuallist-antd": "^0.4.4"
+    "systeminformation": "^4.26.9"
   },
   "main": "public/electron.js",
   "homepage": "./",
@@ -45,13 +44,13 @@
     "babel-plugin-import": "^1.13.0",
     "concurrently": "^5.2.0",
     "customize-cra": "^1.0.0",
-    "electron": "^9.0.0",
+    "electron": "^9.0.5",
     "electron-builder": "^22.7.0",
     "jest-canvas-mock": "^2.2.0",
     "react-app-rewired": "^2.1.6",
     "redux-logger": "^3.0.6",
-    "typescript": "^3.9.3",
-    "wait-on": "^5.0.0"
+    "typescript": "^3.9.5",
+    "wait-on": "^5.0.1"
   },
   "browserslist": {
     "production": [
