@@ -172,7 +172,7 @@ const ProcessTab: React.FC = () => {
   };
 
   const sorted = processes.sort(sortFunc(sortBy));
-
+  // TODO: selection should only include PIDs instead of table rows
   return (
     <div className={styles['process-tab']}>
       <Row className={styles['table']}>
