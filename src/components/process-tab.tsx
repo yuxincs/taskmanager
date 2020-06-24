@@ -86,7 +86,7 @@ const ProcessTab: React.FC = () => {
       dataKey: 'command',
       title: 'Name',
       width: 350,
-      midWidth: 300,
+      minWidth: 300,
       resizable: true,
       sortable: true,
       className: styles['command-cell'],
