@@ -16,7 +16,6 @@ import {updateProcessInfo} from "./actions/process";
 import {updateDiskLoad} from "./actions/disk";
 import {UpdateUpTime} from './actions/general';
 import {cpu, cpuCurrentspeed, cpuFlags, currentLoad, disksIO, mem, memLayout, processes, time} from "systeminformation";
-import './override.css';
 
 let middleware: Array<Middleware> = [thunkMiddleware];
 

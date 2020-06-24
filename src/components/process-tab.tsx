@@ -1,13 +1,17 @@
 import React, {useState} from 'react';
 import { useSelector, useDispatch } from "react-redux";
-import { VList } from 'virtuallist-antd';
-import { Table, Button, Badge } from "antd";
+// TODO: remove ignore mark when react-base-table releases TS version
+// @ts-ignore
+import BaseTable, { AutoResizer, SortOrder } from 'react-base-table';
+import 'react-base-table/styles.css';
+import { Button, Badge, Row } from "antd";
 import { CheckCircleOutlined, DiffTwoTone } from "@ant-design/icons";
-import styles from './process-tab.module.css';
+import styles from './process-tab.module.scss';
 import { killProcess } from "../actions/process";
 import {RootState} from "../reducers";
-import classNames from 'classnames';
+import { toLevel, isSelected, toMemoryString } from './utils';
 import {Systeminformation} from 'systeminformation';
+import classNames from "classnames";
 
 type ProcessesProcessData = Systeminformation.ProcessesProcessData;
 
@@ -50,136 +54,175 @@ const statePriority: StatePriority = {
 
 
 const ProcessTab: React.FC = () => {
-  const [selectedPID, setSelectedPID] = useState(-1);
   const cpuLoad = useSelector((state: RootState) => state.cpu.loadHistory[state.cpu.loadHistory.length - 1]);
   const memoryLoad = useSelector((state: RootState) => state.memory.loadHistory[state.memory.loadHistory.length - 1]);
   const processes = useSelector((state: RootState) => state.process.processes);
   const dispatch = useDispatch();
 
-  const processCellRenderer = (text: string, record: ProcessesProcessData): JSX.Element => {
-    return <span><DiffTwoTone />&emsp;{text}</span>;
+  const [selectedRows, setSelectedRows] = useState({from: -1, to: -1});
+  const [sortBy, setSortBy] = useState({key: 'addedDate', order: SortOrder.DESC});
+
+  const processCellRenderer = ({cellData}: {cellData: string}): JSX.Element => {
+    return <span><DiffTwoTone />&emsp;{cellData}</span>;
   }
 
-  const stateCellRenderer = (text: string, record: ProcessesProcessData): JSX.Element => {
-    switch(record.state) {
+  const stateCellRenderer = ({rowData}: {rowData: ProcessesProcessData}): JSX.Element => {
+    switch(rowData.state) {
       case 'running': return <Badge status="success" />;
       case 'sleeping': return <Badge status="warning" />;
       case 'blocked': return <Badge status="error" />;
       case 'zombie': return <Badge status="default" />;
-      default: console.error('Process state unknown: ' + record.state); return <Badge status="default" />;
+      default: console.error('Process state unknown: ' + rowData.state); return <Badge status="default" />;
     }
   }
 
-  // helper function to generate correct class names (background colors, etc.) for percentage cells
-  const percentageClassName = (selected: boolean, percent: number): string => {
-    let className = styles['num-cell'];
-    if(!selected) {
-      className = classNames(className, styles['level-' + Math.min(Math.ceil((percent + 0.001) / 12.5), 8)])
-    }
-    return className;
-  }
+  const cpuCellRenderer = ({cellData}: {cellData: string}): string => `${parseFloat(cellData).toFixed(1)}%`;
 
-  const cpuCellRenderer = (text: string, record: ProcessesProcessData) => {
-    let className = percentageClassName(selectedPID === record.pid, record.pcpu);
-    return {
-      props: {className: className},
-      children: parseFloat(text).toFixed(1) + ' %'
-    }
-  }
+  const memoryCellRenderer = ({cellData}: {cellData: string}): string => toMemoryString(parseFloat(cellData) * 1024).join(' ');
 
-  const memoryCellRenderer = (text: string, record: ProcessesProcessData) => {
-    let className = percentageClassName(selectedPID === record.pid, record.pmem);
-    let value = record.mem_rss;
-    const units = ['KB', 'MB', 'GB'];
-    let unitIndex = 0;
-    // iteratively divide 1024 to find the best suitable memory unit
-    while(value > 1024 && unitIndex < units.length) {
-      value /= 1024;
-      unitIndex ++;
+  const columns: any[] = [
+    {
+      key: 'command',
+      dataKey: 'command',
+      title: 'Name',
+      width: 350,
+      midWidth: 300,
+      resizable: true,
+      sortable: true,
+      className: styles['command-cell'],
+      cellRenderer: processCellRenderer,
+      headerRenderer: () => <Header subtitle="Name" />
+    },
+    {
+      key: 'state',
+      dataKey: 'state',
+      title: '',
+      sortable: true,
+      width: 35,
+      cellRenderer: stateCellRenderer,
+      align: 'center',
+      headerRenderer: () => <Header subtitle={<CheckCircleOutlined />} />
+    },
+    {
+      key: 'pid',
+      title: 'PID',
+      dataKey: 'pid',
+      width: 80,
+      minWidth: 80,
+      sortable: true,
+      resizable: true,
+      align: 'center',
+      headerRenderer: () => <Header subtitle="PID" />
+    },
+    {
+      key: 'user',
+      dataKey: 'user',
+      title: 'User',
+      width: 80,
+      minWidth: 80,
+      sortable: true,
+      resizable: true,
+      headerRenderer: () => <Header subtitle="User" />
+    },
+    {
+      key: 'pcpu',
+      dataKey: 'pcpu',
+      title: `${cpuLoad} CPU`,
+      width: 100,
+      minWidth: 100,
+      className: ({cellData}: {cellData: string}) =>
+        classNames(styles[`level-${toLevel(parseFloat(cellData))}`],
+          {[styles['busy-num-cell']]: cpuLoad > 80}
+          ),
+      cellRenderer: cpuCellRenderer,
+      sortable: true,
+      resizable: true,
+      align: 'right',
+      headerClassName: () => classNames({[styles['busy-header-cell'] ]: cpuLoad > 80}),
+      headerRenderer: () => <Header title={Math.round( cpuLoad * 10) / 10 + ' %'} subtitle="CPU" />
+    },
+    {
+      key: 'mem_rss',
+      dataKey: 'mem_rss',
+      title: `${memoryLoad} Memory`,
+      width: 100,
+      minWidth: 100,
+      className: ({rowData}: {rowData: ProcessesProcessData}) =>
+        classNames(
+          styles[`level-${toLevel(rowData.pmem)}`],
+          {[styles['busy-num-cell']]: memoryLoad > 80}
+        ),
+      cellRenderer: memoryCellRenderer,
+      sortable: true,
+      align: 'right',
+      headerClassName: () => classNames({[styles['busy-header-cell'] ]: memoryLoad > 80}),
+      headerRenderer: () => <Header title={Math.round( memoryLoad * 10) / 10 + ' %'} subtitle="Memory" />
     }
-    return {
-      props: {className: className},
-      children: value.toFixed(1) + ' ' + units[unitIndex]
-    }
-  }
+  ]
 
-  const columns = [
-    {
-      title: <Header subtitle={'Name'} />,
-      dataIndex: 'command',
-      width: '200px',
-      sorter: (a: ProcessesProcessData, b: ProcessesProcessData) => a.command.localeCompare(b.command),
-      render: processCellRenderer,
-      ellipsis: true
-    },
-    {
-      title: <Header subtitle={<CheckCircleOutlined/>} />,
-      dataIndex: 'state',
-      width: '35px',
-      sorter: (a: ProcessesProcessData, b: ProcessesProcessData) =>
-        statePriority[a.state as ProcessState] - statePriority[b.state as ProcessState],
-      render: stateCellRenderer
-    },
-    {
-      title: <Header subtitle="PID" />,
-      dataIndex: 'pid',
-      sorter: (a: ProcessesProcessData, b: ProcessesProcessData) => a.pid - b.pid,
-      width: '80px',
-      ellipsis: true
-    },
-    {
-      title: <Header subtitle="User" />,
-      dataIndex: 'user',
-      sorter: (a: ProcessesProcessData, b: ProcessesProcessData) => a.user.localeCompare(b.user),
-      width: '80px',
-      ellipsis: true
-    },
-    {
-      title: <Header title={Math.round( cpuLoad * 10) / 10 + ' %'} subtitle="CPU" />,
-      dataIndex: 'pcpu',
-      sorter: (a: ProcessesProcessData, b: ProcessesProcessData) => a.pcpu - b.pcpu,
-      width: '100px',
-      render: cpuCellRenderer,
-      defaultSortOrder: 'descend' as 'descend'
-    },
-    {
-      title: <Header title={Math.round( memoryLoad * 10) / 10 + ' %'} subtitle="Memory" />,
-      dataIndex: 'mem_rss',
-      width: '100px',
-      sorter: (a: any, b: any) => a.mem_rss - b.mem_rss,
-      render: memoryCellRenderer
+  const sortFunc = ({key, order}: {key: string, order: SortOrder}) => (a: any, b: any) => {
+    switch(key) {
+      case 'command': return order === SortOrder.ASC ? b[key].localeCompare(a[key]) : a[key].localeCompare(b[key]);
+      case 'user': return order === SortOrder.ASC ? b[key].localeCompare(a[key]) : a[key].localeCompare(b[key]);
+      case 'state': return order === SortOrder.ASC ?
+        statePriority[a[key] as ProcessState] - statePriority[b[key] as ProcessState] :
+        statePriority[b[key] as ProcessState] - statePriority[a[key] as ProcessState];
+      default: return order === SortOrder.ASC ? a[key] - b[key] : b[key] - a[key];
     }
-  ];
-  let scrollY = 'calc(100vh - 80px - 20px - 64px)'
+  };
+
+  const sorted = processes.sort(sortFunc(sortBy));
+
   return (
     <div className={styles['process-tab']}>
-    <Table
-      className={styles['table']}
-      loading={processes.length === 0}
-      dataSource={processes}
-      columns={columns}
-      bordered={false}
-      scroll={{ y: scrollY }} // minus footer(80px) / tablist(20px) / table header(61px)
-      rowKey="pid"
-      rowClassName={record => styles['row'] + (selectedPID === record.pid ? ' ' + styles['selected'] : '')}
-      pagination={false}
-      size="small"
-      onRow={(record, rowIndex) => {
-        return { onClick: () => setSelectedPID(record.pid) };
-      }}
-      components={VList({
-        height: scrollY
-      })}
-    />
-    <div className={styles['footer']}>
-      <Button className={styles['endtask']} type="primary" disabled={selectedPID === -1}
-              onClick={() => {
-                dispatch(killProcess(selectedPID));
-                setSelectedPID(-1);
-              }}>
-        End Task
-      </Button>
-    </div>
+      <Row className={styles['table']}>
+        <AutoResizer>
+          {({ width, height }: { width: number, height: number }): JSX.Element => (
+            <BaseTable
+              className={styles['table']}
+              data={sorted}
+              width={width}
+              height={height}
+              columns={columns}
+              rowHeight={40}
+              rowKey="pid"
+              rowClassName={
+                ({ rowIndex }: { rowIndex: number }) =>
+                  isSelected(rowIndex, selectedRows) ? styles['selected-row'] : styles['normal-row']
+              }
+              rowEventHandlers={{
+                onClick: ({ rowIndex, event }: { rowIndex: any, event: any }) => {
+                  const { from, to } = selectedRows;
+                  if(event.shiftKey && from !== -1 && to !== -1) {
+                    setSelectedRows({ from: from, to: rowIndex })
+                  } else {
+                    if(from === to && to === rowIndex) {
+                      setSelectedRows({from: -1, to: -1});
+                    } else {
+                      setSelectedRows({ from: rowIndex, to: rowIndex });
+                    }
+                  }
+                }
+              }}
+              sortBy={sortBy}
+              onColumnSort={({ key, order }: { key: any, order: any }) => { setSortBy({key, order}); }}
+              headerClassName={styles['header-cell']}
+              headerHeight={60}
+            />)}
+        </AutoResizer>
+      </Row>
+      <Row className={styles['footer']} justify="end">
+        <Button
+          type="primary"
+          disabled={(selectedRows.to === selectedRows.from) && selectedRows.to === -1}
+          onClick={() => {
+            //dispatch(killProcess(selectedPID));
+            // setSelectedPID(-1);
+          }}
+        >
+          End Task
+        </Button>
+      </Row>
   </div>
   );
 }
