@@ -216,8 +216,16 @@ const ProcessTab: React.FC = () => {
           type="primary"
           disabled={(selectedRows.to === selectedRows.from) && selectedRows.to === -1}
           onClick={() => {
-            //dispatch(killProcess(selectedPID));
-            // setSelectedPID(-1);
+            if(selectedRows.to === -1 || selectedRows.from === -1) {
+              return;
+            }
+            let selectedPIDs = sorted.slice(
+              Math.min(selectedRows.from, selectedRows.to),
+              Math.max(selectedRows.from, selectedRows.to) + 1
+            ).map((element: ProcessesProcessData) => element.pid);
+            console.log(selectedPIDs);
+            selectedPIDs.forEach((pid: number) => dispatch(killProcess(pid)));
+            setSelectedRows({from: -1, to: -1});
           }}
         >
           End Task
