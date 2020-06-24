@@ -4,6 +4,9 @@ import { useSelector, useDispatch } from "react-redux";
 // @ts-ignore
 import BaseTable, { AutoResizer, SortOrder } from 'react-base-table';
 import 'react-base-table/styles.css';
+// @ts-ignore
+import Text from 'react-texty';
+import 'react-texty/styles.css';
 import { Button, Badge, Row } from "antd";
 import { CheckCircleOutlined, DiffTwoTone } from "@ant-design/icons";
 import styles from './process-tab.module.scss';
@@ -11,6 +14,7 @@ import { killProcess } from "../actions/process";
 import {RootState} from "../reducers";
 import { toLevel, isSelected, toMemoryString } from './utils';
 import {Systeminformation} from 'systeminformation';
+
 import classNames from "classnames";
 
 type ProcessesProcessData = Systeminformation.ProcessesProcessData;
@@ -63,7 +67,7 @@ const ProcessTab: React.FC = () => {
   const [sortBy, setSortBy] = useState({key: 'addedDate', order: SortOrder.DESC});
 
   const processCellRenderer = ({cellData}: {cellData: string}): JSX.Element => {
-    return <span><DiffTwoTone />&emsp;{cellData}</span>;
+    return <Text tooltip={cellData}><DiffTwoTone />&emsp;{cellData}</Text>;
   }
 
   const stateCellRenderer = ({rowData}: {rowData: ProcessesProcessData}): JSX.Element => {
