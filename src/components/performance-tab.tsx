@@ -185,7 +185,7 @@ export default function PerformanceTab() {
       defaultActiveKey="1"
       tabPosition="left"
       size="large"
-      tabBarStyle={{width: '25%', height: '100vh'}}
+      tabBarStyle={{width: '30%', height: '100vh'}}
     >
       <Tabs.TabPane
         className={styles['pane']}
