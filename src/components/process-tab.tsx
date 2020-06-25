@@ -132,7 +132,7 @@ const ProcessTab: React.FC = () => {
       key: 'pcpu',
       dataKey: 'pcpu',
       title: `${cpuLoad} CPU`,
-      width: 100,
+      width: 110,
       minWidth: 100,
       className: ({cellData}: {cellData: string}) =>
         classNames(styles[`level-${toLevel(parseFloat(cellData))}`],
@@ -149,8 +149,8 @@ const ProcessTab: React.FC = () => {
       key: 'mem_rss',
       dataKey: 'mem_rss',
       title: `${memoryLoad} Memory`,
-      width: 100,
-      minWidth: 100,
+      width: 110,
+      minWidth: 110,
       className: ({rowData}: {rowData: ProcessesProcessData}) =>
         classNames(
           styles[`level-${toLevel(rowData.pmem)}`],
