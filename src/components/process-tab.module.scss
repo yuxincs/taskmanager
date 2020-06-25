@@ -46,7 +46,7 @@
 
 .selected-row {
   @extend .normal-row;
-  background-color: rgba(36, 169, 225, 0.3);
+  background-color: rgba(36, 169, 225, 0.3) !important;
 }
 
 .command-cell {
