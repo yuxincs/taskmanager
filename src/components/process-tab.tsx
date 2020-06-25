@@ -12,7 +12,7 @@ import { CheckCircleOutlined, DiffTwoTone } from "@ant-design/icons";
 import styles from './process-tab.module.scss';
 import { killProcess } from "../actions/process";
 import {RootState} from "../reducers";
-import { toLevel, isSelected, toMemoryString } from './utils';
+import { toLevel, toMemoryString } from './utils';
 import {Systeminformation} from 'systeminformation';
 
 import classNames from "classnames";
