@@ -206,8 +206,6 @@ const ProcessTab: React.FC = () => {
                     newSelected.clear();
                     // select all items from left to right
                     sorted.slice(left, right + 1).forEach(process => newSelected.add(process.pid));
-                    console.log(minIndex, left, rowIndex);
-                    console.log(newSelected);
                   } else if(event.metaKey) {
                     if(selectedPIDs.has(curPID)) {
                       newSelected.delete(curPID);
