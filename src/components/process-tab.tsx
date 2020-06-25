@@ -63,8 +63,8 @@ const ProcessTab: React.FC = () => {
   const processes = useSelector((state: RootState) => state.process.processes);
   const dispatch = useDispatch();
 
-  const [selectedRows, setSelectedRows] = useState({from: -1, to: -1});
   const [sortBy, setSortBy] = useState({key: 'addedDate', order: SortOrder.DESC});
+  const [selectedPIDs, setSelectedPIDS] = useState<Set<number>>(new Set());
 
   const processCellRenderer = ({cellData}: {cellData: string}): JSX.Element => {
     return <Text tooltip={cellData}><DiffTwoTone />&emsp;{cellData}</Text>;
@@ -191,21 +191,38 @@ const ProcessTab: React.FC = () => {
               rowHeight={40}
               rowKey="pid"
               rowClassName={
-                ({ rowIndex }: { rowIndex: number }) =>
-                  isSelected(rowIndex, selectedRows) ? styles['selected-row'] : styles['normal-row']
+                ({ rowData }: { rowData: ProcessesProcessData }) =>
+                  selectedPIDs.has(rowData.pid) ? styles['selected-row'] : styles['normal-row']
               }
               rowEventHandlers={{
-                onClick: ({ rowIndex, event }: { rowIndex: any, event: any }) => {
-                  const { from, to } = selectedRows;
-                  if(event.shiftKey && from !== -1 && to !== -1) {
-                    setSelectedRows({ from: from, to: rowIndex })
-                  } else {
-                    if(from === to && to === rowIndex) {
-                      setSelectedRows({from: -1, to: -1});
+                onClick: ({ rowData, rowIndex, event }:
+                            { rowData: ProcessesProcessData, rowIndex: number, event: MouseEvent }) => {
+                  const curPID = rowData.pid;
+                  let newSelected = new Set(selectedPIDs);
+                  if(event.shiftKey && selectedPIDs.size > 0) {
+                    const minIndex = sorted.findIndex(process => selectedPIDs.has(process.pid));
+                    const left = Math.min(rowIndex, minIndex);
+                    const right = Math.max(rowIndex, minIndex);
+                    newSelected.clear();
+                    // select all items from left to right
+                    sorted.slice(left, right + 1).forEach(process => newSelected.add(process.pid));
+                    console.log(minIndex, left, rowIndex);
+                    console.log(newSelected);
+                  } else if(event.metaKey) {
+                    if(selectedPIDs.has(curPID)) {
+                      newSelected.delete(curPID);
                     } else {
-                      setSelectedRows({ from: rowIndex, to: rowIndex });
+                      newSelected.add(curPID);
+                    }
+                  } else {
+                    if(newSelected.size == 1 && newSelected.has(curPID)) {
+                      newSelected.clear();
+                    } else {
+                      newSelected.clear();
+                      newSelected.add(curPID);
                     }
                   }
+                  setSelectedPIDS(newSelected);
                 }
               }}
               sortBy={sortBy}
@@ -218,18 +235,21 @@ const ProcessTab: React.FC = () => {
       <Row className={styles['footer']} justify="end">
         <Button
           type="primary"
-          disabled={(selectedRows.to === selectedRows.from) && selectedRows.to === -1}
+          disabled={selectedPIDs.size === 0}
           onClick={() => {
-            if(selectedRows.to === -1 || selectedRows.from === -1) {
+            if(selectedPIDs.size === 0) {
               return;
             }
+            selectedPIDs.forEach((pid: number) => dispatch(killProcess(pid)));
+            setSelectedPIDS(new Set());
+            /*
             let selectedPIDs = sorted.slice(
               Math.min(selectedRows.from, selectedRows.to),
               Math.max(selectedRows.from, selectedRows.to) + 1
             ).map((element: ProcessesProcessData) => element.pid);
-            console.log(selectedPIDs);
             selectedPIDs.forEach((pid: number) => dispatch(killProcess(pid)));
             setSelectedRows({from: -1, to: -1});
+            setSelectedPIDS(new Set());*/
           }}
         >
           End Task
