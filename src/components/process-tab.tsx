@@ -1,7 +1,5 @@
-import React, {useState} from 'react';
+import React, { MouseEvent, SyntheticEvent, useState } from 'react';
 import { useSelector, useDispatch } from "react-redux";
-// TODO: remove ignore mark when react-base-table releases TS version
-// @ts-ignore
 import BaseTable, { AutoResizer, SortOrder } from 'react-base-table';
 import 'react-base-table/styles.css';
 // @ts-ignore
@@ -63,7 +61,7 @@ const ProcessTab: React.FC = () => {
   const processes = useSelector((state: RootState) => state.process.processes);
   const dispatch = useDispatch();
 
-  const [sortBy, setSortBy] = useState({key: 'addedDate', order: SortOrder.DESC});
+  const [sortBy, setSortBy] = useState({key: 'addedDate', order: 'asc' as SortOrder});
   const [selectedPIDs, setSelectedPIDS] = useState<Set<number>>(new Set());
 
   const processCellRenderer = ({cellData}: {cellData: string}): JSX.Element => {
@@ -166,12 +164,12 @@ const ProcessTab: React.FC = () => {
 
   const sortFunc = ({key, order}: {key: string, order: SortOrder}) => (a: any, b: any) => {
     switch(key) {
-      case 'command': return order === SortOrder.ASC ? b[key].localeCompare(a[key]) : a[key].localeCompare(b[key]);
-      case 'user': return order === SortOrder.ASC ? b[key].localeCompare(a[key]) : a[key].localeCompare(b[key]);
-      case 'state': return order === SortOrder.ASC ?
+      case 'command': return order === 'asc' ? b[key].localeCompare(a[key]) : a[key].localeCompare(b[key]);
+      case 'user': return order === 'asc' ? b[key].localeCompare(a[key]) : a[key].localeCompare(b[key]);
+      case 'state': return order === 'asc' ?
         statePriority[a[key] as ProcessState] - statePriority[b[key] as ProcessState] :
         statePriority[b[key] as ProcessState] - statePriority[a[key] as ProcessState];
-      default: return order === SortOrder.ASC ? a[key] - b[key] : b[key] - a[key];
+      default: return order === 'asc' ? a[key] - b[key] : b[key] - a[key];
     }
   };
 
@@ -196,17 +194,19 @@ const ProcessTab: React.FC = () => {
               }
               rowEventHandlers={{
                 onClick: ({ rowData, rowIndex, event }:
-                            { rowData: ProcessesProcessData, rowIndex: number, event: MouseEvent }) => {
+                            { rowData: ProcessesProcessData, rowIndex: number, event: React.SyntheticEvent}) => {
                   const curPID = rowData.pid;
                   let newSelected = new Set(selectedPIDs);
-                  if(event.shiftKey && selectedPIDs.size > 0) {
+                  // TODO: change when a new solution to cast from SyntheticEvent to MouseEvent is found
+                  let mouseEvent = event as MouseEvent;
+                  if(mouseEvent.shiftKey && selectedPIDs.size > 0) {
                     const minIndex = sorted.findIndex(process => selectedPIDs.has(process.pid));
                     const left = Math.min(rowIndex, minIndex);
                     const right = Math.max(rowIndex, minIndex);
                     newSelected.clear();
                     // select all items from left to right
                     sorted.slice(left, right + 1).forEach(process => newSelected.add(process.pid));
-                  } else if(event.metaKey) {
+                  } else if(mouseEvent.metaKey) {
                     if(selectedPIDs.has(curPID)) {
                       newSelected.delete(curPID);
                     } else {
@@ -224,7 +224,7 @@ const ProcessTab: React.FC = () => {
                 }
               }}
               sortBy={sortBy}
-              onColumnSort={({ key, order }: { key: any, order: any }) => { setSortBy({key, order}); }}
+              onColumnSort={({ key, order }: { key: any, order: SortOrder }) => { setSortBy({key, order}); }}
               headerClassName={styles['header-cell']}
               headerHeight={60}
             />)}
