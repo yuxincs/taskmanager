@@ -213,7 +213,7 @@ const ProcessTab: React.FC = () => {
                       newSelected.add(curPID);
                     }
                   } else {
-                    if(newSelected.size == 1 && newSelected.has(curPID)) {
+                    if(newSelected.size === 1 && newSelected.has(curPID)) {
                       newSelected.clear();
                     } else {
                       newSelected.clear();
