@@ -1,14 +1,12 @@
-import 'jest-canvas-mock';
 
-window.matchMedia = jest.fn().mockImplementation(query => {
+
+// TODO: remove when ant design's new fix gets released
+// track https://github.com/ant-design/ant-design/issues/27658#issuecomment-723954128
+// @ts-ignore
+global.matchMedia = global.matchMedia || function () {
   return {
     matches: false,
-    media: query,
-    onchange: null,
-    addListener: jest.fn(), // deprecated
-    removeListener: jest.fn(), // deprecated
-    addEventListener: jest.fn(),
-    removeEventListener: jest.fn(),
-    dispatchEvent: jest.fn(),
+    addListener: jest.fn(),
+    removeListener: jest.fn(),
   };
-});
+};
