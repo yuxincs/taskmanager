@@ -46,10 +46,10 @@
   },
   "devDependencies": {
     "babel-plugin-import": "^1.13.1",
+    "canvas": "^2.6.1",
     "concurrently": "^5.3.0",
     "customize-cra": "^1.0.0",
     "electron-builder": "^22.9.1",
-    "jest-canvas-mock": "^2.3.0",
     "react-app-rewired": "^2.1.6",
     "redux-logger": "^3.0.6",
     "typescript": "^4.0.5",
