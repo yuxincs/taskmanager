@@ -15,3 +15,9 @@ dist/
 
 # coverage reports
 coverage/
+
+# yarn files
+.yarn/*
+!.yarn/releases
+!.yarn/plugins
+.pnp.*
