@@ -4,7 +4,7 @@ import {Systeminformation} from "systeminformation";
 export interface CPUState {
   loadHistory: number[],
   currentSpeed: number,
-  info: Systeminformation.CpuWithFlagsData
+  info: Systeminformation.CpuData
 }
 
 let initialState: CPUState = {
@@ -20,7 +20,7 @@ let initialState: CPUState = {
     },
     manufacturer: '',
     brand: '',
-    speed: '0',
+    speed: 0,
     socket: '',
     physicalCores: 0,
     cores: 0,
@@ -30,10 +30,11 @@ let initialState: CPUState = {
     stepping: '',
     revision: '',
     voltage: '',
-    speedmin: '',
-    speedmax: '',
+    speedMin: 0,
+    speedMax: 0,
     governor: '',
-    processors: 0
+    processors: 0,
+    virtualization: false
   }
 };
 
@@ -49,7 +50,7 @@ export default function cpu(state = initialState, action: CPUActions): CPUState 
     case 'UPDATE_CPU_LOAD': {
       return {
         ...state,
-        loadHistory: state.loadHistory.slice(1, state.loadHistory.length).concat([action.load.currentload])
+        loadHistory: state.loadHistory.slice(1, state.loadHistory.length).concat([action.load.currentLoad])
       }
     }
     case 'UPDATE_CPU_CURRENT_SPEED': {

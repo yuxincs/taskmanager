@@ -78,9 +78,9 @@ const ProcessTab: React.FC = () => {
     }
   }
 
-  const cpuCellRenderer = ({cellData}: {cellData: string}): string => `${parseFloat(cellData).toFixed(1)}%`;
+  const cpuCellRenderer = ({cellData}: {cellData: number}): string => `${Math.round(cellData * 10) / 10}%`;
 
-  const memoryCellRenderer = ({cellData}: {cellData: string}): string => toMemoryString(parseFloat(cellData) * 1024).join(' ');
+  const memoryCellRenderer = ({cellData}: {cellData: number}): string => toMemoryString(cellData * 1024).join(' ');
 
   const columns: any[] = [
     {
@@ -127,8 +127,8 @@ const ProcessTab: React.FC = () => {
       headerRenderer: () => <Header subtitle="User" />
     },
     {
-      key: 'pcpu',
-      dataKey: 'pcpu',
+      key: 'cpu',
+      dataKey: 'cpu',
       title: `${cpuLoad} CPU`,
       width: 110,
       minWidth: 100,
@@ -144,14 +144,14 @@ const ProcessTab: React.FC = () => {
       headerRenderer: () => <Header title={Math.round( cpuLoad * 10) / 10 + ' %'} subtitle="CPU" />
     },
     {
-      key: 'mem_rss',
-      dataKey: 'mem_rss',
+      key: 'memRss',
+      dataKey: 'memRss',
       title: `${memoryLoad} Memory`,
       width: 110,
       minWidth: 110,
       className: ({rowData}: {rowData: ProcessesProcessData}) =>
         classNames(
-          styles[`level-${toLevel(rowData.pmem)}`],
+          styles[`level-${toLevel(rowData.mem)}`],
           {[styles['busy-num-cell']]: memoryLoad > 80}
         ),
       cellRenderer: memoryCellRenderer,

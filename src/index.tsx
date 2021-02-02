@@ -15,7 +15,7 @@ import {updateMemoryInfo, updateMemoryLoad} from "./actions/memory";
 import {updateProcessInfo} from "./actions/process";
 import {updateDiskLoad} from "./actions/disk";
 import {UpdateUpTime} from './actions/general';
-import {cpu, cpuCurrentspeed, cpuFlags, currentLoad, disksIO, mem, memLayout, processes, time} from "systeminformation";
+import {cpu, cpuCurrentSpeed, cpuFlags, currentLoad, disksIO, mem, memLayout, processes, time} from "systeminformation";
 
 let middleware: Array<Middleware> = [thunkMiddleware];
 
@@ -42,7 +42,7 @@ const requestDynamicInfo = () => {
   // request CPU Load
   currentLoad().then((load) => store.dispatch(updateCPULoad(load)));
   // request cpu current speed
-  cpuCurrentspeed().then((speed) => store.dispatch(updateCPUCurrentSpeed(speed.avg)));
+  cpuCurrentSpeed().then((speed) => store.dispatch(updateCPUCurrentSpeed(speed.avg)));
   // request memory load
   mem().then((load) => store.dispatch(updateMemoryLoad(load)));
   // request process info

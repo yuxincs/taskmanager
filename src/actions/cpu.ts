@@ -12,7 +12,7 @@ interface UpdateCPULoadAction {
 
 interface UpdateCPUInfo {
   type: 'UPDATE_CPU_INFO',
-  info: Systeminformation.CpuWithFlagsData
+  info: Systeminformation.CpuData
 }
 
 export type CPUActions = UpdateCPUCurrentSpeedAction | UpdateCPULoadAction | UpdateCPUInfo;
@@ -31,7 +31,7 @@ export function updateCPULoad(load: Systeminformation.CurrentLoadData): UpdateCP
   }
 }
 
-export function updateCPUInfo(info: Systeminformation.CpuWithFlagsData): UpdateCPUInfo {
+export function updateCPUInfo(info: Systeminformation.CpuData): UpdateCPUInfo {
   return {
     type: 'UPDATE_CPU_INFO',
     info: info
