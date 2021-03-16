@@ -18202,6 +18202,7 @@ fsevents@^1.2.7:
     electron-builder: ^22.10.5
     kill-process: ^1.0.2
     prop-types: ^15.7.2
+    rc-util: ^5.8.1
     react: ^17.0.1
     react-app-rewired: ^2.1.8
     react-base-table: ^1.12.0
