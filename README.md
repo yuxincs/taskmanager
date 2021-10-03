@@ -1,6 +1,6 @@
 # TaskManager 
 
-[![Github Actions](https://github.com/yxwangcs/taskmanager/workflows/build/badge.svg)](https://github.com/yxwangcs/taskmanager/actions?query=branch%3Amaster) [![codecov](https://codecov.io/gh/yxwangcs/taskmanager/branch/master/graph/badge.svg)](https://codecov.io/gh/yxwangcs/taskmanager/branch/master)
+[![Github Actions](https://github.com/yxwangcs/taskmanager/workflows/build/badge.svg)](https://github.com/yxwangcs/taskmanager/actions?query=branch%3Amain) [![codecov](https://codecov.io/gh/yxwangcs/taskmanager/branch/main/graph/badge.svg)](https://codecov.io/gh/yxwangcs/taskmanager)
 
 A Windows-Like Task Manager built for Linux and macOS, based on [Electron](https://electronjs.org/), [Ant Design](https://ant.design/), [systeminformation](https://www.npmjs.com/package/systeminformation) and [ECharts](https://www.echartsjs.com/en/index.html).
 
