@@ -5,9 +5,9 @@
 A Windows-Like Task Manager built for Linux and macOS, based on [Electron](https://electronjs.org/), [Ant Design](https://ant.design/), [systeminformation](https://www.npmjs.com/package/systeminformation) and [ECharts](https://www.echartsjs.com/en/index.html).
 
 <p float="left" align="center">
-  <img src="https://github.com/yxwangcs/taskmanager/raw/master/screenshots/1.png" width="45%" />
+  <img src="https://github.com/yxwangcs/taskmanager/raw/main/screenshots/1.png" width="45%" />
   &emsp;
-  <img src="https://github.com/yxwangcs/taskmanager/raw/master/screenshots/2.png" width="45%" /> 
+  <img src="https://github.com/yxwangcs/taskmanager/raw/main/screenshots/2.png" width="45%" /> 
   
 </p>
 
